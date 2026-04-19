@@ -1,0 +1,37 @@
+# Build output
+bin/
+*.o
+*.d
+
+# Data artifacts — never commit
+*.root
+*.log
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.eps
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Backups / swap
+*.backup
+*.bak
+*~
+*.swp
+
+# macOS / editors
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local overrides to build.mk (paths differ per machine)
+build.mk.local
