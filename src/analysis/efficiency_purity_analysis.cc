@@ -46,21 +46,33 @@ const double subleading_jet_etMin = 7.0;  // Minimum ET for subleading jet (7 Ge
 const double etaMin = -1.0;         // Minimum eta
 const double etaMax = 0.0;          // Maximum eta
 
-// Input file and output log
-// const string input_filename = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt7GeV/hera300_pT7/hera300_pT7.root";
-const string input_filename = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt5GeV/eic105_pT5/eic105_pT5.root";
-string baseFileName = input_filename.substr(input_filename.find_last_of("/") + 1);
-string logname = baseFileName.substr(0, baseFileName.find_last_of("."));
-string etMin_str = "_eT_" + to_string((int)leading_jet_etMin) + "_" + to_string((int)subleading_jet_etMin);
+// Input file — override by passing a path as argv[1]. Output log name is
+// derived from the input filename and written to the current working
+// directory (so callers can redirect into a per-sample output folder).
+const string default_input_filename =
+    "/Users/siddharthsingh/Analysis/repos/photoproduction-eic/data/"
+    "allevents_pt7GeV/hera300_pT7/hera300_pT7.root";
 
-// File naming scheme, for 2 decimal digits after eta
-auto formatFloat = [](double value) -> string {
+// Populated in main() after argv parsing.
+string input_filename;
+string log_filename;
+
+static string formatFloat2(double value) {
     stringstream ss;
     ss << fixed << setprecision(2) << value;
     return ss.str();
-};
-string eta_str = "_eta_" + formatFloat(etaMin) + "_" + formatFloat(etaMax);
-const string log_filename = logname + etMin_str + eta_str + "_dijet_EventEff.log";
+}
+
+static string makeLogFilename(const string& input_path,
+                              double lead_et_min, double sublead_et_min,
+                              double eta_lo, double eta_hi) {
+    string base = input_path.substr(input_path.find_last_of("/") + 1);
+    base = base.substr(0, base.find_last_of("."));
+    return base +
+           "_eT_" + to_string((int)lead_et_min) + "_" + to_string((int)sublead_et_min) +
+           "_eta_" + formatFloat2(eta_lo) + "_" + formatFloat2(eta_hi) +
+           "_dijet_EventEff.log";
+}
 
 // Progress reporting
 const int report_every = 100000;    // Report progress every N events
@@ -385,8 +397,12 @@ private:
 // MAIN ANALYSIS FUNCTION
 // =============================================================================
 
-int main() {
-    
+int main(int argc, char** argv) {
+
+    input_filename = (argc > 1) ? argv[1] : default_input_filename;
+    log_filename = makeLogFilename(input_filename, leading_jet_etMin,
+                                    subleading_jet_etMin, etaMin, etaMax);
+
     // Create dual output for console and file logging
     DualOutput dout(log_filename);
     

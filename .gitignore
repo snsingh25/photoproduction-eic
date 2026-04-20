@@ -3,6 +3,10 @@ bin/
 *.o
 *.d
 
+# Input / output data trees — regenerable, don't track
+data/
+data-jets/
+
 # Data artifacts — never commit
 *.root
 *.log

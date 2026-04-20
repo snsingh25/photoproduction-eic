@@ -2,7 +2,10 @@
 // Jet Reconstruction Analysis for HERA Photoproduction Events
 // =============================================================================
 // Description: Reconstructs jets from different subprocess categories using 
-//              anti-kT algorithm and saves basic jet properties with dijet cuts
+//              anti-kT algorithm and saves basic jet properties with dijet cuts.
+//              Also computes softdrop multiplicity (n_sd) per jet using
+//              modified mass drop tagger (zcut=0.1, beta=0) via Cambridge/Aachen
+//              reclustering of constituents.
 //
 // Input: ROOT file with photoproduction events from improved event generator
 // Output: ROOT file with reconstructed dijet events for each process category
@@ -101,12 +104,25 @@ const double subleading_jet_eta_max = 4.5;   // Maximum |eta| for subleading jet
 const double particle_pt_min = 0.1;     // Minimum particle pT (GeV)
 const double particle_eta_max = 5.0;    // Maximum particle |eta|
 
-// Event progress reporting
-const int report_every = 100000;    // Report progress every N events
+// Softdrop multiplicity parameters (modified mass drop tagger)
+// See Frye, Larkoski, Moult, Thaler, JHEP 07 (2017) 064 [arXiv:1704.06266]
+const double sd_zcut = 0.1;       // Energy-sharing cut
+const double sd_beta = 0.0;       // Angular exponent (0 = modified mass drop)
+const double sd_R0   = 1.0;       // Normalization radius (match jet R)
 
-// Input Events
-const string input_filename = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt7GeV/hera300_pT7/hera300_pT7.root"; 
-// "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt5GeV/eic141_pt5GeV/eic141.root";
+// n_subjets parameters (kT exclusive reclustering of constituents)
+// Same ycut as existing nsubjets.cc analysis, for head-to-head comparison.
+const double kt_ycut = 0.0005;    // y_cut for exclusive_jets_ycut
+
+// Event progress reporting
+const int report_every = 100000;    // Report progres/s every N events
+
+// Input Events — default; override via argv[1]. Points at the repo's data/.
+const string default_input_filename =
+    "/Users/siddharthsingh/Analysis/repos/photoproduction-eic/data/"
+    "allevents_pt7GeV/hera300_pT7/hera300_pT7.root";
+// Filled in main() once argv is parsed.
+string input_filename;
 
 // =============================================================================
 // OUTPUT FILENAME GENERATION
@@ -138,15 +154,22 @@ string generateLogFilename(const string& root_filename) {
     return log_filename;
 }
 
-const string output_filename = generateOutputFilename(input_filename, R, etMin);
-const string log_filename = generateLogFilename(output_filename);
+// output_filename / log_filename are derived from input_filename in main().
+string output_filename;
+string log_filename;
 
 // =============================================================================
 // JET RECONSTRUCTION FUNCTION
 // =============================================================================
-vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& py, 
+vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& py,
                                   const vector<float>& pz, const vector<float>& energy,
-                                  const vector<float>& eta) {
+                                  const vector<float>& eta,
+                                  vector<int>& jet_nsd_out,
+                                  vector<int>& jet_nsubjets_out) {
+
+    // Always start with an empty output so early returns leave it in a sane state
+    jet_nsd_out.clear();
+    jet_nsubjets_out.clear();
     
     // Check input vector sizes
     if (px.empty() || px.size() != py.size() || px.size() != pz.size() || 
@@ -200,6 +223,59 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
     sort(selected_jets.begin(), selected_jets.end(), 
          [](const PseudoJet& a, const PseudoJet& b) { return a.Et() > b.Et(); });
     
+    // -------------------------------------------------------------------------
+    // Per-jet substructure observables: n_sd (softdrop multiplicity) and
+    // n_subjets (kT exclusive with ycut). Both must be computed here, inside
+    // reconstructJets(), because the ClusterSequence `cs` is still alive —
+    // which means jet.constituents() is valid. Once this function returns,
+    // cs dies and any structural access on the returned jets would crash.
+    // We keep only the two scalars per jet, independent of cs.
+    // -------------------------------------------------------------------------
+    jet_nsd_out.reserve(selected_jets.size());
+    jet_nsubjets_out.reserve(selected_jets.size());
+    for (const auto& jet : selected_jets) {
+        vector<PseudoJet> constituents = jet.constituents();
+
+        // --- n_sd via Cambridge/Aachen reclustering + tree walk ------------
+        int n_sd = 0;
+        if (constituents.size() >= 2) {
+            JetDefinition ca_def(cambridge_algorithm, sd_R0);
+            ClusterSequence cs_ca(constituents, ca_def);
+            vector<PseudoJet> ca_jets = sorted_by_pt(cs_ca.inclusive_jets());
+
+            if (!ca_jets.empty()) {
+                PseudoJet current = ca_jets[0];
+                PseudoJet p1, p2;
+                while (current.has_parents(p1, p2)) {
+                    if (p1.pt() < p2.pt()) std::swap(p1, p2);   // p1 = harder branch
+                    double dR = p1.delta_R(p2);
+                    double pt_sum = p1.pt() + p2.pt();
+                    if (pt_sum > 0.0) {
+                        double z = p2.pt() / pt_sum;
+                        if (z > sd_zcut * std::pow(dR / sd_R0, sd_beta))
+                            ++n_sd;
+                    }
+                    current = p1;   // follow the harder branch inward
+                }
+            }
+        }
+        jet_nsd_out.push_back(n_sd);
+
+        // --- n_subjets via kT exclusive with ycut --------------------------
+        // Matches the recipe in subprocsubjets/nsubjets.cc so results are
+        // directly comparable. Jets with <2 constituents get n_subjets = 0.
+        int n_subjets = 0;
+        if (constituents.size() >= 2) {
+            JetDefinition kt_def(kt_algorithm, R);
+            ClusterSequence cs_kt(constituents, kt_def);
+            n_subjets = cs_kt.exclusive_jets_ycut(kt_ycut).size();
+        }
+        jet_nsubjets_out.push_back(n_subjets);
+
+        // cs_ca, cs_kt go out of scope here — the integers are already saved
+    }
+    // -------------------------------------------------------------------------
+    
     return selected_jets;
 }
 
@@ -245,7 +321,12 @@ bool passesDijetCuts(const vector<PseudoJet>& jets) {
 // =============================================================================
 // MAIN ANALYSIS FUNCTION
 // =============================================================================
-int main() {
+int main(int argc, char** argv) {
+
+    // Input file: CLI arg 1, else default. Output/log names derived from it.
+    input_filename = (argc > 1) ? argv[1] : default_input_filename;
+    output_filename = generateOutputFilename(input_filename, R, etMin);
+    log_filename = generateLogFilename(output_filename);
 
     // Create dual output for console and file logging
     DualOutput dout(log_filename);
@@ -267,6 +348,8 @@ int main() {
     dout << "  Min Jet ET:       " << etMin << " GeV\n";
     dout << "  Jet Eta Range:    [" << etaMin << ", " << etaMax << "]\n";
     dout << "  Min Particle pT:  " << particle_pt_min << " GeV\n";
+    dout << "  Softdrop (zcut, beta, R0): (" << sd_zcut << ", " << sd_beta << ", " << sd_R0 << ")\n";
+    dout << "  n_subjets (kT ycut):       " << kt_ycut << "\n";
     
     if (DIJET_ONLY) {
         dout << "\nDijet Selection Cuts:\n";
@@ -351,6 +434,8 @@ int main() {
         // Output variables - basic jet info
         Int_t eventID, n_jets;
         vector<float> jet_et, jet_px, jet_py, jet_pz, jet_eta, jet_phi, jet_mass;
+        vector<int>   jet_nsd;        // softdrop multiplicity per saved jet
+        vector<int>   jet_nsubjets;   // kT exclusive subjet count per saved jet
         
         // Dijet-specific variables
         Bool_t passes_dijet_cuts;
@@ -370,6 +455,8 @@ int main() {
         output_tree->Branch("jet_eta", &jet_eta);
         output_tree->Branch("jet_phi", &jet_phi);
         output_tree->Branch("jet_mass", &jet_mass);
+        output_tree->Branch("jet_nsd", &jet_nsd);
+        output_tree->Branch("jet_nsubjets", &jet_nsubjets);
         
         // Dijet-specific branches
         output_tree->Branch("passes_dijet_cuts", &passes_dijet_cuts);
@@ -422,9 +509,13 @@ int main() {
             jet_eta.clear();
             jet_phi.clear();
             jet_mass.clear();
-            
-            // Reconstruct jets
-            vector<PseudoJet> jets = reconstructJets(*px, *py, *pz, *energy, *eta);
+            jet_nsd.clear();
+            jet_nsubjets.clear();
+
+            // Reconstruct jets (and compute per-jet n_sd + n_subjets inline)
+            vector<int> jets_nsd_tmp, jets_nsubjets_tmp;
+            vector<PseudoJet> jets = reconstructJets(*px, *py, *pz, *energy, *eta,
+                                                    jets_nsd_tmp, jets_nsubjets_tmp);
             
             // Basic event info
             eventID = i;
@@ -492,11 +583,14 @@ int main() {
                         jet_eta.push_back(jets[j].eta());
                         jet_phi.push_back(jets[j].phi());
                         jet_mass.push_back(jets[j].m());
+                        jet_nsd.push_back(jets_nsd_tmp[j]);
+                        jet_nsubjets.push_back(jets_nsubjets_tmp[j]);
                     }
                 } else {
                     // Save all jets
                     total_jets += n_jets;
-                    for (const auto& jet : jets) {
+                    for (size_t j = 0; j < jets.size(); ++j) {
+                        const auto& jet = jets[j];
                         jet_et.push_back(jet.Et());
                         jet_px.push_back(jet.px());
                         jet_py.push_back(jet.py());
@@ -504,6 +598,8 @@ int main() {
                         jet_eta.push_back(jet.eta());
                         jet_phi.push_back(jet.phi());
                         jet_mass.push_back(jet.m());
+                        jet_nsd.push_back(jets_nsd_tmp[j]);
+                        jet_nsubjets.push_back(jets_nsubjets_tmp[j]);
                     }
                 }
                 
@@ -606,13 +702,19 @@ int main() {
          << " (" << (100.0*total_events_selected/total_events_processed) << "%)\n";
     
     dout << "\nFor each category, the following are saved:\n";
-    dout << "  - Jet trees with basic properties (ET, px, py, pz, eta, phi, mass)\n";
+    dout << "  - Jet trees with basic properties (ET, px, py, pz, eta, phi, mass, nsd, nsubjets)\n";
     dout << "  - Dijet-specific variables (masses, angles, cuts flags)\n";
     dout << "  - Basic distribution histograms\n";
     dout << "\nJets are reconstructed using anti-kT algorithm with:\n";
     dout << "  - R = " << R << "\n";
     dout << "  - ET > " << etMin << " GeV\n";
     dout << "  - " << etaMin << " < eta < " << etaMax << "\n";
+    dout << "\nSoftdrop multiplicity n_sd (modified mass drop):\n";
+    dout << "  - z_cut = " << sd_zcut << "\n";
+    dout << "  - beta  = " << sd_beta << "\n";
+    dout << "  - R0    = " << sd_R0 << "\n";
+    dout << "\nn_subjets (kT exclusive):\n";
+    dout << "  - y_cut = " << kt_ycut << "\n";
     
     if (DIJET_ONLY) {
         dout << "\nDijet selection applied with:\n";
