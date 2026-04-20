@@ -587,11 +587,14 @@ int main(int argc, char** argv) {
                 for (int i = 0; i < pythia.event.size(); ++i) {
                     const Particle& particle = pythia.event[i];
 
-                    // Save the outgoing hard-process partons (status == 23).
-                    // PYTHIA stores them with status code 23 BEFORE the
-                    // shower turns them into descendants; that makes them
-                    // the "LO outgoing parton" reference for jet matching.
-                    if (particle.status() == 23) {
+                    // Save the outgoing hard-process partons (|status| == 23).
+                    // PYTHIA gives these particles status +23 when created;
+                    // once the shower replaces them with descendants the
+                    // stored status flips to -23. The final event record
+                    // therefore carries -23 for the "LO outgoing parton"
+                    // slots, which is what we want as the jet-matching
+                    // reference.
+                    if (particle.statusAbs() == 23) {
                         int absid = std::abs(particle.id());
                         if (absid == 21 || (absid >= 1 && absid <= 6)) {
                             data->parton_pdgId.push_back(particle.id());
