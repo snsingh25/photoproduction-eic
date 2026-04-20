@@ -295,33 +295,39 @@ string getProcessName(int code) {
 // MAIN FUNCTION
 // =============================================================================
 
-int main() {
-    
+int main(int argc, char** argv) {
+
     try {
-        
+
         // =====================================================================
-        // CONFIGURATION - MODIFY THIS SECTION
+        // CONFIGURATION
         // =====================================================================
-        
+        //   ./bin/evtgen [preset] [nEvents] [customTag]
+        //
+        // Defaults: HERA_300, 1,000,000 attempts, no tag (matches the
+        // original production). Any arg you leave out keeps its default.
+
         EventConfig config;
-        
-        // --- Select collider preset ---
-        config.preset = HERA_300;  // Options: HERA_300, EIC_64, EIC_105, EIC_141, CUSTOM
-        
-        // --- Event count ---
-        // NOTE: This is the number of PYTHIA attempts, not valid events.
-        // With pTHatMin = 7 GeV, expect ~10-15% efficiency (valid/attempts).
-        // 1M attempts → ~100-150k valid events (typical for HERA photoproduction)
-        config.nEvents = 1000000;
-        
-        // --- Optional: Override default parameters ---
-        // config.pTHatMin = 7.0;
-        // config.pT0Ref = 3.0;
-        // config.Q2max = 1.0;
-        
-        // --- Optional: Custom tag for filename ---
-        // config.customTag = "test";
-        
+        config.preset   = HERA_300;
+        config.nEvents  = 1000000;
+        config.customTag = "";
+
+        if (argc > 1) {
+            string presetArg = argv[1];
+            if      (presetArg == "HERA_300") config.preset = HERA_300;
+            else if (presetArg == "EIC_64")   config.preset = EIC_64;
+            else if (presetArg == "EIC_105")  config.preset = EIC_105;
+            else if (presetArg == "EIC_141")  config.preset = EIC_141;
+            else if (presetArg == "CUSTOM")   config.preset = CUSTOM;
+            else {
+                cerr << "Unknown preset '" << presetArg << "'. "
+                     << "Options: HERA_300, EIC_64, EIC_105, EIC_141, CUSTOM.\n";
+                return 1;
+            }
+        }
+        if (argc > 2) config.nEvents = stol(argv[2]);
+        if (argc > 3) config.customTag = argv[3];
+
         // --- Apply preset and generate filenames ---
         config.applyPreset();
         
@@ -433,15 +439,22 @@ int main() {
             vector<Float_t> pT, eta, phi, mass;
             vector<Int_t> pdgId, status;
             vector<Bool_t> isCharged, isHadron;
-            
+
+            // Outgoing hard-process partons (PYTHIA status == 23).
+            // Used for jet-to-parton DeltaR matching checks downstream.
+            vector<Int_t>   parton_pdgId;
+            vector<Float_t> parton_pT, parton_eta, parton_phi;
+
             Float_t electronPx, electronPy, electronPz, electronE;
             Int_t nParticles;
-            
+
             void clear() {
                 px.clear(); py.clear(); pz.clear(); energy.clear();
                 pT.clear(); eta.clear(); phi.clear(); mass.clear();
                 pdgId.clear(); status.clear();
                 isCharged.clear(); isHadron.clear();
+                parton_pdgId.clear();
+                parton_pT.clear(); parton_eta.clear(); parton_phi.clear();
             }
         };
         
@@ -480,7 +493,12 @@ int main() {
             tree->Branch("status", &data->status);
             tree->Branch("isCharged", &data->isCharged);
             tree->Branch("isHadron", &data->isHadron);
-            
+
+            tree->Branch("parton_pdgId", &data->parton_pdgId);
+            tree->Branch("parton_pT",    &data->parton_pT);
+            tree->Branch("parton_eta",   &data->parton_eta);
+            tree->Branch("parton_phi",   &data->parton_phi);
+
             return tree;
         };
         
@@ -568,7 +586,21 @@ int main() {
                 int nPart = 0;
                 for (int i = 0; i < pythia.event.size(); ++i) {
                     const Particle& particle = pythia.event[i];
-                    
+
+                    // Save the outgoing hard-process partons (status == 23).
+                    // PYTHIA stores them with status code 23 BEFORE the
+                    // shower turns them into descendants; that makes them
+                    // the "LO outgoing parton" reference for jet matching.
+                    if (particle.status() == 23) {
+                        int absid = std::abs(particle.id());
+                        if (absid == 21 || (absid >= 1 && absid <= 6)) {
+                            data->parton_pdgId.push_back(particle.id());
+                            data->parton_pT.push_back(particle.pT());
+                            data->parton_eta.push_back(particle.eta());
+                            data->parton_phi.push_back(particle.phi());
+                        }
+                    }
+
                     if (particle.isFinal() && particle.isVisible()) {
                         data->px.push_back(particle.px());
                         data->py.push_back(particle.py());

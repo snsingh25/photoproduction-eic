@@ -409,19 +409,34 @@ int main(int argc, char** argv) {
         
         // Set up input branches - check if branches exist first
         vector<float> *px = nullptr, *py = nullptr, *pz = nullptr, *energy = nullptr, *eta = nullptr;
-        
-        if (!input_tree->GetBranch("px") || !input_tree->GetBranch("py") || 
-            !input_tree->GetBranch("pz") || !input_tree->GetBranch("energy") || 
+
+        if (!input_tree->GetBranch("px") || !input_tree->GetBranch("py") ||
+            !input_tree->GetBranch("pz") || !input_tree->GetBranch("energy") ||
             !input_tree->GetBranch("eta")) {
             dout << "  Error: Required branches not found in tree, skipping...\n";
             continue;
         }
-        
+
         input_tree->SetBranchAddress("px", &px);
         input_tree->SetBranchAddress("py", &py);
         input_tree->SetBranchAddress("pz", &pz);
         input_tree->SetBranchAddress("energy", &energy);
         input_tree->SetBranchAddress("eta", &eta);
+
+        // Optional input branches: outgoing hard-process partons
+        // (status==23) for jet-to-parton DeltaR matching. Present only
+        // in validation samples produced after commit e465c51.
+        vector<int>   *parton_pdgId = nullptr;
+        vector<float> *parton_eta_in = nullptr, *parton_phi_in = nullptr;
+        const bool have_partons =
+            input_tree->GetBranch("parton_pdgId") &&
+            input_tree->GetBranch("parton_eta") &&
+            input_tree->GetBranch("parton_phi");
+        if (have_partons) {
+            input_tree->SetBranchAddress("parton_pdgId", &parton_pdgId);
+            input_tree->SetBranchAddress("parton_eta",   &parton_eta_in);
+            input_tree->SetBranchAddress("parton_phi",   &parton_phi_in);
+        }
         
         // Create output directory and tree
         output_file->cd();
@@ -436,6 +451,8 @@ int main(int argc, char** argv) {
         vector<float> jet_et, jet_px, jet_py, jet_pz, jet_eta, jet_phi, jet_mass;
         vector<int>   jet_nsd;        // softdrop multiplicity per saved jet
         vector<int>   jet_nsubjets;   // kT exclusive subjet count per saved jet
+        vector<float> jet_parton_dR;  // DeltaR to nearest hard parton (−1 if no partons)
+        vector<int>   jet_parton_pdgId; // PDG id of nearest hard parton (0 if no partons)
         
         // Dijet-specific variables
         Bool_t passes_dijet_cuts;
@@ -457,6 +474,8 @@ int main(int argc, char** argv) {
         output_tree->Branch("jet_mass", &jet_mass);
         output_tree->Branch("jet_nsd", &jet_nsd);
         output_tree->Branch("jet_nsubjets", &jet_nsubjets);
+        output_tree->Branch("jet_parton_dR", &jet_parton_dR);
+        output_tree->Branch("jet_parton_pdgId", &jet_parton_pdgId);
         
         // Dijet-specific branches
         output_tree->Branch("passes_dijet_cuts", &passes_dijet_cuts);
@@ -511,6 +530,8 @@ int main(int argc, char** argv) {
             jet_mass.clear();
             jet_nsd.clear();
             jet_nsubjets.clear();
+            jet_parton_dR.clear();
+            jet_parton_pdgId.clear();
 
             // Reconstruct jets (and compute per-jet n_sd + n_subjets inline)
             vector<int> jets_nsd_tmp, jets_nsubjets_tmp;
@@ -568,10 +589,44 @@ int main(int argc, char** argv) {
                 }
             }
             
+            // Helper: signed delta-phi wrapped into (-pi, pi], used for
+            // jet-parton matching.
+            auto wrapped_dphi = [](double a, double b) {
+                double d = a - b;
+                while (d > M_PI) d -= 2.0 * M_PI;
+                while (d <= -M_PI) d += 2.0 * M_PI;
+                return d;
+            };
+
+            // Helper: nearest hard-parton match for a given jet. Returns
+            // (dR, pdgId). Falls back to (-1, 0) if this input tree has
+            // no parton branches or they are empty/null for this event.
+            auto match_parton = [&](const PseudoJet& jet) {
+                if (!have_partons || parton_eta_in == nullptr ||
+                    parton_phi_in == nullptr || parton_pdgId == nullptr ||
+                    parton_eta_in->empty()) {
+                    return std::make_pair(-1.0f, 0);
+                }
+                double best_dR = 1e9;
+                int    best_id = 0;
+                double je = jet.eta();
+                double jp = jet.phi();
+                for (size_t k = 0; k < parton_eta_in->size(); ++k) {
+                    double deta = je - (*parton_eta_in)[k];
+                    double dphi = wrapped_dphi(jp, (*parton_phi_in)[k]);
+                    double dR = sqrt(deta * deta + dphi * dphi);
+                    if (dR < best_dR) {
+                        best_dR = dR;
+                        best_id = (*parton_pdgId)[k];
+                    }
+                }
+                return std::make_pair((float)best_dR, best_id);
+            };
+
             // Fill jet vectors based on mode
             if (fill_event) {
                 events_selected++;
-                
+
                 if (DIJET_ONLY) {
                     // Only save leading and subleading jets
                     total_jets += 2;
@@ -585,6 +640,9 @@ int main(int argc, char** argv) {
                         jet_mass.push_back(jets[j].m());
                         jet_nsd.push_back(jets_nsd_tmp[j]);
                         jet_nsubjets.push_back(jets_nsubjets_tmp[j]);
+                        auto pm = match_parton(jets[j]);
+                        jet_parton_dR.push_back(pm.first);
+                        jet_parton_pdgId.push_back(pm.second);
                     }
                 } else {
                     // Save all jets
@@ -600,9 +658,12 @@ int main(int argc, char** argv) {
                         jet_mass.push_back(jet.m());
                         jet_nsd.push_back(jets_nsd_tmp[j]);
                         jet_nsubjets.push_back(jets_nsubjets_tmp[j]);
+                        auto pm = match_parton(jet);
+                        jet_parton_dR.push_back(pm.first);
+                        jet_parton_pdgId.push_back(pm.second);
                     }
                 }
-                
+
                 output_tree->Fill();
             }
         }
