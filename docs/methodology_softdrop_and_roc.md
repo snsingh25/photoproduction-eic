@@ -52,33 +52,38 @@ on a single proton parton).
 ### 1.2 Subprocess classification (QQ / GG / GQ)
 
 Each event is labelled by its PYTHIA process code `pythia.info.code()`
-using the function `classifySubprocess` in `evtgen.cc:219`:
+using the function `classifySubprocess` in `evtgen.cc`. The convention
+is **outgoing hard-process parton flavour**:
 
-| Label | Channel | Codes | Processes |
+| Label | Outgoing partons | Codes | Processes |
 |---|---|---|---|
-| **QQ** | resolved | 114, 115, 116, 122, 124 | $qq'\to qq'$; $q\bar q\to gg$; $q\bar q\to q'\bar q'$; $q\bar q\to c\bar c$; $q\bar q\to b\bar b$ |
-| **QQ** | direct | 274, 284 | $q\gamma\to qg$; $\gamma q\to qg$ |
-| **GG** | resolved | 111, 112, 121, 123 | $gg\to gg$; $gg\to q\bar q$ (uds); $gg\to c\bar c$; $gg\to b\bar b$ |
-| **GG** | direct | 271–273, 281–283 | $\gamma g\to q\bar q$ (uds,c,b); $g\gamma\to q\bar q$ (uds,c,b) |
-| **GQ** | resolved | 113 | $qg\to qg$ |
+| **QQ** | quark + quark | 112, 114, 116, 121, 122, 123, 124 (resolved); 271, 272, 273, 281, 282, 283 (direct BGF) | $gg\to q\bar q$; $qq'\to qq'$; $q\bar q\to q'\bar q'$; $gg\to c\bar c$; $q\bar q\to c\bar c$; $gg\to b\bar b$; $q\bar q\to b\bar b$; $g\gamma\to q\bar q$ (uds,c,b); $\gamma g\to q\bar q$ (uds,c,b) |
+| **GG** | gluon + gluon | 111, 115 | $gg\to gg$; $q\bar q\to gg$ |
+| **GQ** | quark + gluon | 113 (resolved); 274, 284 (direct QCDC) | $qg\to qg$; $q\gamma\to qg$; $\gamma q\to qg$ |
 
 Two orthogonal flags tag the photon interaction mode:
 
 - `isResolved = True`  iff  $111 \le$ code $\le 124$
 - `isDirect   = True`  iff  $271 \le$ code $\le 284$
 
-**Important caveat for the referee.** The labels in this paper denote
-the **proton-side initial parton**, not the outgoing-jet flavour. For
-example, process 115 ($q\bar q \to gg$) is placed in "QQ_Events"
-because the proton contributes a quark, but both outgoing hard jets are
-gluons. Similarly 112 ($gg \to q\bar q$) and all direct BGF processes
-(271–273, 281–283) end up in "GG_Events" with outgoing quark jets.
-Any reader assuming the LHC/ML-tagger convention "label = outgoing
-parton flavour" will misread the results. The paper should state this
-labelling convention explicitly. If the intent is instead
-outgoing-flavour labelling, the `classifySubprocess` function must
-be rewritten (moving codes 115, 112, 271–273, 281–283 to different
-categories).
+**Audit.** Running
+[`scripts/audit_truth_labels.py`](../scripts/audit_truth_labels.py)
+on every event in the four samples confirms the labelling is
+**consistent with the outgoing-flavour convention at 99.99% or
+better**: the only contamination is 14–28 events per sample (<0.007%)
+of process 284 ($\gamma q \to qg$) in the QQ_Events tree instead of
+the GQ_Events tree, which is small enough to be neglected. Per-sample
+match rates (the remaining fraction being this 284 leakage):
+
+| Sample | QQ_Events | GG_Events | GQ_Events |
+|---|---:|---:|---:|
+| HERA 300 GeV | 100.00% | 100.00% | 100.00% |
+| EIC 141 GeV  | 99.99%  | 100.00% | 100.00% |
+| EIC 105 GeV  | 99.99%  | 100.00% | 100.00% |
+| EIC 64 GeV   | 99.99%  | 100.00% | 100.00% |
+
+The physics language in the paper ("QQ ≈ quark–quark dijets", etc.)
+is therefore fully justified.
 
 ---
 

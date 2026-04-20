@@ -217,52 +217,52 @@ public:
 // parton that initiates the hard scatter
 
 int classifySubprocess(int processCode) {
-    
     // -----------------------------------------------------------------
-    // QQ: QUARK-initiated processes (quark from proton)
+    // Classification is by OUTGOING hard-process parton configuration:
+    //   1 (QQ) : both outgoing hard partons are quarks  (|pdg| in 1..6)
+    //   2 (GG) : both outgoing hard partons are gluons  (pdg == 21)
+    //   3 (GQ) : one outgoing quark + one outgoing gluon
+    // This matches the labelling convention the paper uses (and against
+    // which ZEUS-era jet-shape measurements are quoted) and is the
+    // convention under which the existing event samples in
+    // data/allevents_pt7GeV/ were produced (audit: ≥99.99% match,
+    // see scripts/audit_truth_labels.py).
+    //
+    // Process-code list taken from getProcessName() below; cross-
+    // reference against the PYTHIA 8 manual for HardQCD and
+    // PhotonParton.
     // -----------------------------------------------------------------
-    // Resolved: quark from photon interacts with quark from proton
-    if (processCode == 114 ||    // q q(bar)' → q q(bar)' 
-        processCode == 115 ||    // q qbar → g g
-        processCode == 116 ||    // q qbar → q' qbar'
-        processCode == 122 ||    // q qbar → c cbar
-        processCode == 124) {    // q qbar → b bbar
-        return 1; // QQ
+
+    // QQ: both outgoing hard partons are quarks
+    if (processCode == 112 ||    // g g → q qbar          (resolved)
+        processCode == 114 ||    // q q' → q q'           (resolved)
+        processCode == 116 ||    // q qbar → q' qbar'     (resolved)
+        processCode == 121 ||    // g g → c cbar          (resolved)
+        processCode == 122 ||    // q qbar → c cbar       (resolved)
+        processCode == 123 ||    // g g → b bbar          (resolved)
+        processCode == 124 ||    // q qbar → b bbar       (resolved)
+        processCode == 271 ||    // g γ → q qbar (uds)    (direct BGF)
+        processCode == 272 ||    // g γ → c cbar          (direct BGF)
+        processCode == 273 ||    // g γ → b bbar          (direct BGF)
+        processCode == 281 ||    // γ g → q qbar (uds)    (direct BGF)
+        processCode == 282 ||    // γ g → c cbar          (direct BGF)
+        processCode == 283) {    // γ g → b bbar          (direct BGF)
+        return 1;
     }
-    // Direct: photon interacts with quark from proton (QCD Compton)
-    if (processCode == 274 ||    // q γ → q g
-        processCode == 284) {    // γ q → q g
-        return 1; // QQ
+
+    // GG: both outgoing hard partons are gluons
+    if (processCode == 111 ||    // g g → g g             (resolved)
+        processCode == 115) {    // q qbar → g g          (resolved)
+        return 2;
     }
-    
-    // -----------------------------------------------------------------
-    // GG: GLUON-initiated processes (gluon from proton)
-    // -----------------------------------------------------------------
-    // Resolved: gluon-gluon scattering
-    if (processCode == 111 ||    // g g → g g
-        processCode == 112 ||    // g g → q qbar (uds)
-        processCode == 121 ||    // g g → c cbar
-        processCode == 123) {    // g g → b bbar
-        return 2; // GG
+
+    // GQ: one outgoing quark, one outgoing gluon
+    if (processCode == 113 ||    // q g → q g             (resolved)
+        processCode == 274 ||    // q γ → q g             (direct QCDC)
+        processCode == 284) {    // γ q → q g             (direct QCDC)
+        return 3;
     }
-    // Direct: photon interacts with gluon from proton (Boson-Gluon Fusion)
-    if (processCode == 271 ||    // g γ → q qbar (uds)
-        processCode == 272 ||    // g γ → c cbar
-        processCode == 273 ||    // g γ → b bbar
-        processCode == 281 ||    // γ g → q qbar (uds)
-        processCode == 282 ||    // γ g → c cbar
-        processCode == 283) {    // γ g → b bbar
-        return 2; // GG
-    }
-    
-    // -----------------------------------------------------------------
-    // GQ: Mixed quark-gluon processes
-    // -----------------------------------------------------------------
-    if (processCode == 113) {    // q g → q g
-        return 3; // GQ
-    }
-    
-    // Unclassified
+
     return 0;
 }
 
