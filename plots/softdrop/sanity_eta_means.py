@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 
 
 CATEGORIES = ["QQ_Events", "GG_Events"]
-BINS = [(-1.0, 0.0), (0.0, 1.0), (1.0, 2.0), (2.0, 3.0)]
+DEFAULT_BINS = [(-1.0, 0.0), (0.0, 1.0), (1.0, 2.0), (2.0, 3.0)]
 
 
 def load(root_path):
@@ -62,7 +62,16 @@ def sep(a, b):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("root_file")
+    ap.add_argument("--bins", default=None,
+                    help="comma-separated eta bin edges, e.g. '-1,0,1,1.5,2' "
+                         "(default: -1,0,1,2,3)")
     args = ap.parse_args()
+
+    if args.bins is None:
+        bins = DEFAULT_BINS
+    else:
+        edges = [float(x) for x in args.bins.split(",")]
+        bins = list(zip(edges[:-1], edges[1:]))
 
     data = load(args.root_file)
     if "QQ_Events" not in data or "GG_Events" not in data:
@@ -106,7 +115,7 @@ def main():
         # keep per-bin stats for the decomposition check
         per_bin_qq = []
         per_bin_gg = []
-        for lo, hi in BINS:
+        for lo, hi in bins:
             mqq = (qq_eta_all >= lo) & (qq_eta_all < hi)
             mgg = (gg_eta_all >= lo) & (gg_eta_all < hi)
             qb = qq_all[mqq]

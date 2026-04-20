@@ -165,11 +165,13 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
                                   const vector<float>& pz, const vector<float>& energy,
                                   const vector<float>& eta,
                                   vector<int>& jet_nsd_out,
-                                  vector<int>& jet_nsubjets_out) {
+                                  vector<int>& jet_nsubjets_out,
+                                  vector<float>& jet_psi03_out) {
 
     // Always start with an empty output so early returns leave it in a sane state
     jet_nsd_out.clear();
     jet_nsubjets_out.clear();
+    jet_psi03_out.clear();
     
     // Check input vector sizes
     if (px.empty() || px.size() != py.size() || px.size() != pz.size() || 
@@ -233,8 +235,28 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
     // -------------------------------------------------------------------------
     jet_nsd_out.reserve(selected_jets.size());
     jet_nsubjets_out.reserve(selected_jets.size());
+    jet_psi03_out.reserve(selected_jets.size());
+
+    // Integrated jet shape psi(r) at r = 0.3 (matches the convention used
+    // by src/jetshapes/integrated/jetrecoint.cc and the paper's Fig 9).
+    const double psi_r = 0.3;
+
     for (const auto& jet : selected_jets) {
         vector<PseudoJet> constituents = jet.constituents();
+
+        // --- psi(r=0.3): fraction of jet ET within Delta-R < 0.3 ---------
+        double et_in_r = 0.0;
+        const double et_jet = jet.Et();
+        if (et_jet > 0.0) {
+            for (const auto& c : constituents) {
+                if (c.delta_R(jet) <= psi_r) {
+                    et_in_r += c.Et();
+                }
+            }
+            jet_psi03_out.push_back(static_cast<float>(et_in_r / et_jet));
+        } else {
+            jet_psi03_out.push_back(0.0f);
+        }
 
         // --- n_sd via Cambridge/Aachen reclustering + tree walk ------------
         int n_sd = 0;
@@ -451,6 +473,7 @@ int main(int argc, char** argv) {
         vector<float> jet_et, jet_px, jet_py, jet_pz, jet_eta, jet_phi, jet_mass;
         vector<int>   jet_nsd;        // softdrop multiplicity per saved jet
         vector<int>   jet_nsubjets;   // kT exclusive subjet count per saved jet
+        vector<float> jet_psi03;      // integrated jet shape psi(r=0.3)
         vector<float> jet_parton_dR;  // DeltaR to nearest hard parton (−1 if no partons)
         vector<int>   jet_parton_pdgId; // PDG id of nearest hard parton (0 if no partons)
         
@@ -474,6 +497,7 @@ int main(int argc, char** argv) {
         output_tree->Branch("jet_mass", &jet_mass);
         output_tree->Branch("jet_nsd", &jet_nsd);
         output_tree->Branch("jet_nsubjets", &jet_nsubjets);
+        output_tree->Branch("jet_psi03", &jet_psi03);
         output_tree->Branch("jet_parton_dR", &jet_parton_dR);
         output_tree->Branch("jet_parton_pdgId", &jet_parton_pdgId);
         
@@ -530,13 +554,16 @@ int main(int argc, char** argv) {
             jet_mass.clear();
             jet_nsd.clear();
             jet_nsubjets.clear();
+            jet_psi03.clear();
             jet_parton_dR.clear();
             jet_parton_pdgId.clear();
 
-            // Reconstruct jets (and compute per-jet n_sd + n_subjets inline)
-            vector<int> jets_nsd_tmp, jets_nsubjets_tmp;
+            // Reconstruct jets (and compute per-jet n_sd, n_subjets, psi(r) inline)
+            vector<int>   jets_nsd_tmp, jets_nsubjets_tmp;
+            vector<float> jets_psi03_tmp;
             vector<PseudoJet> jets = reconstructJets(*px, *py, *pz, *energy, *eta,
-                                                    jets_nsd_tmp, jets_nsubjets_tmp);
+                                                    jets_nsd_tmp, jets_nsubjets_tmp,
+                                                    jets_psi03_tmp);
             
             // Basic event info
             eventID = i;
@@ -640,6 +667,7 @@ int main(int argc, char** argv) {
                         jet_mass.push_back(jets[j].m());
                         jet_nsd.push_back(jets_nsd_tmp[j]);
                         jet_nsubjets.push_back(jets_nsubjets_tmp[j]);
+                        jet_psi03.push_back(jets_psi03_tmp[j]);
                         auto pm = match_parton(jets[j]);
                         jet_parton_dR.push_back(pm.first);
                         jet_parton_pdgId.push_back(pm.second);
@@ -658,6 +686,7 @@ int main(int argc, char** argv) {
                         jet_mass.push_back(jet.m());
                         jet_nsd.push_back(jets_nsd_tmp[j]);
                         jet_nsubjets.push_back(jets_nsubjets_tmp[j]);
+                        jet_psi03.push_back(jets_psi03_tmp[j]);
                         auto pm = match_parton(jet);
                         jet_parton_dR.push_back(pm.first);
                         jet_parton_pdgId.push_back(pm.second);
