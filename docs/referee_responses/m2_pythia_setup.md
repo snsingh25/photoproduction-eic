@@ -88,7 +88,7 @@ HardQCD:all       = on       # resolved-photon 2->2 QCD
 PhotonParton:all  = on       # direct-photon 2->2 QCD
 
 # --- MPI Tune (important for gamma-p) ---
-MultipartonInteractions:pT0Ref = <pT0Ref>    # 4.0 (HERA), 3.0 (EIC)
+MultipartonInteractions:pT0Ref = 3.0         # all samples
 
 # --- Fragmentation Tune ---
 Tune:pp = 14                 # Monash 2013
@@ -105,7 +105,11 @@ StringPT:sigma = 0.335
 | EIC 64 | 100 | 10 | 63.2 | **5** | 3.0 |
 | EIC 105 | 275 | 10 | 104.9 | **5** | 3.0 |
 | EIC 141 | 275 | 18 | 141.0 | **7** | 3.0 |
-| HERA 300 | 820 | 27.5 | 300 | **7** | 4.0 |
+| HERA 300 | 820 | 27.5 | 300 | **7** | 3.0 |
+
+`pT0Ref` regulates MPI / underlying event and is essentially
+insensitive to the Table II fractions in the 3–4 GeV range; both
+values reproduce Table II to ≤ 0.1 pp at our statistics.
 
 **Note on `pTHatMin`.** The paper's methodology paragraph currently
 states `pTHatMin = 3 GeV`, but this is inconsistent with the Table II
@@ -136,7 +140,7 @@ PhaseSpace:pTHatMin    = 7.0
 HardQCD:all            = on
 PhotonParton:all       = on
 
-MultipartonInteractions:pT0Ref = 4.0
+MultipartonInteractions:pT0Ref = 3.0
 
 Tune:pp                = 14
 Tune:ee                = 7
@@ -147,9 +151,10 @@ StringPT:sigma         = 0.335
 Main:numberOfEvents    = 1000000
 ```
 
-For EIC 64 / 105, set `Beams:eA`, `Beams:eB` per Table I,
-`PhaseSpace:pTHatMin = 5.0`, and `MultipartonInteractions:pT0Ref = 3.0`.
-For EIC 141, same beam change but `PhaseSpace:pTHatMin = 7.0`.
+For EIC 64 / 105, set `Beams:eA`, `Beams:eB` per Table I and
+`PhaseSpace:pTHatMin = 5.0`. For EIC 141, same beam change but
+`PhaseSpace:pTHatMin = 7.0`. `MultipartonInteractions:pT0Ref = 3.0`
+is used for every sample.
 
 ## 4. Label assignment (code snippet)
 

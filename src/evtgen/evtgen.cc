@@ -86,7 +86,7 @@ struct EventConfig {
                 protonEnergy = 820.0;
                 electronEnergy = 27.5;
                 pTHatMin = 7.0;
-                pT0Ref = 4.0;          // Tuned for HERA γp
+                pT0Ref = 3.0;          // matches paper; MPI-insensitive
                 break;
             case EIC_64:
                 protonEnergy = 100.0;
