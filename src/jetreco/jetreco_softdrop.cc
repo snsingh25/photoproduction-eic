@@ -168,7 +168,8 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
                                   vector<int>& jet_nsubjets_out,
                                   vector<float>& jet_psi03_out,
                                   vector<int>& jet_nsd_beta1_out,
-                                  vector<int>& jet_nsd_loose_out) {
+                                  vector<int>& jet_nsd_loose_out,
+                                  JetAlgorithm jet_algo_in = antikt_algorithm) {
 
     // Always start with an empty output so early returns leave it in a sane state
     jet_nsd_out.clear();
@@ -205,8 +206,9 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
         return vector<PseudoJet>();  
     }
     
-    // Define anti-kT algorithm
-    JetDefinition jet_def(antikt_algorithm, R);
+    // Define the clustering algorithm (anti-kT by default; kT available
+    // via CLI for algorithmic-comparison studies).
+    JetDefinition jet_def(jet_algo_in, R);
     
     // Run clustering
     ClusterSequence cs(input_particles, jet_def);
@@ -365,7 +367,27 @@ bool passesDijetCuts(const vector<PseudoJet>& jets) {
 int main(int argc, char** argv) {
 
     // Input file: CLI arg 1, else default. Output/log names derived from it.
+    //   argv[1] : input ROOT file path
+    //   argv[2] : jet algorithm   ("antikt" [default] or "kt")
     input_filename = (argc > 1) ? argv[1] : default_input_filename;
+
+    JetAlgorithm jet_algo = antikt_algorithm;
+    string       jet_algo_str = "anti-kT";
+    if (argc > 2) {
+        string arg2 = argv[2];
+        if (arg2 == "kt" || arg2 == "kT") {
+            jet_algo = kt_algorithm;
+            jet_algo_str = "kT";
+        } else if (arg2 == "antikt" || arg2 == "anti-kt" || arg2 == "anti-kT") {
+            jet_algo = antikt_algorithm;
+            jet_algo_str = "anti-kT";
+        } else {
+            cerr << "Unknown jet algorithm '" << arg2
+                 << "'. Options: antikt (default), kt." << endl;
+            return 1;
+        }
+    }
+
     output_filename = generateOutputFilename(input_filename, R, etMin);
     log_filename = generateLogFilename(output_filename);
 
@@ -384,7 +406,7 @@ int main(int argc, char** argv) {
     dout << "=============================================================================\n";
     dout << "Analysis Parameters:\n";
     dout << "  Analysis Mode:    " << (DIJET_ONLY ? "DIJET ONLY" : "ALL JETS") << "\n";
-    dout << "  Jet Algorithm:    Anti-kT\n";
+    dout << "  Jet Algorithm:    " << jet_algo_str << "\n";
     dout << "  Jet Radius:       " << R << "\n";
     dout << "  Min Jet ET:       " << etMin << " GeV\n";
     dout << "  Jet Eta Range:    [" << etaMin << ", " << etaMax << "]\n";
@@ -593,7 +615,8 @@ int main(int argc, char** argv) {
                                                     jets_nsd_tmp, jets_nsubjets_tmp,
                                                     jets_psi03_tmp,
                                                     jets_nsd_beta1_tmp,
-                                                    jets_nsd_loose_tmp);
+                                                    jets_nsd_loose_tmp,
+                                                    jet_algo);
             
             // Basic event info
             eventID = i;
