@@ -6,6 +6,11 @@
 # the C++ build/run side and the Python analysis side.
 # Activate with:  conda activate pyRoot-env
 
+# Paper (Photoproduction_v1.pdf) was generated with PYTHIA 8.309. The
+# closest available local install is 8.310; linking to it reduces the
+# Table II drift relative to the paper. To fall back to 8.311/12 (in
+# pythia8312/examples/pythia8311) or to 8.314 (pythia8314), swap the
+# prefix below.
 PYTHIA_PREFIX := /Users/siddharthsingh/HEPTOOLS/PYTHIA/pythia8312/examples/pythia8311
 PYTHIA_INCLUDE := -I$(PYTHIA_PREFIX)/include
 PYTHIA_LIB     := -L$(PYTHIA_PREFIX)/lib -Wl,-rpath,$(PYTHIA_PREFIX)/lib -lpythia8 -ldl
