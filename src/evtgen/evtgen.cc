@@ -75,29 +75,31 @@ struct EventConfig {
     
     // Apply preset configuration
     void applyPreset() {
+        // Paper Table I beam energies, and the paper's stated
+        // PhaseSpace:pTHatMin = 3.0 GeV (photoproduction jet-shape convention).
         switch (preset) {
             case HERA_300:
                 protonEnergy = 820.0;
                 electronEnergy = 27.5;
-                pTHatMin = 7.0;        // For E_T^jet > 17 GeV studies
+                pTHatMin = 3.0;
                 pT0Ref = 4.0;          // Tuned for HERA γp
                 break;
             case EIC_64:
                 protonEnergy = 100.0;
                 electronEnergy = 10.0;
-                pTHatMin = 5.0;        // Lower for EIC jet studies
+                pTHatMin = 3.0;
                 pT0Ref = 3.0;
                 break;
             case EIC_105:
                 protonEnergy = 275.0;
                 electronEnergy = 10.0;
-                pTHatMin = 5.0;
+                pTHatMin = 3.0;
                 pT0Ref = 3.0;
                 break;
             case EIC_141:
                 protonEnergy = 275.0;
                 electronEnergy = 18.0;
-                pTHatMin = 5.0;
+                pTHatMin = 3.0;
                 pT0Ref = 3.0;
                 break;
             case CUSTOM:
