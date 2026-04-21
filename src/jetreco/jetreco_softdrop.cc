@@ -80,12 +80,15 @@ public:
 // ANALYSIS CONFIGURATION
 // =============================================================================
 
-// Analysis mode selection
-const bool DIJET_ONLY = false;    // Set to true for dijet analysis, false for all jets
+// Analysis mode selection.
+// Both of these are runtime-configurable via argv (see main):
+//   argv[3] = "dijets" | "alljets"  (default alljets)
+//   argv[4] = etMin in GeV          (default 17.0)
+bool   DIJET_ONLY = false;       // true: keep only dijet events, save leading+subleading
+double etMin      = 17.0;        // minimum ET every jet must pass (HERA = 17, EIC = 10)
 
-// Jet clustering parameters 
+// Jet clustering parameters
 const double R = 1.0;             // Jet radius
-const double etMin = 17.0;         // Minimum ET for any jet (HERA = 17, EIC = 10), ALL jets must pass this Base Cut
 const double etaMin = -4.0;        // Minimum eta for any jet
 const double etaMax = 4.0;         // Maximum eta for any jet
 
@@ -366,9 +369,11 @@ bool passesDijetCuts(const vector<PseudoJet>& jets) {
 // =============================================================================
 int main(int argc, char** argv) {
 
-    // Input file: CLI arg 1, else default. Output/log names derived from it.
+    // CLI args:
     //   argv[1] : input ROOT file path
-    //   argv[2] : jet algorithm   ("antikt" [default] or "kt")
+    //   argv[2] : jet algorithm       ("antikt" [default] or "kt")
+    //   argv[3] : analysis mode        ("alljets" [default] or "dijets")
+    //   argv[4] : base-jet ET min [GeV] (default 17.0)
     input_filename = (argc > 1) ? argv[1] : default_input_filename;
 
     JetAlgorithm jet_algo = antikt_algorithm;
@@ -387,6 +392,17 @@ int main(int argc, char** argv) {
             return 1;
         }
     }
+    if (argc > 3) {
+        string arg3 = argv[3];
+        if (arg3 == "dijets")       DIJET_ONLY = true;
+        else if (arg3 == "alljets") DIJET_ONLY = false;
+        else {
+            cerr << "Unknown analysis mode '" << arg3
+                 << "'. Options: alljets (default), dijets." << endl;
+            return 1;
+        }
+    }
+    if (argc > 4) etMin = atof(argv[4]);
 
     output_filename = generateOutputFilename(input_filename, R, etMin);
     log_filename = generateLogFilename(output_filename);

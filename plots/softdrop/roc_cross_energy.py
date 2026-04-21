@@ -25,20 +25,26 @@ import uproot
 import matplotlib.pyplot as plt
 
 
-SAMPLES = [
+DEFAULT_SAMPLES = [
     ("eic64_pT7",   "EIC 64 GeV",   64,  "C0"),
     ("eic105_pT7",  "EIC 105 GeV",  105, "C2"),
     ("eic141_pT7",  "EIC 141 GeV",  141, "C3"),
     ("hera300_pT7", "HERA 300 GeV", 300, "C4"),
 ]
+# Gets overwritten by --samples if the user provides one.
+SAMPLES = list(DEFAULT_SAMPLES)
 
 CATEGORIES = ["QQ_Events", "GG_Events"]
 
 
 # -----------------------------------------------------------------------------
 def find_root(data_jets_dir, sample):
-    hits = sorted(glob.glob(f"{data_jets_dir}/{sample}/alljets_*.root"))
-    return hits[0] if hits else None
+    # Match both alljets_*.root (default) and dijets_*.root (DIJET_ONLY mode).
+    for pat in ("alljets_*.root", "dijets_*.root", "*.root"):
+        hits = sorted(glob.glob(f"{data_jets_dir}/{sample}/{pat}"))
+        if hits:
+            return hits[0]
+    return None
 
 
 def load(root_path):
@@ -86,7 +92,11 @@ def roc_integer(sig, bkg):
 # -----------------------------------------------------------------------------
 def collect_curves(sample_data, bins, min_jets=20):
     """For each (sample, bin, observable), return {sample_key -> {bin_label -> (es, eb, auc, n_qq, n_gg)}}."""
-    labels = ["inclusive"] + [f"$\\eta \\in [{lo:.0f}, {hi:.0f})$" for lo, hi in bins]
+    def _fmt(x):
+        return f"{x:.0f}" if float(x).is_integer() else f"{x:.1f}"
+    labels = ["inclusive"] + [
+        f"$\\eta \\in [{_fmt(lo)}, {_fmt(hi)})$" for lo, hi in bins
+    ]
 
     results = {}   # sample_key -> {bin_label -> {'nsd': (...), 'nsubjets': (...)}}
     for sname, label, _sqrts, _col in SAMPLES:
@@ -149,7 +159,21 @@ def main():
     ap.add_argument("--out-dir", default=None,
                     help="where to write output PDFs (default: same as --data-jets)")
     ap.add_argument("--min-jets", type=int, default=20)
+    ap.add_argument("--samples",
+                    help="semicolon-separated sample specs, e.g. "
+                         "'eic64_antikt_dijets,EIC 64,64,C0;hera300_kt_dijets,HERA 300,300,C4'. "
+                         "Each spec is <dirname>,<label>,<sqrts>,<color>. "
+                         "If omitted, the default 4-sample list is used.")
     args = ap.parse_args()
+
+    global SAMPLES
+    if args.samples:
+        SAMPLES = []
+        for spec in args.samples.split(";"):
+            parts = [p.strip() for p in spec.split(",")]
+            if len(parts) != 4:
+                raise SystemExit(f"Bad --samples entry '{spec}'; expected 4 fields")
+            SAMPLES.append((parts[0], parts[1], int(parts[2]), parts[3]))
 
     bin_edges = [float(x) for x in args.bins.split(",")]
     bins = list(zip(bin_edges[:-1], bin_edges[1:]))
