@@ -1,0 +1,12 @@
+========================================================================================
+Psi(r=0.3) vs n_SD vs n_subjets — ROC comparison  —  dijets_eic141_pT7_R10_EtMin10_10_7
+========================================================================================
+  N_QQ = 150,638   N_GG = 33,260
+
+Observable              <QQ>    sig_QQ      <GG>    sig_GG       sep       AUC
+------------------------------------------------------------------------------
+n_SD                   3.439     1.337     4.412     1.313    +0.519     0.695
+n_subjets              3.385     1.418     3.848     1.522    +0.223     0.582
+Psi(r=0.3)             0.681     0.226     0.445     0.222    -0.746     0.778
+
+Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data-jets/eic141_antikt_dijets/roc_psi_vs_others.pdf

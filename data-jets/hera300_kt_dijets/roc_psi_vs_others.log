@@ -1,0 +1,12 @@
+========================================================================================
+Psi(r=0.3) vs n_SD vs n_subjets — ROC comparison  —  dijets_hera300_pT7_R10_EtMin17_10_7
+========================================================================================
+  N_QQ = 16,844   N_GG = 4,150
+
+Observable              <QQ>    sig_QQ      <GG>    sig_GG       sep       AUC
+------------------------------------------------------------------------------
+n_SD                   3.630     1.399     4.781     1.398    +0.582     0.716
+n_subjets              2.947     1.538     3.500     1.878    +0.228     0.578
+Psi(r=0.3)             0.749     0.213     0.508     0.228    -0.773     0.795
+
+Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data-jets/hera300_kt_dijets/roc_psi_vs_others.pdf
