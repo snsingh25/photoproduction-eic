@@ -1,0 +1,26 @@
+==========================================================================
+HEAD-TO-HEAD: n_sd  vs  n_subjets
+==========================================================================
+Category        N_jets    <n_sd>    sd_std  <n_subj>    sj_std
+QQ                9564      3.55      1.39      3.11      1.32
+GG                 853      4.67      1.40      3.90      1.44
+GQ               10013      4.00      1.47      3.43      1.38
+
+Mean separation  (<GG> - <QQ>) / sqrt(sig_QQ^2 + sig_GG^2):
+    n_sd       = +0.566
+    n_subjets  = +0.407
+    -> n_sd separation is 1.39x that of n_subjets
+
+AUC (area under ROC, GG as signal vs QQ as background):
+    n_sd       = 0.7097
+    n_subjets  = 0.6520
+    (random = 0.5, perfect = 1.0; higher is better)
+
+==========================================================================
+Per-eta-bin separation (<GG> - <QQ>) / pooled_sigma
+==========================================================================
+eta bin           n_QQ    n_GG   sep(n_sd)   sep(n_subj)
+ -1.0, 0.0   (too few jets — skipped)
+[ 0.0, 1.0)    4194     272       0.571         0.739
+[ 1.0, 2.0)    3969     452       0.565         0.681
+[ 2.0, 3.0)     867     116       0.531         0.718

@@ -3,17 +3,17 @@ bin/
 *.o
 *.d
 
-# Input / output data trees — regenerable, don't track
-data/
-data-jets/
+# Only the bulky generated event/jet trees are ignored — PDFs, logs,
+# and summary .txt inside data/ and data-jets/ are tracked so plots
+# and run records live with the repo.
+data/**/*.root
+data-jets/**/*.root
 
-# Data artifacts — never commit
-*.root
-*.log
-*.pdf
-*.png
+# Images we don't want tracked (jpg/png screenshots, etc.);
+# PDFs are intentionally NOT in this list.
 *.jpg
 *.jpeg
+*.png
 *.eps
 
 # Jupyter

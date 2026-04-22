@@ -1,0 +1,23 @@
+==============================================================================================
+Jet-parton Delta-R matching check  —  alljets_hera300_pTHat7_pT0Ref4.0_Q2max1_n500k_validation_R10_EtMin17
+==============================================================================================
+Tight match: Delta-R < 0.5    Loose match: Delta-R < 1.0
+
+Category    Jet              N    <dR>   median  <0.5 (tight)  <1.0 (loose)   flavour OK
+----------------------------------------------------------------------------------------------
+QQ          leading       3736   0.265    0.192  3220   86.19%  3688   98.72% 3220  100.00%
+QQ          subleading    3736   0.292    0.191  3187   85.31%  3617   96.81% 3187  100.00%
+GG          leading        727   0.348    0.260   561   77.17%   699   96.15%  561  100.00%
+GG          subleading     727   0.405    0.258   547   75.24%   673   92.57%  547  100.00%
+GQ          leading       4250   0.274    0.199  3632   85.46%  4172   98.16% 3632  100.00%
+GQ          subleading    4250   0.322    0.216  3520   82.82%  4050   95.29% 3520  100.00%
+
+Interpretation:
+  - For anti-kT R=1 jets, tight-match fraction >~95% is expected:
+    hard partons should be close to the jets they seeded.
+  - >5% with Delta-R > 1.0 would indicate the LO-parton -> jet
+    identification is unreliable (e.g. remnant contamination).
+  - 'flavour OK' shows fraction of tightly-matched jets whose
+    nearest parton is consistent with the event label.
+
+Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data-jets/validation_partons_hera300/jet_parton_match.pdf

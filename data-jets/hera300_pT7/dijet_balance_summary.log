@@ -1,0 +1,20 @@
+========================================================================================
+Dijet balance check  —  alljets_hera300_pT7_R10_EtMin17
+========================================================================================
+Input: alljets_hera300_pT7_R10_EtMin17.root
+Born-like cuts used for fraction: Delta-phi > 2.5 rad AND pT_ratio > 0.5
+
+Category          N dijets   <Delta-phi>    <pT_ratio>     Born-like   Delta-phi>2.5     pTr>0.5
+------------------------------------------------------------------------------------------------
+QQ_Events             8479         2.975         0.903        96.97%          97.02%      99.94%
+GG_Events             2247         2.933         0.892        95.68%          95.73%      99.96%
+GQ_Events            10049         2.966         0.898        96.47%          96.50%      99.97%
+
+Interpretation:
+  - Delta-phi should peak sharply near pi (LO back-to-back).
+  - pT_ratio should peak near 1 (LO momentum balance).
+  - Born-like fraction >~70% is expected with pT_hat > 7 GeV.
+  - A strongly skewed pT-ratio or broad Delta-phi can dilute the
+    'hard-parton -> jet' identification used for QQ/GG/GQ labels.
+
+Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data-jets/hera300_pT7/dijet_balance.pdf

@@ -1,0 +1,144 @@
+============================================================================================
+Sample: eic105_pT7
+============================================================================================
+
+Label           N events    QQ outgoing    GG outgoing    QG outgoing    UNKNOWN    match?
+--------------------------------------------------------------------------------------------
+QQ_Events         378245 378226 99.99%      0  0.00%     19  0.01%   0  0.00%  99.99% ✓
+GG_Events         107066      0  0.00% 107066 100.00%      0  0.00%   0  0.00%  100.00% ✓
+GQ_Events         514133      0  0.00%      0  0.00% 514133 100.00%   0  0.00%  100.00% ✓
+
+  QQ_Events   (expected outgoing: QQ)
+  code  process                         outgoing         N  % of label  OK?
+  112   g g -> q qbar                         QQ      2646       0.70%     ✓
+  114   q q' -> q q'                          QQ    158337      41.86%     ✓
+  116   q qbar -> q' qbar'                    QQ      2861       0.76%     ✓
+  121   g g -> c cbar                         QQ       735       0.19%     ✓
+  122   q qbar -> c cbar                      QQ       841       0.22%     ✓
+  123   g g -> b bbar                         QQ       156       0.04%     ✓
+  124   q qbar -> b bbar                      QQ       313       0.08%     ✓
+  271   g gamma -> q qbar (uds)               QQ    129300      34.18%     ✓
+  272   g gamma -> c cbar                     QQ     76581      20.25%     ✓
+  273   g gamma -> b bbar                     QQ      6451       1.71%     ✓
+  281   gamma g -> q qbar (uds)               QQ         4       0.00%     ✓
+  282   gamma g -> c cbar                     QQ         1       0.00%     ✓
+  284   gamma q -> q g                        QG        19       0.01%     ✗
+
+  GG_Events   (expected outgoing: GG)
+  code  process                         outgoing         N  % of label  OK?
+  111   g g -> g g                            GG    103230      96.42%     ✓
+  115   q qbar -> g g                         GG      3836       3.58%     ✓
+
+  GQ_Events   (expected outgoing: QG)
+  code  process                         outgoing         N  % of label  OK?
+  113   q g -> q g                            QG    351887      68.44%     ✓
+  274   q gamma -> q g                        QG    162246      31.56%     ✓
+
+============================================================================================
+Sample: eic141_pT7
+============================================================================================
+
+Label           N events    QQ outgoing    GG outgoing    QG outgoing    UNKNOWN    match?
+--------------------------------------------------------------------------------------------
+QQ_Events         391413 391393 99.99%      0  0.00%     20  0.01%   0  0.00%  99.99% ✓
+GG_Events          93259      0  0.00%  93259 100.00%      0  0.00%   0  0.00%  100.00% ✓
+GQ_Events         514961      0  0.00%      0  0.00% 514961 100.00%   0  0.00%  100.00% ✓
+
+  QQ_Events   (expected outgoing: QQ)
+  code  process                         outgoing         N  % of label  OK?
+  112   g g -> q qbar                         QQ      2324       0.59%     ✓
+  114   q q' -> q q'                          QQ    166196      42.46%     ✓
+  116   q qbar -> q' qbar'                    QQ      2976       0.76%     ✓
+  121   g g -> c cbar                         QQ       655       0.17%     ✓
+  122   q qbar -> c cbar                      QQ       896       0.23%     ✓
+  123   g g -> b bbar                         QQ       275       0.07%     ✓
+  124   q qbar -> b bbar                      QQ       513       0.13%     ✓
+  271   g gamma -> q qbar (uds)               QQ    127090      32.47%     ✓
+  272   g gamma -> c cbar                     QQ     79364      20.28%     ✓
+  273   g gamma -> b bbar                     QQ     11095       2.83%     ✓
+  281   gamma g -> q qbar (uds)               QQ         4       0.00%     ✓
+  282   gamma g -> c cbar                     QQ         5       0.00%     ✓
+  284   gamma q -> q g                        QG        20       0.01%     ✗
+
+  GG_Events   (expected outgoing: GG)
+  code  process                         outgoing         N  % of label  OK?
+  111   g g -> g g                            GG     89340      95.80%     ✓
+  115   q qbar -> g g                         GG      3919       4.20%     ✓
+
+  GQ_Events   (expected outgoing: QG)
+  code  process                         outgoing         N  % of label  OK?
+  113   q g -> q g                            QG    347511      67.48%     ✓
+  274   q gamma -> q g                        QG    167450      32.52%     ✓
+
+============================================================================================
+Sample: eic64_pT7
+============================================================================================
+
+Label           N events    QQ outgoing    GG outgoing    QG outgoing    UNKNOWN    match?
+--------------------------------------------------------------------------------------------
+QQ_Events         401596 401568 99.99%      0  0.00%     28  0.01%   0  0.00%  99.99% ✓
+GG_Events          58928      0  0.00%  58928 100.00%      0  0.00%   0  0.00%  100.00% ✓
+GQ_Events         537987      0  0.00%      0  0.00% 537987 100.00%   0  0.00%  100.00% ✓
+
+  QQ_Events   (expected outgoing: QQ)
+  code  process                         outgoing         N  % of label  OK?
+  112   g g -> q qbar                         QQ      1453       0.36%     ✓
+  114   q q' -> q q'                          QQ    163782      40.78%     ✓
+  116   q qbar -> q' qbar'                    QQ      3762       0.94%     ✓
+  121   g g -> c cbar                         QQ       376       0.09%     ✓
+  122   q qbar -> c cbar                      QQ      1042       0.26%     ✓
+  123   g g -> b bbar                         QQ        58       0.01%     ✓
+  124   q qbar -> b bbar                      QQ       324       0.08%     ✓
+  271   g gamma -> q qbar (uds)               QQ    142705      35.53%     ✓
+  272   g gamma -> c cbar                     QQ     82411      20.52%     ✓
+  273   g gamma -> b bbar                     QQ      5646       1.41%     ✓
+  281   gamma g -> q qbar (uds)               QQ         7       0.00%     ✓
+  282   gamma g -> c cbar                     QQ         2       0.00%     ✓
+  284   gamma q -> q g                        QG        28       0.01%     ✗
+
+  GG_Events   (expected outgoing: GG)
+  code  process                         outgoing         N  % of label  OK?
+  111   g g -> g g                            GG     54229      92.03%     ✓
+  115   q qbar -> g g                         GG      4699       7.97%     ✓
+
+  GQ_Events   (expected outgoing: QG)
+  code  process                         outgoing         N  % of label  OK?
+  113   q g -> q g                            QG    270800      50.34%     ✓
+  274   q gamma -> q g                        QG    267187      49.66%     ✓
+
+============================================================================================
+Sample: hera300_pT7
+============================================================================================
+
+Label           N events    QQ outgoing    GG outgoing    QG outgoing    UNKNOWN    match?
+--------------------------------------------------------------------------------------------
+QQ_Events         318964 318950 100.00%      0  0.00%     14  0.00%   0  0.00%  100.00% ✓
+GG_Events         176498      0  0.00% 176498 100.00%      0  0.00%   0  0.00%  100.00% ✓
+GQ_Events         504451      0  0.00%      0  0.00% 504451 100.00%   0  0.00%  100.00% ✓
+
+  QQ_Events   (expected outgoing: QQ)
+  code  process                         outgoing         N  % of label  OK?
+  112   g g -> q qbar                         QQ      4172       1.31%     ✓
+  114   q q' -> q q'                          QQ    134643      42.21%     ✓
+  116   q qbar -> q' qbar'                    QQ      1781       0.56%     ✓
+  121   g g -> c cbar                         QQ      1365       0.43%     ✓
+  122   q qbar -> c cbar                      QQ       588       0.18%     ✓
+  123   g g -> b bbar                         QQ       701       0.22%     ✓
+  124   q qbar -> b bbar                      QQ       319       0.10%     ✓
+  271   g gamma -> q qbar (uds)               QQ    101455      31.81%     ✓
+  272   g gamma -> c cbar                     QQ     63992      20.06%     ✓
+  273   g gamma -> b bbar                     QQ      9922       3.11%     ✓
+  281   gamma g -> q qbar (uds)               QQ         9       0.00%     ✓
+  282   gamma g -> c cbar                     QQ         3       0.00%     ✓
+  284   gamma q -> q g                        QG        14       0.00%     ✗
+
+  GG_Events   (expected outgoing: GG)
+  code  process                         outgoing         N  % of label  OK?
+  111   g g -> g g                            GG    173871      98.51%     ✓
+  115   q qbar -> g g                         GG      2627       1.49%     ✓
+
+  GQ_Events   (expected outgoing: QG)
+  code  process                         outgoing         N  % of label  OK?
+  113   q g -> q g                            QG    423909      84.03%     ✓
+  274   q gamma -> q g                        QG     80542      15.97%     ✓
+

@@ -1,0 +1,36 @@
+==========================================================================================
+Sample: hera300_pT7
+==========================================================================================
+
+Label                N   QQ outgoing   GG outgoing   QG outgoing     other
+----------------------------------------------------------------------------
+QQ_Events       318964      0   0.0%      0   0.0%      0   0.0%318964 100.0%
+GG_Events       176498      0   0.0%      0   0.0%      0   0.0%176498 100.0%
+GQ_Events       504451      0   0.0%      0   0.0%      0   0.0%504451 100.0%
+
+Breakdown by PYTHIA process code (per label):
+
+  QQ_Events  (N = 318964):
+    112   g g -> q qbar                      N=  4172 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    114   q q' -> q q'                       N=134643 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    116   q qbar -> q' qbar'                 N=  1781 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    121   g g -> c cbar                      N=  1365 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    122   q qbar -> c cbar                   N=   588 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    123   g g -> b bbar                      N=   701 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    124   q qbar -> b bbar                   N=   319 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    271   g gamma -> q qbar (uds)            N=101455 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    272   g gamma -> c cbar                  N= 63992 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    273   g gamma -> b bbar                  N=  9922 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    281   gamma g -> q qbar (uds)            N=     9 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    282   gamma g -> c cbar                  N=     3 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QQ_out)
+    284   gamma q -> q g                     N=    14 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QG_out)
+
+  GG_Events  (N = 176498):
+    111   g g -> g g                         N=173871 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: GG_out)
+    115   q qbar -> g g                      N=  2627 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: GG_out)
+
+  GQ_Events  (N = 504451):
+    113   q g -> q g                         N=423909 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QG_out)
+    274   q gamma -> q g                     N= 80542 QQout=  0.0% GGout=  0.0% QGout=  0.0%    (analytic: QG_out)
+
+

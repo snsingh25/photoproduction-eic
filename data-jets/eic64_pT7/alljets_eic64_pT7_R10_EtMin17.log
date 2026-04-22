@@ -1,0 +1,99 @@
+=============================================================================
+JET RECONSTRUCTION ANALYSIS FOR HERA PHOTOPRODUCTION EVENTS
+=============================================================================
+Analysis Parameters:
+  Analysis Mode:    ALL JETS
+  Jet Algorithm:    Anti-kT
+  Jet Radius:       1
+  Min Jet ET:       17 GeV
+  Jet Eta Range:    [-4, 4]
+  Min Particle pT:  0.1 GeV
+  Softdrop (zcut, beta, R0): (0.1, 0, 1)
+  n_subjets (kT ycut):       0.0005
+=============================================================================
+
+Successfully opened input file: ../../data/allevents_pt7GeV/eic64_pT7/eic64_pT7.root
+Log file: alljets_eic64_pT7_R10_EtMin17.log
+
+Processing QQ_Events...
+  Found 401596 events
+    Processing event 0/401596 (0%)    Processing event 100000/401596 (24%)    Processing event 200000/401596 (49%)    Processing event 300000/401596 (74%)    Processing event 400000/401596 (99%)
+  Events processed: 401596
+  Events with ≥2 jets: 77 (0.0191735%)
+  Events selected: 77 (0.0191735%)
+  Total jets saved: 154
+  Average jets/selected event: 2
+
+Processing GG_Events...
+  Found 58928 events
+    Processing event 0/58928 (0%)
+  Events processed: 58928
+  Events with ≥2 jets: 1 (0.00169699%)
+  Events selected: 1 (0.00169699%)
+  Total jets saved: 2
+  Average jets/selected event: 2
+
+Processing GQ_Events...
+  Found 537987 events
+    Processing event 0/537987 (0%)    Processing event 100000/537987 (18%)    Processing event 200000/537987 (37%)    Processing event 300000/537987 (55%)    Processing event 400000/537987 (74%)    Processing event 500000/537987 (92%)
+  Events processed: 537987
+  Events with ≥2 jets: 73 (0.0135691%)
+  Events selected: 73 (0.0135691%)
+  Total jets saved: 146
+  Average jets/selected event: 2
+
+Processing Combined_Events...
+  Found 998511 events
+    Processing event 0/998511 (0%)    Processing event 100000/998511 (10%)    Processing event 200000/998511 (20%)    Processing event 300000/998511 (30%)    Processing event 400000/998511 (40%)    Processing event 500000/998511 (50%)    Processing event 600000/998511 (60%)    Processing event 700000/998511 (70%)    Processing event 800000/998511 (80%)    Processing event 900000/998511 (90%)
+  Events processed: 998511
+  Events with ≥2 jets: 151 (0.0151225%)
+  Events selected: 151 (0.0151225%)
+  Total jets saved: 302
+  Average jets/selected event: 2
+
+Processing Resolved_Events...
+  Found 500562 events
+    Processing event 0/500562 (0%)    Processing event 100000/500562 (19%)    Processing event 200000/500562 (39%)    Processing event 300000/500562 (59%)    Processing event 400000/500562 (79%)    Processing event 500000/500562 (99%)
+  Events processed: 500562
+  Events with ≥2 jets: 44 (0.00879012%)
+  Events selected: 44 (0.00879012%)
+  Total jets saved: 88
+  Average jets/selected event: 2
+
+Processing Direct_Events...
+  Found 497949 events
+    Processing event 0/497949 (0%)    Processing event 100000/497949 (20%)    Processing event 200000/497949 (40%)    Processing event 300000/497949 (60%)    Processing event 400000/497949 (80%)
+  Events processed: 497949
+  Events with ≥2 jets: 107 (0.0214881%)
+  Events selected: 107 (0.0214881%)
+  Total jets saved: 214
+  Average jets/selected event: 2
+
+=============================================================================
+ANALYSIS COMPLETED SUCCESSFULLY!
+=============================================================================
+Output file: alljets_eic64_pT7_R10_EtMin17.root
+Log file: alljets_eic64_pT7_R10_EtMin17.log
+
+Overall Statistics:
+  Total events processed: 2995533
+  Total events selected: 453 (0.0151225%)
+
+For each category, the following are saved:
+  - Jet trees with basic properties (ET, px, py, pz, eta, phi, mass, nsd, nsubjets)
+  - Dijet-specific variables (masses, angles, cuts flags)
+  - Basic distribution histograms
+
+Jets are reconstructed using anti-kT algorithm with:
+  - R = 1
+  - ET > 17 GeV
+  - -4 < eta < 4
+
+Softdrop multiplicity n_sd (modified mass drop):
+  - z_cut = 0.1
+  - beta  = 0
+  - R0    = 1
+
+n_subjets (kT exclusive):
+  - y_cut = 0.0005
+=============================================================================

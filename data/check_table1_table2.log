@@ -1,0 +1,38 @@
+======================================================================================
+Sample: HERA 300 GeV (27.5, 820)   (sqrt(s) = 300.0 GeV)
+  file: data/hera300/hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k.root
+======================================================================================
+
+[Table I] Combined events:
+  Paper:       999,881
+  Data:        999,888
+  Diff:             +7  (+0.001%)
+  Status:   PASS  (threshold: |diff| < 1% of paper)
+
+[Table II] Photon-interaction decomposition (fractions of total):
+  Resolved  :  743,696  ( 74.38%)  (paper 74.40%, Δ -0.02 pp)
+  Direct    :  256,192  ( 25.62%)  (paper 25.60%, Δ +0.02 pp)
+
+  Category  Code  Process                                N    % of total  vs paper
+  ----------------------------------------------------------------------------------------
+  Resolved  113   q g -> q g                       423,708        42.38%  (paper 42.36%, Δ +0.02 pp)
+  Resolved  111   g g -> g g                       173,417        17.34%  (paper 17.37%, Δ -0.03 pp)
+  Resolved  114   q q' -> q q'                     135,220        13.52%  (paper 13.48%, Δ +0.04 pp)
+  Resolved  112   g g -> q qbar                      4,124         0.41%
+  Resolved  115   q qbar -> g g                      2,597         0.26%
+  Resolved  116   q qbar -> q' qbar'                 1,802         0.18%
+  Resolved  121   g g -> c cbar                      1,297         0.13%
+  Resolved  123   g g -> b bbar                        674         0.07%
+  Resolved  122   q qbar -> c cbar                     540         0.05%
+  Resolved  124   q qbar -> b bbar                     317         0.03%
+  Direct    271   g gamma -> q qbar (uds)          101,431        10.14%  (paper 10.15%, Δ -0.01 pp)
+  Direct    274   q gamma -> q g                    80,843         8.09%  (paper  8.10%, Δ -0.01 pp)
+  Direct    272   g gamma -> c cbar                 64,089         6.41%
+  Direct    273   g gamma -> b bbar                  9,801         0.98%
+  Direct    284   gamma q -> q g                        16         0.00%
+  Direct    281   gamma g -> q qbar (uds)                9         0.00%
+  Direct    282   gamma g -> c cbar                      3         0.00%
+
+======================================================================================
+OVERALL: all paper Table I / II values match within 0.2 pp tolerance.
+======================================================================================

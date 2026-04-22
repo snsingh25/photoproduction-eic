@@ -1,0 +1,84 @@
+Event Generation Started: Mon Apr 20 19:14:56 2026
+
+=== PYTHIA CONFIGURATION VERIFICATION ===
+Tune:pp = 14
+Tune:ee = 7
+StringZ:aLund = 0.68
+StringZ:bLund = 0.98
+StringPT:sigma = 0.335
+MultipartonInteractions:pT0Ref = 4
+PhaseSpace:pTHatMin = 7
+Photon:Q2max = 1
+==========================================
+
+Starting event generation...
+Target: 500000 events
+
+  Progress: 0% | Valid: 0 | Efficiency: 0.0%
+  Progress: 10% | Valid: 49994 | Efficiency: 100.0%
+  Progress: 20% | Valid: 99987 | Efficiency: 100.0%
+  Progress: 30% | Valid: 149977 | Efficiency: 100.0%
+  Progress: 40% | Valid: 199975 | Efficiency: 100.0%
+  Progress: 50% | Valid: 249971 | Efficiency: 100.0%
+  Progress: 60% | Valid: 299961 | Efficiency: 100.0%
+  Progress: 70% | Valid: 349955 | Efficiency: 100.0%
+  Progress: 80% | Valid: 399948 | Efficiency: 100.0%
+  Progress: 90% | Valid: 449941 | Efficiency: 100.0%
+
+Event generation complete!
+
+
+=============================================================================
+EVENT GENERATION SUMMARY
+=============================================================================
+Output File: ./hera300_pTHat7_pT0Ref4.0_Q2max1_n500k_validation.root
+Log File:    ./hera300_pTHat7_pT0Ref4.0_Q2max1_n500k_validation.log
+
+--- Event Counts ---
+Total Attempts:     500000
+Valid Events:       499933
+Failed Events:      67
+Efficiency:         100.0%
+
+--- Subprocess Classification ---
+  QQ (quark-init):    159947 (32.0%)
+  GG (gluon-init):     88434 (17.7%)
+  GQ (mixed):         251552 (50.3%)
+  Unclassified:            0 (0.0%)
+
+--- Photoproduction Type ---
+  Resolved:           372135 (74.4%)
+  Direct:             127798 (25.6%)
+
+--- Process Code Breakdown ---
+    Code                  Process     Count         %    Class
+---------------------------------------------------------------
+     111              g g → g g     87063    17.41%        GG
+     112           g g → q qbar      2143     0.43%        QQ
+     113              q g → q g    211347    42.28%        GQ
+     114            q q' → q q'     67748    13.55%        QQ
+     115           q qbar → g g      1371     0.27%        GG
+     116      q qbar → q' qbar'       974     0.19%        QQ
+     121           g g → c cbar       684     0.14%        QQ
+     122        q qbar → c cbar       299     0.06%        QQ
+     123           g g → b bbar       327     0.07%        QQ
+     124        q qbar → b bbar       179     0.04%        QQ
+     271          g γ → q qbar     50659    10.13%        QQ
+     272          g γ → c cbar     32056     6.41%        QQ
+     273          g γ → b bbar      4873     0.97%        QQ
+     274             q γ → q g     40196     8.04%        GQ
+     281          γ g → q qbar         4     0.00%        QQ
+     282          γ g → c cbar         1     0.00%        QQ
+     284             γ q → q g         9     0.00%        GQ
+
+--- Trees Saved ---
+  QQ_Events:         159947 events
+  GG_Events:          88434 events
+  GQ_Events:         251552 events
+  Combined_Events:   499933 events
+  Resolved_Events:   372135 events
+  Direct_Events:     127798 events
+=============================================================================
+
+Event generation completed successfully!
+Output: ./hera300_pTHat7_pT0Ref4.0_Q2max1_n500k_validation.root

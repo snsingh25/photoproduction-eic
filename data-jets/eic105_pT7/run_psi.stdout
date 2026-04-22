@@ -1,0 +1,112 @@
+=============================================================================
+JET RECONSTRUCTION ANALYSIS FOR HERA PHOTOPRODUCTION EVENTS
+=============================================================================
+Analysis Parameters:
+  Analysis Mode:    ALL JETS
+  Jet Algorithm:    Anti-kT
+  Jet Radius:       1
+  Min Jet ET:       17 GeV
+  Jet Eta Range:    [-4, 4]
+  Min Particle pT:  0.1 GeV
+  Softdrop (zcut, beta, R0): (0.1, 0, 1)
+  n_subjets (kT ycut):       0.0005
+=============================================================================
+
+Successfully opened input file: ../../data/allevents_pt7GeV/eic105_pT7/eic105_pT7.root
+Log file: alljets_eic105_pT7_R10_EtMin17.log
+
+Processing QQ_Events...
+  Found 378245 events
+    Processing event 0/378245 (0%)#--------------------------------------------------------------------------
+#                         FastJet release 3.4.2
+#                 M. Cacciari, G.P. Salam and G. Soyez                  
+#     A software package for jet finding and analysis at colliders      
+#                           http://fastjet.fr                           
+#	                                                                      
+# Please cite EPJC72(2012)1896 [arXiv:1111.6097] if you use this package
+# for scientific work and optionally PLB641(2006)57 [hep-ph/0512210].   
+#                                                                       
+# FastJet is provided without warranty under the GNU GPL v2 or higher.  
+# It uses T. Chan's closest pair algorithm, S. Fortune's Voronoi code
+# and 3rd party plugin jet algorithms. See COPYING file for details.
+#--------------------------------------------------------------------------
+    Processing event 100000/378245 (26%)    Processing event 200000/378245 (52%)    Processing event 300000/378245 (79%)
+  Events processed: 378245
+  Events with ≥2 jets: 565 (0.149374%)
+  Events selected: 565 (0.149374%)
+  Total jets saved: 1130
+  Average jets/selected event: 2
+
+Processing GG_Events...
+  Found 107066 events
+    Processing event 0/107066 (0%)    Processing event 100000/107066 (93%)
+  Events processed: 107066
+  Events with ≥2 jets: 22 (0.0205481%)
+  Events selected: 22 (0.0205481%)
+  Total jets saved: 44
+  Average jets/selected event: 2
+
+Processing GQ_Events...
+  Found 514133 events
+    Processing event 0/514133 (0%)    Processing event 100000/514133 (19%)    Processing event 200000/514133 (38%)    Processing event 300000/514133 (58%)    Processing event 400000/514133 (77%)    Processing event 500000/514133 (97%)
+  Events processed: 514133
+  Events with ≥2 jets: 583 (0.113395%)
+  Events selected: 583 (0.113395%)
+  Total jets saved: 1166
+  Average jets/selected event: 2
+
+Processing Combined_Events...
+  Found 999444 events
+    Processing event 0/999444 (0%)    Processing event 100000/999444 (10%)    Processing event 200000/999444 (20%)    Processing event 300000/999444 (30%)    Processing event 400000/999444 (40%)    Processing event 500000/999444 (50%)    Processing event 600000/999444 (60%)    Processing event 700000/999444 (70%)    Processing event 800000/999444 (80%)    Processing event 900000/999444 (90%)
+  Events processed: 999444
+  Events with ≥2 jets: 1170 (0.117065%)
+  Events selected: 1170 (0.117065%)
+  Total jets saved: 2340
+  Average jets/selected event: 2
+
+Processing Resolved_Events...
+  Found 624866 events
+    Processing event 0/624866 (0%)    Processing event 100000/624866 (16%)    Processing event 200000/624866 (32%)    Processing event 300000/624866 (48%)    Processing event 400000/624866 (64%)    Processing event 500000/624866 (80%)    Processing event 600000/624866 (96%)
+  Events processed: 624866
+  Events with ≥2 jets: 487 (0.0779367%)
+  Events selected: 487 (0.0779367%)
+  Total jets saved: 974
+  Average jets/selected event: 2
+
+Processing Direct_Events...
+  Found 374578 events
+    Processing event 0/374578 (0%)    Processing event 100000/374578 (26%)    Processing event 200000/374578 (53%)    Processing event 300000/374578 (80%)
+  Events processed: 374578
+  Events with ≥2 jets: 683 (0.182339%)
+  Events selected: 683 (0.182339%)
+  Total jets saved: 1366
+  Average jets/selected event: 2
+
+=============================================================================
+ANALYSIS COMPLETED SUCCESSFULLY!
+=============================================================================
+Output file: alljets_eic105_pT7_R10_EtMin17.root
+Log file: alljets_eic105_pT7_R10_EtMin17.log
+
+Overall Statistics:
+  Total events processed: 2998332
+  Total events selected: 3510 (0.117065%)
+
+For each category, the following are saved:
+  - Jet trees with basic properties (ET, px, py, pz, eta, phi, mass, nsd, nsubjets)
+  - Dijet-specific variables (masses, angles, cuts flags)
+  - Basic distribution histograms
+
+Jets are reconstructed using anti-kT algorithm with:
+  - R = 1
+  - ET > 17 GeV
+  - -4 < eta < 4
+
+Softdrop multiplicity n_sd (modified mass drop):
+  - z_cut = 0.1
+  - beta  = 0
+  - R0    = 1
+
+n_subjets (kT exclusive):
+  - y_cut = 0.0005
+=============================================================================

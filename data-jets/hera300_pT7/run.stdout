@@ -1,0 +1,127 @@
+=============================================================================
+EVENT-LEVEL EFFICIENCY ANALYSIS FOR DIJET QUARK/GLUON CLASSIFICATION
+=============================================================================
+Analysis Parameters:
+  Analysis Type:        STRICT Dijet Events (exactly 2 jets)
+  Jet Algorithm:        Anti-kT
+  Jet Radius:           1
+  Leading Jet ET:       > 10 GeV
+  Subleading Jet ET:    > 7 GeV
+  Jet Eta Range:        [-1, 0]
+  Shape Radius:         r = 0.3
+  Thin Jet Cut:         Ψ(r) > 0.8
+  Thick Jet Cut:        Ψ(r) < 0.6
+  Dijet Requirement:    Exactly 2 jets per event
+=============================================================================
+
+Input File: /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data/allevents_pt7GeV/hera300_pT7/hera300_pT7.root
+Log File: hera300_pT7_eT_10_7_eta_-1.00_0.00_dijet_EventEff.log
+
+Successfully opened input file.
+
+Found 999913 events in Combined_Events tree.
+
+Successfully set up input branches.
+
+Starting event processing...
+
+#--------------------------------------------------------------------------
+#                         FastJet release 3.4.2
+#                 M. Cacciari, G.P. Salam and G. Soyez                  
+#     A software package for jet finding and analysis at colliders      
+#                           http://fastjet.fr                           
+#	                                                                      
+# Please cite EPJC72(2012)1896 [arXiv:1111.6097] if you use this package
+# for scientific work and optionally PLB641(2006)57 [hep-ph/0512210].   
+#                                                                       
+# FastJet is provided without warranty under the GNU GPL v2 or higher.  
+# It uses T. Chan's closest pair algorithm, S. Fortune's Voronoi code
+# and 3rd party plugin jet algorithms. See COPYING file for details.
+#--------------------------------------------------------------------------
+Processed 100000 events...
+Processed 200000 events...
+Processed 300000 events...
+Processed 400000 events...
+Processed 500000 events...
+Processed 600000 events...
+Processed 700000 events...
+Processed 800000 events...
+Processed 900000 events...
+
+
+Event processing completed!
+Events processed: 999913
+Dijet events: 10785(1.08)%
+
+=============================================================================
+EFFICIENCY AND PURITY ANALYSIS RESULTS (EVENT-LEVEL EFFICIENCY)
+=============================================================================
+Classification Cuts Used:
+  Thin Jets (Quark-like):  Ψ(r=0.30) > 0.80
+  Thick Jets (Gluon-like): Ψ(r=0.30) < 0.60
+
+Overall Statistics:
+  Total Events Analyzed: 10785
+  Total Jets Analyzed:   21570 (should be 21570)
+
+=============================================================================
+EVENT-LEVEL CLASSIFICATION PATTERNS
+=============================================================================
+Format: [Leading-Subleading] classification patterns
+
+Subprocess | Total Events | [T-T] | [Tk-Tk] | [T-Tk] | [Tk-T] | Other | Dominant Pattern
+-----------|-------------|-------|---------|--------|--------|-------|------------------
+        QQ |        5972 |   517 |     935 |    567 |    521 |  3432 | Other/Unclassified
+        GG |         456 |     3 |     266 |     23 |     15 |   149 | [Tk-Tk] Thick-dominated
+        GQ |        4357 |   101 |    1107 |    530 |    474 |  2145 | Other/Unclassified
+
+=============================================================================
+EFFICIENCY ANALYSIS (EVENT-LEVEL, BOTH JETS MUST SATISFY CONDITION)
+=============================================================================
+Event-level efficiency: Both jets must satisfy the expected condition
+Expected: QQ→[T-T], GG→[Tk-Tk], GQ→[T-Tk] or [Tk-T] (mixed)
+
+Subprocess | Total Events | Correctly Classified | Efficiency | Performance
+-----------|-------------|---------------------|------------|-------------
+        QQ |        5972 |                 517 |      0.087 | ✗ Poor
+        GG |         456 |                 266 |      0.583 | ~ Fair
+        GQ |        4357 |                1004 |      0.230 | ✗ Poor
+
+Detailed Expected Performance:
+  QQ → [T-T] Both Thin efficiency:  0.087 (8.657%) ✗ Poor
+  GG → [Tk-Tk] Both Thick efficiency: 0.583 (58.333%) ~ Fair
+  GQ → [T-Tk] or [Tk-T] Mixed efficiency: 0.230 (23.043%) ✗ Poor
+
+=============================================================================
+PURITY ANALYSIS (JET-LEVEL SAMPLE COMPOSITION)
+=============================================================================
+Total Thin Jets Classified: 4952
+Thin Jet Sample Composition:
+  QQ jets: 3287 (66.4%)
+  GG jets: 54 (1.1%)
+  GQ jets: 1611 (32.5%)
+
+Total Thick Jets Classified: 9833
+Thick Jet Sample Composition:
+  QQ jets: 4509 (45.9%)
+  GG jets: 697 (7.1%)
+  GQ jets: 4627 (47.1%)
+
+=============================================================================
+PHYSICS INTERPRETATION
+=============================================================================
+Event-Level Classification Performance:
+  QQ → [T-T] Both Thin:  0.087 (8.657%) ✗ Poor
+  GG → [Tk-Tk] Both Thick: 0.583 (58.333%) ~ Fair
+  GQ → [T-Tk] or [Tk-T] Mixed: 0.230 (23.043%) ✗ Poor
+
+Expected vs Observed:
+  - QQ events should produce two quark jets → Both classified as Thin [T-T]
+  - GG events should produce two gluon jets → Both classified as Thick [Tk-Tk]
+  - GQ events should produce mixed jets → Either [T-Tk] or [Tk-T] patterns
+
+=============================================================================
+
+Analysis completed successfully!
+Results saved to: hera300_pT7_eT_10_7_eta_-1.00_0.00_dijet_EventEff.log
+=============================================================================

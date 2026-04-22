@@ -1,0 +1,17 @@
+======================================================================================================
+Softdrop-parameter sensitivity  —  alljets_hera300_pT7_R10_EtMin17
+======================================================================================================
+Config                    <nSD>_QQ    sig_QQ  <nSD>_GG    sig_GG    AUC incl   AUC [0,1)   AUC [1.5,2)
+------------------------------------------------------------------------------------------------------
+(0.1, 0.0)  baseline         3.639     1.408     4.867     1.405      0.7285      0.7171        0.7282
+(0.1, 1.0)  original SD      4.956     1.567     5.979     1.471      0.6816      0.6666        0.6817
+(0.05, 0.0) loose            4.795     1.570     6.054     1.500      0.7170      0.6995        0.7270
+
+Physics interpretation:
+  - Stricter cut (lower z_cut) counts more splittings, raises <n_SD>
+    for both classes, but also lowers per-splitting gluon-vs-quark
+    Casimir leverage -> AUC may not improve much.
+  - Non-zero beta (angle-dependent grooming) tightens the cut at
+    small angles and loosens it at large ones -> counts fewer
+    splittings and can approach the Cambridge/Aachen ungroomed
+    limit as beta -> large.
