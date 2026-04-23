@@ -18,12 +18,12 @@ Dijet Selection Cuts:
   Subleading |η|:   < 4.5
 =============================================================================
 
-Successfully opened input file: ../../data/allevents_pt7GeV/eic64_pT7/eic64_pT7.root
-Log file: dijets_eic64_pT7_R10_EtMin10_10_7.log
+Successfully opened input file: ../../data/eic64/eic64_pTHat5_pT0Ref3.0_Q2max1_n1000k.root
+Log file: dijets_eic64_pTHat5_pT0Ref3.0_Q2max1_n1000k_R10_EtMin10_10_7.log
 
 Processing QQ_Events...
-  Found 401596 events
-    Processing event 0/401596 (0%)#--------------------------------------------------------------------------
+  Found 401568 events
+    Processing event 0/401568 (0%)#--------------------------------------------------------------------------
 #                         FastJet release 3.4.2
 #                 M. Cacciari, G.P. Salam and G. Soyez                  
 #     A software package for jet finding and analysis at colliders      
@@ -36,67 +36,67 @@ Processing QQ_Events...
 # It uses T. Chan's closest pair algorithm, S. Fortune's Voronoi code
 # and 3rd party plugin jet algorithms. See COPYING file for details.
 #--------------------------------------------------------------------------
-    Processing event 100000/401596 (24%)    Processing event 200000/401596 (49%)    Processing event 300000/401596 (74%)    Processing event 400000/401596 (99%)
-  Events processed: 401596
-  Events with ≥2 jets: 8181 (2.03712%)
-  Events passing dijet cuts: 8181 (2.03712%)
-  Total jets saved: 16362
+    Processing event 100000/401568 (24%)    Processing event 200000/401568 (49%)    Processing event 300000/401568 (74%)    Processing event 400000/401568 (99%)
+  Events processed: 401568
+  Events with ≥2 jets: 7568 (1.88461%)
+  Events passing dijet cuts: 7566 (1.88411%)
+  Total jets saved: 15132
   Average jets/selected event: 2
 
 Processing GG_Events...
   Found 58928 events
     Processing event 0/58928 (0%)
   Events processed: 58928
-  Events with ≥2 jets: 385 (0.65334%)
-  Events passing dijet cuts: 385 (0.65334%)
-  Total jets saved: 770
+  Events with ≥2 jets: 379 (0.643158%)
+  Events passing dijet cuts: 379 (0.643158%)
+  Total jets saved: 758
   Average jets/selected event: 2
 
 Processing GQ_Events...
-  Found 537987 events
-    Processing event 0/537987 (0%)    Processing event 100000/537987 (18%)    Processing event 200000/537987 (37%)    Processing event 300000/537987 (55%)    Processing event 400000/537987 (74%)    Processing event 500000/537987 (92%)
-  Events processed: 537987
-  Events with ≥2 jets: 7526 (1.39892%)
-  Events passing dijet cuts: 7526 (1.39892%)
-  Total jets saved: 15052
+  Found 538015 events
+    Processing event 0/538015 (0%)    Processing event 100000/538015 (18%)    Processing event 200000/538015 (37%)    Processing event 300000/538015 (55%)    Processing event 400000/538015 (74%)    Processing event 500000/538015 (92%)
+  Events processed: 538015
+  Events with ≥2 jets: 7352 (1.3665%)
+  Events passing dijet cuts: 7348 (1.36576%)
+  Total jets saved: 14696
   Average jets/selected event: 2
 
 Processing Combined_Events...
   Found 998511 events
     Processing event 0/998511 (0%)    Processing event 100000/998511 (10%)    Processing event 200000/998511 (20%)    Processing event 300000/998511 (30%)    Processing event 400000/998511 (40%)    Processing event 500000/998511 (50%)    Processing event 600000/998511 (60%)    Processing event 700000/998511 (70%)    Processing event 800000/998511 (80%)    Processing event 900000/998511 (90%)
   Events processed: 998511
-  Events with ≥2 jets: 16092 (1.6116%)
-  Events passing dijet cuts: 16092 (1.6116%)
-  Total jets saved: 32184
+  Events with ≥2 jets: 15299 (1.53218%)
+  Events passing dijet cuts: 15293 (1.53158%)
+  Total jets saved: 30586
   Average jets/selected event: 2
 
 Processing Resolved_Events...
-  Found 500562 events
-    Processing event 0/500562 (0%)    Processing event 100000/500562 (19%)    Processing event 200000/500562 (39%)    Processing event 300000/500562 (59%)    Processing event 400000/500562 (79%)    Processing event 500000/500562 (99%)
-  Events processed: 500562
-  Events with ≥2 jets: 7158 (1.42999%)
-  Events passing dijet cuts: 7158 (1.42999%)
-  Total jets saved: 14316
+  Found 500525 events
+    Processing event 0/500525 (0%)    Processing event 100000/500525 (19%)    Processing event 200000/500525 (39%)    Processing event 300000/500525 (59%)    Processing event 400000/500525 (79%)    Processing event 500000/500525 (99%)
+  Events processed: 500525
+  Events with ≥2 jets: 6815 (1.36157%)
+  Events passing dijet cuts: 6813 (1.36117%)
+  Total jets saved: 13626
   Average jets/selected event: 2
 
 Processing Direct_Events...
-  Found 497949 events
-    Processing event 0/497949 (0%)    Processing event 100000/497949 (20%)    Processing event 200000/497949 (40%)    Processing event 300000/497949 (60%)    Processing event 400000/497949 (80%)
-  Events processed: 497949
-  Events with ≥2 jets: 8934 (1.79416%)
-  Events passing dijet cuts: 8934 (1.79416%)
-  Total jets saved: 17868
+  Found 497986 events
+    Processing event 0/497986 (0%)    Processing event 100000/497986 (20%)    Processing event 200000/497986 (40%)    Processing event 300000/497986 (60%)    Processing event 400000/497986 (80%)
+  Events processed: 497986
+  Events with ≥2 jets: 8484 (1.70366%)
+  Events passing dijet cuts: 8480 (1.70286%)
+  Total jets saved: 16960
   Average jets/selected event: 2
 
 =============================================================================
 ANALYSIS COMPLETED SUCCESSFULLY!
 =============================================================================
-Output file: dijets_eic64_pT7_R10_EtMin10_10_7.root
-Log file: dijets_eic64_pT7_R10_EtMin10_10_7.log
+Output file: dijets_eic64_pTHat5_pT0Ref3.0_Q2max1_n1000k_R10_EtMin10_10_7.root
+Log file: dijets_eic64_pTHat5_pT0Ref3.0_Q2max1_n1000k_R10_EtMin10_10_7.log
 
 Overall Statistics:
   Total events processed: 2995533
-  Total events selected: 48276 (1.6116%)
+  Total events selected: 45879 (1.53158%)
 
 For each category, the following are saved:
   - Jet trees with basic properties (ET, px, py, pz, eta, phi, mass, nsd, nsubjets)

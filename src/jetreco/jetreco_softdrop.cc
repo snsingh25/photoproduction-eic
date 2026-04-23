@@ -329,9 +329,15 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
 // DIJET SELECTION FUNCTION
 // =============================================================================
 bool passesDijetCuts(const vector<PseudoJet>& jets) {
-    // Need at least 2 jets
-    if (jets.size() < 2) return false;
-    
+    // Exclusive dijet selection: exactly 2 jets passing the base
+    // E_T cut. Events with 3+ jets are rejected entirely (rather than
+    // dropping the extra jets and keeping the leading two), which
+    // matches the paper's stated "exactly 2 jets required" convention
+    // and removes a small but systematic contamination from 3-jet
+    // events (2% at HERA 300 down to 0.02% at EIC 64 in the previous
+    // inclusive-dijet runs).
+    if (jets.size() != 2) return false;
+
     PseudoJet leading_jet = jets[0];
     PseudoJet subleading_jet = jets[1];
     

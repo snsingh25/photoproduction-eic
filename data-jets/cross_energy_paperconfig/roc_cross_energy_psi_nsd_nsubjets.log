@@ -1,27 +1,27 @@
 AUC summary — paper-config dijet samples, paper eta bins
 ============================================================================================
 Sample                        bin                 N_QQ    N_GG   Psi_AUC   nSD_AUC   nSJ_AUC
-EIC 64 (anti-kT dijets)       inclusive          16362     770     0.740     0.653     0.649
+EIC 64 (anti-kT dijets)       inclusive          15132     758     0.745     0.657     0.652
 EIC 64 (anti-kT dijets)       $\eta \in [-1, 0)$       —       —         —         —         —
-EIC 64 (anti-kT dijets)       $\eta \in [0, 1)$    8592     347     0.743     0.642     0.693
-EIC 64 (anti-kT dijets)       $\eta \in [1, 1.5)$    4335     254     0.750     0.665     0.722
-EIC 64 (anti-kT dijets)       $\eta \in [1.5, 2)$    2214     137     0.733     0.669     0.689
+EIC 64 (anti-kT dijets)       $\eta \in [0, 1)$    7927     340     0.748     0.647     0.696
+EIC 64 (anti-kT dijets)       $\eta \in [1, 1.5)$    4014     252     0.755     0.669     0.725
+EIC 64 (anti-kT dijets)       $\eta \in [1.5, 2)$    2065     135     0.735     0.665     0.691
 --------------------------------------------------------------------------------------------
-EIC 105 (anti-kT dijets)      inclusive          27242    2844     0.761     0.678     0.585
+EIC 105 (anti-kT dijets)      inclusive          25258    2796     0.766     0.682     0.590
 EIC 105 (anti-kT dijets)      $\eta \in [-1, 0)$       —       —         —         —         —
-EIC 105 (anti-kT dijets)      $\eta \in [0, 1)$    9036     612     0.758     0.662     0.698
-EIC 105 (anti-kT dijets)      $\eta \in [1, 1.5)$    6079     626     0.781     0.673     0.730
-EIC 105 (anti-kT dijets)      $\eta \in [1.5, 2)$    5482     688     0.759     0.684     0.717
+EIC 105 (anti-kT dijets)      $\eta \in [0, 1)$    8295     601     0.764     0.665     0.702
+EIC 105 (anti-kT dijets)      $\eta \in [1, 1.5)$    5642     612     0.785     0.678     0.734
+EIC 105 (anti-kT dijets)      $\eta \in [1.5, 2)$    5131     679     0.760     0.686     0.720
 --------------------------------------------------------------------------------------------
-EIC 141 (anti-kT dijets)      inclusive         150638   33260     0.778     0.695     0.582
-EIC 141 (anti-kT dijets)      $\eta \in [-1, 0)$   21860    1793     0.769     0.652     0.731
-EIC 141 (anti-kT dijets)      $\eta \in [0, 1)$   54929    8674     0.782     0.679     0.740
-EIC 141 (anti-kT dijets)      $\eta \in [1, 1.5)$   27098    6652     0.779     0.691     0.750
-EIC 141 (anti-kT dijets)      $\eta \in [1.5, 2)$   22242    6890     0.782     0.703     0.744
+EIC 141 (anti-kT dijets)      inclusive         135800   22930     0.757     0.672     0.586
+EIC 141 (anti-kT dijets)      $\eta \in [-1, 0)$   20036    1538     0.766     0.658     0.724
+EIC 141 (anti-kT dijets)      $\eta \in [0, 1)$   50776    6634     0.764     0.659     0.723
+EIC 141 (anti-kT dijets)      $\eta \in [1, 1.5)$   24329    4735     0.757     0.668     0.726
+EIC 141 (anti-kT dijets)      $\eta \in [1.5, 2)$   19555    4612     0.764     0.683     0.723
 --------------------------------------------------------------------------------------------
-HERA 300 (kT dijets)          inclusive          16844    4150     0.795     0.716     0.578
-HERA 300 (kT dijets)          $\eta \in [-1, 0)$    1841     188     0.791     0.684     0.784
-HERA 300 (kT dijets)          $\eta \in [0, 1)$    5446     887     0.824     0.717     0.800
-HERA 300 (kT dijets)          $\eta \in [1, 1.5)$    2863     689     0.787     0.695     0.767
-HERA 300 (kT dijets)          $\eta \in [1.5, 2)$    2508     699     0.803     0.730     0.782
+HERA 300 (kT dijets)          inclusive          15130    3122     0.776     0.698     0.576
+HERA 300 (kT dijets)          $\eta \in [-1, 0)$    1659     155     0.800     0.662     0.770
+HERA 300 (kT dijets)          $\eta \in [0, 1)$    4870     676     0.788     0.697     0.764
+HERA 300 (kT dijets)          $\eta \in [1, 1.5)$    2537     490     0.786     0.697     0.769
+HERA 300 (kT dijets)          $\eta \in [1.5, 2)$    2268     571     0.788     0.689     0.755
 --------------------------------------------------------------------------------------------
