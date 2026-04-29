@@ -164,6 +164,11 @@ string log_filename;
 // =============================================================================
 // JET RECONSTRUCTION FUNCTION
 // =============================================================================
+// Psi(r) curve grid used for Figure-5-style plots.
+static const std::vector<double> kPsiRGrid = {
+    0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0
+};
+
 vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& py,
                                   const vector<float>& pz, const vector<float>& energy,
                                   const vector<float>& eta,
@@ -172,6 +177,11 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
                                   vector<float>& jet_psi03_out,
                                   vector<int>& jet_nsd_beta1_out,
                                   vector<int>& jet_nsd_loose_out,
+                                  // Flat curve: 10 floats per jet, layout
+                                  // [j0r1, j0r2, ..., j0r10, j1r1, ...].
+                                  // (vector<vector<float>> would need a manual
+                                  // ROOT dictionary; flat works out of the box.)
+                                  vector<float>& jet_psi_curve_flat_out,
                                   JetAlgorithm jet_algo_in = antikt_algorithm) {
 
     // Always start with an empty output so early returns leave it in a sane state
@@ -180,6 +190,7 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
     jet_psi03_out.clear();
     jet_nsd_beta1_out.clear();
     jet_nsd_loose_out.clear();
+    jet_psi_curve_flat_out.clear();
     
     // Check input vector sizes
     if (px.empty() || px.size() != py.size() || px.size() != pz.size() || 
@@ -247,27 +258,28 @@ vector<PseudoJet> reconstructJets(const vector<float>& px, const vector<float>& 
     jet_psi03_out.reserve(selected_jets.size());
     jet_nsd_beta1_out.reserve(selected_jets.size());
     jet_nsd_loose_out.reserve(selected_jets.size());
-
-    // Integrated jet shape psi(r) at r = 0.3 (matches the convention used
-    // by src/jetshapes/integrated/jetrecoint.cc and the paper's Fig 9).
-    const double psi_r = 0.3;
+    jet_psi_curve_flat_out.reserve(selected_jets.size() * kPsiRGrid.size());
 
     for (const auto& jet : selected_jets) {
         vector<PseudoJet> constituents = jet.constituents();
 
-        // --- psi(r=0.3): fraction of jet ET within Delta-R < 0.3 ---------
-        double et_in_r = 0.0;
+        // --- psi(r) curve over r in {0.1, ..., 1.0}; psi03 = curve[2] ----
+        std::vector<float> psi_curve(kPsiRGrid.size(), 0.0f);
         const double et_jet = jet.Et();
         if (et_jet > 0.0) {
             for (const auto& c : constituents) {
-                if (c.delta_R(jet) <= psi_r) {
-                    et_in_r += c.Et();
+                double dR = c.delta_R(jet);
+                double et_c = c.Et();
+                for (size_t k = 0; k < kPsiRGrid.size(); ++k) {
+                    if (dR <= kPsiRGrid[k]) psi_curve[k] += et_c;
                 }
             }
-            jet_psi03_out.push_back(static_cast<float>(et_in_r / et_jet));
-        } else {
-            jet_psi03_out.push_back(0.0f);
+            for (auto& v : psi_curve) v = static_cast<float>(v / et_jet);
         }
+        // Flatten append: 10 floats per jet, in r-grid order.
+        for (float v : psi_curve) jet_psi_curve_flat_out.push_back(v);
+        // psi(r=0.3) is the third entry in the grid
+        jet_psi03_out.push_back(psi_curve[2]);
 
         // --- n_sd via Cambridge/Aachen reclustering + tree walk ------------
         // Compute three configurations in the same walk so a sensitivity
@@ -539,6 +551,9 @@ int main(int argc, char** argv) {
         vector<int>   jet_nsd_loose;    // softdrop multiplicity (z_cut=0.05, beta=0)
         vector<int>   jet_nsubjets;     // kT exclusive subjet count per saved jet
         vector<float> jet_psi03;        // integrated jet shape psi(r=0.3)
+        // psi(r) curve flattened: 10 floats per saved jet in r=0.1..1.0 order.
+        // Reshape in Python as np.asarray(jet_psi_curve_flat).reshape(-1, 10).
+        vector<float> jet_psi_curve_flat;
         vector<float> jet_parton_dR;    // DeltaR to nearest hard parton (−1 if no partons)
         vector<int>   jet_parton_pdgId; // PDG id of nearest hard parton (0 if no partons)
         
@@ -565,6 +580,7 @@ int main(int argc, char** argv) {
         output_tree->Branch("jet_nsd_loose", &jet_nsd_loose);
         output_tree->Branch("jet_nsubjets", &jet_nsubjets);
         output_tree->Branch("jet_psi03", &jet_psi03);
+        output_tree->Branch("jet_psi_curve_flat", &jet_psi_curve_flat);
         output_tree->Branch("jet_parton_dR", &jet_parton_dR);
         output_tree->Branch("jet_parton_pdgId", &jet_parton_pdgId);
         
@@ -624,6 +640,7 @@ int main(int argc, char** argv) {
             jet_nsd_loose.clear();
             jet_nsubjets.clear();
             jet_psi03.clear();
+            jet_psi_curve_flat.clear();
             jet_parton_dR.clear();
             jet_parton_pdgId.clear();
 
@@ -633,11 +650,13 @@ int main(int argc, char** argv) {
             vector<int>   jets_nsd_tmp, jets_nsubjets_tmp;
             vector<int>   jets_nsd_beta1_tmp, jets_nsd_loose_tmp;
             vector<float> jets_psi03_tmp;
+            vector<float> jets_psi_curve_flat_tmp;
             vector<PseudoJet> jets = reconstructJets(*px, *py, *pz, *energy, *eta,
                                                     jets_nsd_tmp, jets_nsubjets_tmp,
                                                     jets_psi03_tmp,
                                                     jets_nsd_beta1_tmp,
                                                     jets_nsd_loose_tmp,
+                                                    jets_psi_curve_flat_tmp,
                                                     jet_algo);
             
             // Basic event info
@@ -744,7 +763,7 @@ int main(int argc, char** argv) {
                         jet_nsd_beta1.push_back(jets_nsd_beta1_tmp[j]);
                         jet_nsd_loose.push_back(jets_nsd_loose_tmp[j]);
                         jet_nsubjets.push_back(jets_nsubjets_tmp[j]);
-                        jet_psi03.push_back(jets_psi03_tmp[j]);
+                        jet_psi03.push_back(jets_psi03_tmp[j]); for (int kk = 0; kk < 10; ++kk) jet_psi_curve_flat.push_back(jets_psi_curve_flat_tmp[10*j + kk]);
                         auto pm = match_parton(jets[j]);
                         jet_parton_dR.push_back(pm.first);
                         jet_parton_pdgId.push_back(pm.second);
@@ -765,7 +784,7 @@ int main(int argc, char** argv) {
                         jet_nsd_beta1.push_back(jets_nsd_beta1_tmp[j]);
                         jet_nsd_loose.push_back(jets_nsd_loose_tmp[j]);
                         jet_nsubjets.push_back(jets_nsubjets_tmp[j]);
-                        jet_psi03.push_back(jets_psi03_tmp[j]);
+                        jet_psi03.push_back(jets_psi03_tmp[j]); for (int kk = 0; kk < 10; ++kk) jet_psi_curve_flat.push_back(jets_psi_curve_flat_tmp[10*j + kk]);
                         auto pm = match_parton(jet);
                         jet_parton_dR.push_back(pm.first);
                         jet_parton_pdgId.push_back(pm.second);
