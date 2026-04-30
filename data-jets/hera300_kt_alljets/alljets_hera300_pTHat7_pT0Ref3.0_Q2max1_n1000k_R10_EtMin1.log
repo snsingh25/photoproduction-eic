@@ -1,0 +1,99 @@
+=============================================================================
+JET RECONSTRUCTION ANALYSIS FOR HERA PHOTOPRODUCTION EVENTS
+=============================================================================
+Analysis Parameters:
+  Analysis Mode:    ALL JETS
+  Jet Algorithm:    kT
+  Jet Radius:       1
+  Min Jet ET:       1 GeV
+  Jet Eta Range:    [-4, 4]
+  Min Particle pT:  0.1 GeV
+  Softdrop (zcut, beta, R0): (0.1, 0, 1)
+  n_subjets (kT ycut):       0.0005
+=============================================================================
+
+Successfully opened input file: /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data/hera300/hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k.root
+Log file: alljets_hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k_R10_EtMin1.log
+
+Processing QQ_Events...
+  Found 319307 events
+    Processing event 0/319307 (0%)    Processing event 100000/319307 (31%)    Processing event 200000/319307 (62%)    Processing event 300000/319307 (93%)
+  Events processed: 319307
+  Events with ≥2 jets: 316552 (99.1372%)
+  Events selected: 316552 (99.1372%)
+  Total jets saved: 1408062
+  Average jets/selected event: 4.44812
+
+Processing GG_Events...
+  Found 176014 events
+    Processing event 0/176014 (0%)    Processing event 100000/176014 (56%)
+  Events processed: 176014
+  Events with ≥2 jets: 175759 (99.8551%)
+  Events selected: 175759 (99.8551%)
+  Total jets saved: 1183225
+  Average jets/selected event: 6.73209
+
+Processing GQ_Events...
+  Found 504567 events
+    Processing event 0/504567 (0%)    Processing event 100000/504567 (19%)    Processing event 200000/504567 (39%)    Processing event 300000/504567 (59%)    Processing event 400000/504567 (79%)    Processing event 500000/504567 (99%)
+  Events processed: 504567
+  Events with ≥2 jets: 500911 (99.2754%)
+  Events selected: 500911 (99.2754%)
+  Total jets saved: 2669470
+  Average jets/selected event: 5.32923
+
+Processing Combined_Events...
+  Found 999888 events
+    Processing event 0/999888 (0%)    Processing event 100000/999888 (10%)    Processing event 200000/999888 (20%)    Processing event 300000/999888 (30%)    Processing event 400000/999888 (40%)    Processing event 500000/999888 (50%)    Processing event 600000/999888 (60%)    Processing event 700000/999888 (70%)    Processing event 800000/999888 (80%)    Processing event 900000/999888 (90%)
+  Events processed: 999888
+  Events with ≥2 jets: 993222 (99.3333%)
+  Events selected: 993222 (99.3333%)
+  Total jets saved: 5260757
+  Average jets/selected event: 5.29666
+
+Processing Resolved_Events...
+  Found 743696 events
+    Processing event 0/743696 (0%)    Processing event 100000/743696 (13%)    Processing event 200000/743696 (26%)    Processing event 300000/743696 (40%)    Processing event 400000/743696 (53%)    Processing event 500000/743696 (67%)    Processing event 600000/743696 (80%)    Processing event 700000/743696 (94%)
+  Events processed: 743696
+  Events with ≥2 jets: 740772 (99.6068%)
+  Events selected: 740772 (99.6068%)
+  Total jets saved: 4255652
+  Average jets/selected event: 5.74489
+
+Processing Direct_Events...
+  Found 256192 events
+    Processing event 0/256192 (0%)    Processing event 100000/256192 (39%)    Processing event 200000/256192 (78%)
+  Events processed: 256192
+  Events with ≥2 jets: 252450 (98.5394%)
+  Events selected: 252450 (98.5394%)
+  Total jets saved: 1005105
+  Average jets/selected event: 3.9814
+
+=============================================================================
+ANALYSIS COMPLETED SUCCESSFULLY!
+=============================================================================
+Output file: alljets_hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k_R10_EtMin1.root
+Log file: alljets_hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k_R10_EtMin1.log
+
+Overall Statistics:
+  Total events processed: 2999664
+  Total events selected: 2979666 (99.3333%)
+
+For each category, the following are saved:
+  - Jet trees with basic properties (ET, px, py, pz, eta, phi, mass, nsd, nsubjets)
+  - Dijet-specific variables (masses, angles, cuts flags)
+  - Basic distribution histograms
+
+Jets are reconstructed using anti-kT algorithm with:
+  - R = 1
+  - ET > 1 GeV
+  - -4 < eta < 4
+
+Softdrop multiplicity n_sd (modified mass drop):
+  - z_cut = 0.1
+  - beta  = 0
+  - R0    = 1
+
+n_subjets (kT exclusive):
+  - y_cut = 0.0005
+=============================================================================

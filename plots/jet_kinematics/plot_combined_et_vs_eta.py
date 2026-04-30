@@ -22,14 +22,11 @@ from matplotlib.colors import LinearSegmentedColormap
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
-def find_dijet_root(sample_dir):
-    """Return the first dijets_*.root or alljets_*.root in <repo>/data-jets/<sample_dir>/."""
+def find_alljets_root(sample_dir):
+    """Return the first alljets_*.root in <repo>/data-jets/<sample_dir>/."""
     base = REPO_ROOT / "data-jets" / sample_dir
-    for pat in ("dijets_*.root", "alljets_*.root"):
-        hits = sorted(glob.glob(str(base / pat)))
-        if hits:
-            return hits[0]
-    return None
+    hits = sorted(glob.glob(str(base / "alljets_*.root")))
+    return hits[0] if hits else None
 
 # LaTeX Computer Modern fonts
 plt.rcParams.update({
@@ -160,15 +157,17 @@ def main():
         print(f"Error: {e}")
         return None, None, None
     
-    # Discover dijet ROOT files inside this repo's data-jets/.
+    # Discover alljets ROOT files inside this repo's data-jets/.
+    # alljets_*_EtMin1.root keeps every reconstructed jet (no dijet
+    # selection, no leading/subleading cuts, ET > 1 GeV floor only).
     datasets = [
-        {'sample': 'hera300_kt_dijets',     'label': r'300 GeV'},
-        {'sample': 'eic141_antikt_dijets',  'label': r'141 GeV'},
-        {'sample': 'eic105_antikt_dijets',  'label': r'105 GeV'},
-        {'sample': 'eic64_antikt_dijets',   'label': r'64 GeV'},
+        {'sample': 'hera300_kt_alljets',     'label': r'300 GeV'},
+        {'sample': 'eic141_antikt_alljets',  'label': r'141 GeV'},
+        {'sample': 'eic105_antikt_alljets',  'label': r'105 GeV'},
+        {'sample': 'eic64_antikt_alljets',   'label': r'64 GeV'},
     ]
     for d in datasets:
-        d['filepath'] = find_dijet_root(d['sample']) or ""
+        d['filepath'] = find_alljets_root(d['sample']) or ""
     
     # Check which files actually exist
     existing_datasets = check_file_existence(datasets)
@@ -227,10 +226,12 @@ def main():
             
             im = ax.pcolormesh(X, Y, H.T, cmap=cmap, vmin=vmin, vmax=vmax, rasterized=True)
             
-            # Colorbar
+            # Colorbar — only label the right-column (GG) bars to avoid
+            # repeating the unit between the two panels of each row.
             cbar = plt.colorbar(im, ax=ax, pad=0.02, fraction=0.15)
             cbar.ax.tick_params(labelsize=22)
-            cbar.set_label(r'jets / bin', fontsize=22, labelpad=8)
+            if event_idx == 1:
+                cbar.set_label(r'jets / bin', fontsize=22, labelpad=8)
             # Get current ticks and remove the last one
             ticks = cbar.get_ticks()
             cbar.set_ticks(ticks[:-1])  # Remove last tick
