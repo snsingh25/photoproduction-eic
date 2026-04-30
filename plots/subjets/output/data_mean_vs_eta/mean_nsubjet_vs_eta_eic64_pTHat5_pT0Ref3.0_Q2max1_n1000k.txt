@@ -1,0 +1,11 @@
+# Mean Subjet Multiplicity vs Eta (aggregated from per-bin histograms)
+# Experiment: eic64_pTHat5_pT0Ref3.0_Q2max1_n1000k
+# sqrt_s = 64
+# R = 1.0
+# ycut = 0.0005
+# leading_jet_etMin = 10
+# subleading_jet_etMin = 7
+# Columns: eta_low eta_high eta_center mean_QQ mean_GG n_QQ n_GG
+0.0 1.0 0.500 4.11513 4.88588 9233 517
+1.0 1.5 1.250 3.37348 4.00000 1893 226
+1.5 2.0 1.750 2.59836 3.35955 488 89
