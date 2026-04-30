@@ -1,7 +1,7 @@
 ========================================================================================
 Dijet balance check  —  dijets_hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k_R10_EtMin17_10_7
 ========================================================================================
-Input: dijets_hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k_R10_EtMin17_10_7.root
+Input: data-jets/hera300_kt_dijets/dijets_hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k_R10_EtMin17_10_7.root
 Born-like cuts used for fraction: Delta-phi > 2.5 rad AND pT_ratio > 0.5
 
 Category          N dijets   <Delta-phi>    <pT_ratio>     Born-like   Delta-phi>2.5     pTr>0.5
@@ -17,4 +17,4 @@ Interpretation:
   - A strongly skewed pT-ratio or broad Delta-phi can dilute the
     'hard-parton -> jet' identification used for QQ/GG/GQ labels.
 
-Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data-jets/hera300_kt_dijets/dijet_balance.pdf
+Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/plots/softdrop/output/hera300_kt_dijets/dijet_balance.pdf

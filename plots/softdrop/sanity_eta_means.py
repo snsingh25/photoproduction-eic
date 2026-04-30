@@ -65,6 +65,8 @@ def main():
     ap.add_argument("--bins", default=None,
                     help="comma-separated eta bin edges, e.g. '-1,0,1,1.5,2' "
                          "(default: -1,0,1,2,3)")
+    ap.add_argument("--out-dir", default=None,
+                    help="output directory (default: plots/softdrop/output/<sample>/)")
     args = ap.parse_args()
 
     if args.bins is None:
@@ -72,6 +74,10 @@ def main():
     else:
         edges = [float(x) for x in args.bins.split(",")]
         bins = list(zip(edges[:-1], edges[1:]))
+
+    sample = Path(args.root_file).resolve().parent.name
+    out_dir = Path(args.out_dir) if args.out_dir else Path(__file__).resolve().parent / "output" / sample
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     data = load(args.root_file)
     if "QQ_Events" not in data or "GG_Events" not in data:
@@ -189,7 +195,7 @@ def main():
         ax.legend(frameon=False)
 
     fig.tight_layout()
-    out_pdf = Path("sanity_eta_means.pdf")
+    out_pdf = out_dir / "sanity_eta_means.pdf"
     fig.savefig(out_pdf)
     print(f"\nWrote {out_pdf.resolve()}")
 

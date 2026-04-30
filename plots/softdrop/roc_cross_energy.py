@@ -157,7 +157,8 @@ def main():
     ap.add_argument("--data-jets", default="data-jets",
                     help="root of per-sample output dirs")
     ap.add_argument("--out-dir", default=None,
-                    help="where to write output PDFs (default: same as --data-jets)")
+                    help="where to write output PDFs (default: "
+                         "plots/softdrop/output/cross_energy_legacy/)")
     ap.add_argument("--min-jets", type=int, default=20)
     ap.add_argument("--samples",
                     help="semicolon-separated sample specs, e.g. "
@@ -179,7 +180,8 @@ def main():
     bins = list(zip(bin_edges[:-1], bin_edges[1:]))
 
     data_jets = Path(args.data_jets).resolve()
-    out_dir = Path(args.out_dir or args.data_jets).resolve()
+    out_dir = Path(args.out_dir).resolve() if args.out_dir else (
+        Path(__file__).resolve().parent / "output" / "cross_energy_legacy")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"Scanning {data_jets} for samples: {[s[0] for s in SAMPLES]}")

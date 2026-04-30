@@ -22,7 +22,7 @@ branch, look up the canonical outgoing parton pair (from
 `getProcessName` / the PYTHIA 8 manual) and tally per label:
 
 Script: [`scripts/audit_truth_labels.py`](../scripts/audit_truth_labels.py)
-Log:    [`data-jets/audit_truth_labels.log`](../data-jets/audit_truth_labels.log)
+Log:    [`scripts/output/audit_truth_labels.log`](../scripts/output/audit_truth_labels.log)
 
 **Result.**
 
@@ -64,7 +64,7 @@ output and plot the distributions normalized per-category.
 
 Script: [`plots/softdrop/dijet_balance_check.py`](../plots/softdrop/dijet_balance_check.py)
 Runner: [`scripts/run_dijet_balance.sh`](../scripts/run_dijet_balance.sh)
-Per-sample PDFs: `data-jets/<sample>_pT7/dijet_balance.pdf`
+Per-sample PDFs: `plots/softdrop/output/<sample>/dijet_balance.pdf`
 
 **Result.**
 
@@ -124,7 +124,7 @@ Code changes: commit `ed5ce74` (`statusAbs()==23` in evtgen) + commit
 Script: [`plots/softdrop/jet_parton_match.py`](../plots/softdrop/jet_parton_match.py)
 Validation sample: `data/validation_partons/hera300/*.root` (gitignored)
 Validation jets:   `data-jets/validation_partons_hera300/*.root` (gitignored)
-Plot:              `data-jets/validation_partons_hera300/jet_parton_match.pdf`
+Plot:              `plots/softdrop/output/validation_partons_hera300/jet_parton_match.pdf`
 
 **Result.**
 

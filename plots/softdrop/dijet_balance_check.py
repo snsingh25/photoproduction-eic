@@ -74,6 +74,8 @@ def fmt_pct(n, tot):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("root_file")
+    ap.add_argument("--out-dir", default=None,
+                    help="output directory (default: plots/softdrop/output/<sample>/)")
     args = ap.parse_args()
 
     data = load(args.root_file)
@@ -81,6 +83,9 @@ def main():
         print("No usable dijet data in", args.root_file)
         sys.exit(1)
 
+    sample = Path(args.root_file).resolve().parent.name
+    out_dir = Path(args.out_dir) if args.out_dir else Path(__file__).resolve().parent / "output" / sample
+    out_dir.mkdir(parents=True, exist_ok=True)
     sample_name = Path(args.root_file).stem
     log_lines = []
     def log(s=""):
@@ -166,13 +171,13 @@ def main():
     ax.grid(alpha=0.3)
 
     fig.tight_layout()
-    out_pdf = Path("dijet_balance.pdf")
+    out_pdf = out_dir / "dijet_balance.pdf"
     fig.savefig(out_pdf)
     plt.close(fig)
 
     log(f"\nWrote {out_pdf.resolve()}")
 
-    out_log = Path("dijet_balance_summary.log")
+    out_log = out_dir / "dijet_balance_summary.log"
     out_log.write_text("\n".join(log_lines) + "\n")
     print(f"Wrote {out_log.resolve()}")
 

@@ -68,12 +68,19 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("antikt_root")
     ap.add_argument("kt_root")
+    ap.add_argument("--out-dir",
+                    default=str(Path(__file__).resolve().parent
+                                / "output/cross_energy_paperconfig"),
+                    help="output directory (default: cross_energy_paperconfig)")
     args = ap.parse_args()
 
     d_ak = load(args.antikt_root)
     d_kt = load(args.kt_root)
     if not d_ak or not d_kt:
         print("Missing data"); sys.exit(1)
+
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     log_lines = []
     def log(s=""):
@@ -147,10 +154,11 @@ def main():
         ax.legend(frameon=False, fontsize=9, ncol=2)
     fig.suptitle("anti-kT (solid circles) vs kT (open squares)", fontsize=13, y=1.00)
     fig.tight_layout()
-    fig.savefig("algo_compare_kt_vs_antikt.pdf"); plt.close(fig)
-    log(f"\nWrote algo_compare_kt_vs_antikt.pdf")
+    out_pdf = out_dir / "algo_compare_kt_vs_antikt.pdf"
+    fig.savefig(out_pdf); plt.close(fig)
+    log(f"\nWrote {out_pdf}")
 
-    out_log = Path("algo_compare_kt_vs_antikt.log")
+    out_log = out_dir / "algo_compare_kt_vs_antikt.log"
     out_log.write_text("\n".join(log_lines) + "\n")
     print(f"Wrote {out_log.resolve()}")
 

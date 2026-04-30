@@ -196,13 +196,18 @@ def main():
                     help="comma-separated eta bin edges")
     ap.add_argument("--min-jets", type=int, default=20,
                     help="skip bins with fewer QQ or GG jets than this")
+    ap.add_argument("--out-dir", default=None,
+                    help="output directory (default: plots/softdrop/output/<sample>/)")
     args = ap.parse_args()
 
     bin_edges = [float(x) for x in args.bins.split(",")]
     bins = list(zip(bin_edges[:-1], bin_edges[1:]))
 
+    sample = Path(args.root_file).resolve().parent.name
+    out_dir = Path(args.out_dir) if args.out_dir else Path(__file__).resolve().parent / "output" / sample
+    out_dir.mkdir(parents=True, exist_ok=True)
     sample_name = Path(args.root_file).stem
-    log_path = Path("roc_summary.log")
+    log_path = out_dir / "roc_summary.log"
     log_lines = []
 
     def log(s=""):
@@ -234,7 +239,7 @@ def main():
     log("-" * 78)
     inc_stats = {}
     plot_roc_single(data, f"{sample_name}  —  inclusive",
-                    "roc_inclusive.pdf", inc_stats)
+                    str(out_dir / "roc_inclusive.pdf"), inc_stats)
     log(f"  N_QQ={inc_stats['n_qq']:,}  N_GG={inc_stats['n_gg']:,}")
     log(f"  n_SD       : AUC = {inc_stats['nsd']['auc']:.4f}   sep = {inc_stats['nsd']['sep']:+.3f}")
     log(f"  n_subjets  : AUC = {inc_stats['nsubjets']['auc']:.4f}   sep = {inc_stats['nsubjets']['sep']:+.3f}")
@@ -271,7 +276,7 @@ def main():
         st = {}
         plot_roc_single(sub,
                         f"{sample_name}  —  $\\eta \\in [{lo:.1f}, {hi:.1f})$",
-                        pdf_name, st)
+                        str(out_dir / pdf_name), st)
         log(f"  N_QQ={st['n_qq']:,}  N_GG={st['n_gg']:,}")
         log(f"  n_SD       : AUC = {st['nsd']['auc']:.4f}   sep = {st['nsd']['sep']:+.3f}")
         log(f"  n_subjets  : AUC = {st['nsubjets']['auc']:.4f}   sep = {st['nsubjets']['sep']:+.3f}")
@@ -286,7 +291,7 @@ def main():
 
     # --- combined grid -----------------------------------------------------
     if panels:
-        plot_grid(panels, "roc_all_bins.pdf", sample_name)
+        plot_grid(panels, str(out_dir / "roc_all_bins.pdf"), sample_name)
         log("\n-> wrote roc_all_bins.pdf (grid view)")
 
     # --- summary table -----------------------------------------------------

@@ -67,12 +67,17 @@ def slice_eta(data, cat, lo, hi, branch):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("root_file")
+    ap.add_argument("--out-dir", default=None,
+                    help="output directory (default: plots/softdrop/output/<sample>/)")
     args = ap.parse_args()
 
     data = load(args.root_file)
     if "QQ_Events" not in data or "GG_Events" not in data:
         print("missing QQ or GG tree"); sys.exit(1)
 
+    sample = Path(args.root_file).resolve().parent.name
+    out_dir = Path(args.out_dir) if args.out_dir else Path(__file__).resolve().parent / "output" / sample
+    out_dir.mkdir(parents=True, exist_ok=True)
     sample_name = Path(args.root_file).stem
     log_lines = []
     def log(s=""):
@@ -116,7 +121,7 @@ def main():
     log("    splittings and can approach the Cambridge/Aachen ungroomed")
     log("    limit as beta -> large.")
 
-    out_log = Path("softdrop_sensitivity.log")
+    out_log = out_dir / "softdrop_sensitivity.log"
     out_log.write_text("\n".join(log_lines) + "\n")
     print(f"\nWrote {out_log.resolve()}")
 

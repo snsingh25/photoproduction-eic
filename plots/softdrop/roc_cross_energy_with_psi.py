@@ -152,7 +152,9 @@ def main():
                     help="comma-separated eta bin edges (default paper bins)")
     ap.add_argument("--data-jets", default="data-jets",
                     help="root of per-sample output dirs")
-    ap.add_argument("--out-dir", default="data-jets/cross_energy_paperconfig",
+    ap.add_argument("--out-dir",
+                    default=str(Path(__file__).resolve().parent
+                                / "output/cross_energy_paperconfig"),
                     help="where to write output PDFs")
     ap.add_argument("--samples",
                     help=("semicolon-separated sample specs "

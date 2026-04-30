@@ -185,7 +185,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--data-jets", default="data-jets")
     ap.add_argument("--out-dir",
-                    default="data-jets/cross_energy_paperconfig/fig5_panels")
+                    default=str(Path(__file__).resolve().parent
+                                / "output/cross_energy_paperconfig/fig5_panels"))
     ap.add_argument("--no-tex", action="store_true",
                     help="Use mathtext instead of LaTeX (for systems without "
                          "Computer Modern installed).")

@@ -53,7 +53,7 @@ unchanged). Per-bin means are computed by
 EIC 141 is qualitatively identical. EIC 105/64 are GG-statistics-limited
 in several bins.
 
-Plot: `data-jets/hera300_pT7/paper_fig9_psi03.pdf`
+Plot: `plots/softdrop/output/hera300_pT7/paper_fig9_psi03.pdf`
 
 **Status**: PASS. The values can be overlaid on Fig 9 for a pixel-check
 against the ZEUS points; the central QQ/GG numbers are within errors of
@@ -96,7 +96,7 @@ EIC 141, paper binning:
 - Statistical errors < 0.1, small enough that overlaying on Fig 8
   should visually match.
 
-Plot: `data-jets/hera300_pT7/paper_fig8_nsubjets.pdf`
+Plot: `plots/softdrop/output/hera300_pT7/paper_fig8_nsubjets.pdf`
 
 **Status**: PASS.
 
@@ -257,7 +257,7 @@ to count three n_SD variants in the same Cambridge/Aachen walk
 - `jet_nsd_loose`  → (0.05, 0.0) — loose z_cut
 
 Script: [`plots/softdrop/softdrop_sensitivity.py`](../plots/softdrop/softdrop_sensitivity.py)
-Log:    `data-jets/hera300_pT7/softdrop_sensitivity.log`
+Log:    `plots/softdrop/output/hera300_pT7/softdrop_sensitivity.log`
 
 **Result.** HERA 300:
 

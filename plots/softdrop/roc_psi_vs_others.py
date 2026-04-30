@@ -82,12 +82,17 @@ def main():
     ap.add_argument("root_file",
                     default="data-jets/hera300_pT7/alljets_hera300_pT7_R10_EtMin17.root",
                     nargs="?")
+    ap.add_argument("--out-dir", default=None,
+                    help="output directory (default: plots/softdrop/output/<sample>/)")
     args = ap.parse_args()
 
     data = load(args.root_file)
     if not data:
         print(f"Missing data in {args.root_file}"); sys.exit(1)
 
+    sample = Path(args.root_file).resolve().parent.name
+    out_dir = Path(args.out_dir) if args.out_dir else Path(__file__).resolve().parent / "output" / sample
+    out_dir.mkdir(parents=True, exist_ok=True)
     sample_name = Path(args.root_file).stem
     qq = data["QQ_Events"]
     gg = data["GG_Events"]
@@ -146,10 +151,10 @@ def main():
             bbox={"boxstyle": "round,pad=0.3", "fc": "white", "ec": "0.7"})
 
     fig.tight_layout()
-    out_pdf = Path("roc_psi_vs_others.pdf")
+    out_pdf = out_dir / "roc_psi_vs_others.pdf"
     fig.savefig(out_pdf); plt.close(fig)
     log(f"\nWrote {out_pdf.resolve()}")
-    Path("roc_psi_vs_others.log").write_text("\n".join(log_lines) + "\n")
+    (out_dir / "roc_psi_vs_others.log").write_text("\n".join(log_lines) + "\n")
 
 
 if __name__ == "__main__":

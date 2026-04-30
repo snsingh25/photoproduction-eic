@@ -10,9 +10,14 @@ Usage (run from softdrop/ dir):
 
 import os
 import sys
+from pathlib import Path
 import numpy as np
 import uproot
 import matplotlib.pyplot as plt
+
+
+_OUT_DIR = Path(__file__).resolve().parent / "output" / "cross_energy_paperconfig"
+_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
 SAMPLES = [
@@ -113,9 +118,10 @@ for r in rows:
     p(f"{r['label']:<16}{r['mean_nsd_qq']:>12.2f}{r['mean_nsd_gg']:>12.2f}"
       f"{r['mean_nsj_qq']:>14.2f}{r['mean_nsj_gg']:>14.2f}")
 
-with open("compare_energies_summary.txt", "w") as fh:
+_summary_path = _OUT_DIR / "compare_energies_summary.txt"
+with open(_summary_path, "w") as fh:
     fh.write("\n".join(out_lines) + "\n")
-p("\nWrote compare_energies_summary.txt")
+p(f"\nWrote {_summary_path}")
 
 
 # --- figure: separation and AUC vs sqrt(s) ----------------------------------
@@ -153,5 +159,6 @@ ax.grid(alpha=0.3)
 ax.set_ylim(0.45, 0.85)
 
 fig.tight_layout()
-fig.savefig("compare_energies.pdf")
-print("\nWrote compare_energies.pdf")
+_pdf_path = _OUT_DIR / "compare_energies.pdf"
+fig.savefig(_pdf_path)
+print(f"\nWrote {_pdf_path}")

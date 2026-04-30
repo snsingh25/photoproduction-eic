@@ -17,6 +17,7 @@ Writes:
 
 import argparse
 import sys
+from pathlib import Path
 
 import numpy as np
 import uproot
@@ -215,6 +216,8 @@ def main():
     ap.add_argument("root_file")
     ap.add_argument("--eta-binned", action="store_true",
                     help="Also print per-eta-bin comparison table")
+    ap.add_argument("--out-dir", default=None,
+                    help="output directory (default: plots/softdrop/output/<sample>/)")
     args = ap.parse_args()
 
     data = load(args.root_file)
@@ -222,16 +225,21 @@ def main():
         print(f"No usable trees in {args.root_file}")
         sys.exit(1)
 
+    sample = Path(args.root_file).resolve().parent.name
+    out_dir = Path(args.out_dir) if args.out_dir else Path(__file__).resolve().parent / "output" / sample
+    out_dir.mkdir(parents=True, exist_ok=True)
+
     summary_lines = []
     summarize(data, summary_lines)
     if args.eta_binned:
         eta_binned_summary(data, summary_lines)
 
-    with open("compare_nsd_vs_nsubjets_summary.txt", "w") as fh:
+    summary_path = out_dir / "compare_nsd_vs_nsubjets_summary.txt"
+    with open(summary_path, "w") as fh:
         fh.write("\n".join(summary_lines) + "\n")
-    print("\nWrote compare_nsd_vs_nsubjets_summary.txt")
+    print(f"\nWrote {summary_path}")
 
-    plot_main(data, "compare_nsd_vs_nsubjets.pdf")
+    plot_main(data, str(out_dir / "compare_nsd_vs_nsubjets.pdf"))
 
 
 if __name__ == "__main__":

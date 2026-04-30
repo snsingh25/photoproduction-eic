@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run plots/softdrop/roc_eta_scan.py on every per-sample output under
-# data-jets/. Outputs (per-eta PDFs, grid, roc_summary.log) land in
-# each sample's own folder.
+# data-jets/. The script auto-routes outputs (per-eta PDFs, grid,
+# roc_summary.log) into plots/softdrop/output/<sample>/.
 #
 # Usage:  ./scripts/run_roc_scan.sh
 #         ./scripts/run_roc_scan.sh --bins "-1,0,1,2,3"
@@ -18,16 +18,16 @@ EXTRA_ARGS=("$@")
 
 for d in "$REPO_ROOT/data-jets"/*/; do
     sample="$(basename "$d")"
-    root_file=$(ls "$d"/alljets_*.root 2>/dev/null | head -1 || true)
+    root_file=$(ls "$d"/alljets_*.root "$d"/dijets_*.root 2>/dev/null | head -1 || true)
     if [[ -z "$root_file" ]]; then
-        echo "[skip] $sample: no alljets_*.root found"
+        echo "[skip] $sample: no jet ROOT found"
         continue
     fi
     echo "========================================================================"
     echo "  $sample"
     echo "========================================================================"
-    (cd "$d" && "$PY" "$SCRIPT" "$(basename "$root_file")" ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"})
+    "$PY" "$SCRIPT" "$root_file" ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
     echo
 done
 
-echo "Done. PDFs + roc_summary.log written inside each data-jets/<sample>/ folder."
+echo "Done. Outputs under plots/softdrop/output/<sample>/."

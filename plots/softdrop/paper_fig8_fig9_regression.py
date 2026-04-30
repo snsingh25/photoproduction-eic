@@ -108,11 +108,16 @@ def main():
     ap.add_argument("root_file")
     ap.add_argument("--bins", default=DEFAULT_BIN_EDGES,
                     help=f"comma-separated eta bin edges (default: {DEFAULT_BIN_EDGES})")
+    ap.add_argument("--out-dir", default=None,
+                    help="output directory (default: plots/softdrop/output/<sample>/)")
     args = ap.parse_args()
 
     edges = [float(x) for x in args.bins.split(",")]
     bins = list(zip(edges[:-1], edges[1:]))
 
+    sample = Path(args.root_file).resolve().parent.name
+    out_dir = Path(args.out_dir) if args.out_dir else Path(__file__).resolve().parent / "output" / sample
+    out_dir.mkdir(parents=True, exist_ok=True)
     sample_name = Path(args.root_file).stem
     data = load(args.root_file)
     if not data:
@@ -148,13 +153,13 @@ def main():
     plot_obs(data, "nsubjets",
              r"$\langle n_{\mathrm{subjets}}\rangle$",
              f"{sample_name}  —  Fig 8 regression",
-             "paper_fig8_nsubjets.pdf", bins)
+             str(out_dir / "paper_fig8_nsubjets.pdf"), bins)
     plot_obs(data, "psi03",
              r"$\langle \Psi(r=0.3)\rangle$",
              f"{sample_name}  —  Fig 9 regression",
-             "paper_fig9_psi03.pdf", bins)
+             str(out_dir / "paper_fig9_psi03.pdf"), bins)
 
-    out_log = Path("paper_regression_summary.log")
+    out_log = out_dir / "paper_regression_summary.log"
     out_log.write_text("\n".join(log_lines) + "\n")
     log(f"\nWrote {out_log.resolve()}")
 
