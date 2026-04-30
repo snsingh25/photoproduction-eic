@@ -1,0 +1,24 @@
+# Subjet Multiplicity Data
+# Experiment: hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k
+# CMS_Energy: 300
+# ycut = 0.0005
+# etaMin = 1.5
+# etaMax = 2
+# Leading_Jet_ET_Min = 10
+# Subleading_Jet_ET_Min = 7
+# Selection = alljets
+# Columns: bin_center, QQ_normalized, GG_normalized
+# Mean_QQ: 2.56054
+# Mean_GG: 3.32745
+# Entries_QQ: 3923
+# Entries_GG: 2944
+0.5 0.000764721 0.00169837
+1.5 0.108845 0.0264946
+2.5 0.385419 0.141304
+3.5 0.365537 0.422215
+4.5 0.118022 0.308424
+5.5 0.0175886 0.0842391
+6.5 0.00254907 0.0129076
+7.5 0.00127453 0.00237772
+8.5 0 0.000339674
+9.5 0 0

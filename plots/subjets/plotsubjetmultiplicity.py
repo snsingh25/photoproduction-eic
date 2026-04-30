@@ -67,6 +67,11 @@ def read_subjet_data(filename):
                 metadata['entries_gg'] = int(line.split(':')[1])
             elif line.startswith('# Experiment:'):
                 metadata['experiment'] = line.split(':')[1].strip()
+            elif line.startswith('# CMS_Energy:'):
+                try:
+                    metadata['cms_energy'] = int(line.split(':')[1])
+                except ValueError:
+                    pass
             elif line.startswith('# ycut'):
                 metadata['ycut'] = line.split('=')[1].strip()
             elif line.startswith('# etaMin'):
@@ -155,7 +160,9 @@ def plot_subjet_multiplicity(input_file, output_file=None):
     # Add eta range and ep energy labels
     ax.text(0.05, 0.95, rf'${eta_min_str} < \eta_{{\mathrm{{jet}}}} < {eta_max_str}$', 
             transform=ax.transAxes, fontsize=28, verticalalignment='top')
-    ax.text(0.05, 0.87, r'ep, 300 GeV', transform=ax.transAxes, fontsize=28, verticalalignment='top')
+    cms_energy = meta.get('cms_energy')
+    cms_label = f'ep, {cms_energy} GeV' if cms_energy else 'ep'
+    ax.text(0.05, 0.87, cms_label, transform=ax.transAxes, fontsize=28, verticalalignment='top')
     
     # Minor ticks
     ax.minorticks_on()

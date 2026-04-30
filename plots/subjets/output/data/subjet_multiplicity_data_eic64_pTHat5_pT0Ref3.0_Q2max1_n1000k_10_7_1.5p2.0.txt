@@ -1,0 +1,24 @@
+# Subjet Multiplicity Data
+# Experiment: eic64_pTHat5_pT0Ref3.0_Q2max1_n1000k
+# CMS_Energy: 64
+# ycut = 0.0005
+# etaMin = 1.5
+# etaMax = 2
+# Leading_Jet_ET_Min = 10
+# Subleading_Jet_ET_Min = 7
+# Selection = alljets
+# Columns: bin_center, QQ_normalized, GG_normalized
+# Mean_QQ: 2.59836
+# Mean_GG: 3.35955
+# Entries_QQ: 488
+# Entries_GG: 89
+0.5 0 0
+1.5 0.0922131 0
+2.5 0.397541 0.213483
+3.5 0.352459 0.292135
+4.5 0.135246 0.41573
+5.5 0.022541 0.0786517
+6.5 0 0
+7.5 0 0
+8.5 0 0
+9.5 0 0

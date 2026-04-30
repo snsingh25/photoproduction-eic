@@ -28,21 +28,39 @@ const double R = 1.0;
 const double ycut = 0.0005;
 const double leading_jet_etMin = 10.0;
 const double subleading_jet_etMin = 7.0;
-// const double jet_etMin = 10.0;
-const double etaMin = -1.0;
-const double etaMax = 0.0;
-const bool isDijet = false;
 
-int main() {
+int main(int argc, char** argv) {
     gROOT->SetBatch(kTRUE);
 
-    // Open ROOT file
-    const string inputFile = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt7GeV/hera300_pT7/hera300_pT7.root"; // Hera
-    // const string inputFile = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt5GeV/eic141_pT5/eic141_pT5.root"; // eic141
-    // const string inputFile = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt5GeV/eic105_pT5/eic105_pT5.root"; // eic105
-    // const string inputFile = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt5GeV/eic64_pT5/eic64_pT5.root"; // eic64
-    
+    if (argc < 4) {
+        cerr << "Usage: " << argv[0]
+             << " <input.root> <etaMin> <etaMax> [out_dir] [alljets|dijets]\n"
+             << "  input.root : event-level ROOT (with QQ_Events/GG_Events/GQ_Events trees)\n"
+             << "  out_dir    : where to write the .txt (default: current dir)\n"
+             << "  selection  : 'alljets' (default) or 'dijets' (require exactly 2 jets)\n";
+        return 1;
+    }
+
+    const string inputFile = argv[1];
+    const double etaMin    = atof(argv[2]);
+    const double etaMax    = atof(argv[3]);
+    const string outDir    = (argc > 4) ? argv[4] : ".";
+    const bool isDijet     = (argc > 5) && string(argv[5]) == "dijets";
+
     const string expName = std::filesystem::path(inputFile).stem().string();
+
+    // Best-effort sqrt(s) extraction so the plotter can label correctly.
+    // Recognises eic64/eic105/eic141/hera300 anywhere in the stem.
+    int sqrts_GeV = 0;
+    {
+        struct Tag { const char* needle; int sqrts; };
+        const Tag tags[] = {
+            {"hera300", 300}, {"eic141", 141}, {"eic105", 105}, {"eic64", 64}
+        };
+        for (const auto& t : tags) {
+            if (expName.find(t.needle) != string::npos) { sqrts_GeV = t.sqrts; break; }
+        }
+    }
     
     cout << "\n========================================" << endl;
     cout << "  Subjet Multiplicity Analysis" << endl;
@@ -218,22 +236,25 @@ int main() {
     }
 
     // Write output data file with proper decimal formatting
+    std::filesystem::create_directories(outDir);
     ostringstream filename_stream;
-    filename_stream << "subjet_multiplicity_data_" << expName << "_" 
-                    << (int)leading_jet_etMin << "_" 
-                    << (int)subleading_jet_etMin << "_" 
-                    << fixed << setprecision(1) << etaMin << "p" 
+    filename_stream << outDir << "/subjet_multiplicity_data_" << expName << "_"
+                    << (int)leading_jet_etMin << "_"
+                    << (int)subleading_jet_etMin << "_"
+                    << fixed << setprecision(1) << etaMin << "p"
                     << fixed << setprecision(1) << etaMax << ".txt";
-    
+
     ofstream outfile(filename_stream.str());
-    
+
     outfile << "# Subjet Multiplicity Data" << endl;
     outfile << "# Experiment: " << expName << endl;
+    outfile << "# CMS_Energy: " << sqrts_GeV << endl;
     outfile << "# ycut = " << ycut << endl;
     outfile << "# etaMin = " << etaMin << endl;
     outfile << "# etaMax = " << etaMax << endl;
     outfile << "# Leading_Jet_ET_Min = " << leading_jet_etMin << endl;
     outfile << "# Subleading_Jet_ET_Min = " << subleading_jet_etMin << endl;
+    outfile << "# Selection = " << (isDijet ? "dijets" : "alljets") << endl;
     outfile << "# Columns: bin_center, QQ_normalized, GG_normalized" << endl;
     outfile << "# Mean_QQ: " << h_qq->GetMean() << endl;
     outfile << "# Mean_GG: " << h_gg->GetMean() << endl;
