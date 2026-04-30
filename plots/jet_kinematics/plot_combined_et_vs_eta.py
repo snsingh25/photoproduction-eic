@@ -5,15 +5,31 @@ Jet E_T vs eta analysis - Fixed version
 Clean implementation with Computer Modern fonts
 """
 
+import glob
+import os
+import sys
+from pathlib import Path
+
 import uproot
 import awkward as ak
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.colors import LinearSegmentedColormap
-import matplotlib.pyplot as plt
-import os
-import sys
+
+
+# Repo root = parents[2] of this file (plots/jet_kinematics/<this>.py).
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def find_dijet_root(sample_dir):
+    """Return the first dijets_*.root or alljets_*.root in <repo>/data-jets/<sample_dir>/."""
+    base = REPO_ROOT / "data-jets" / sample_dir
+    for pat in ("dijets_*.root", "alljets_*.root"):
+        hits = sorted(glob.glob(str(base / pat)))
+        if hits:
+            return hits[0]
+    return None
 
 # LaTeX Computer Modern fonts
 plt.rcParams.update({
@@ -144,26 +160,15 @@ def main():
         print(f"Error: {e}")
         return None, None, None
     
-    # Datasets - using relative paths that are more likely to work
-    # Datasets
+    # Discover dijet ROOT files inside this repo's data-jets/.
     datasets = [
-        {
-            'filepath': '/Users/siddharthsingh/Analysis/ph-new/subprocjets/jets-basic/dijets/hera300_dijets_pT7/dijets_hera300_R10_EtMin0_10_7.root',
-            'label': r'300 GeV'
-        },
-        {
-            'filepath': '/Users/siddharthsingh/Analysis/ph-new/subprocjets/jets-basic/dijets/eic141_dijets_pT5/dijets_eic141_R10_EtMin0_10_7.root',
-            'label': r'141 GeV'
-        },
-        {
-            'filepath': '/Users/siddharthsingh/Analysis/ph-new/subprocjets/jets-basic/dijets/eic105_dijets_pT5/dijets_eic105_R10_EtMin0_10_7.root',
-            'label': r'105 GeV'
-        },
-        {
-            'filepath': '/Users/siddharthsingh/Analysis/ph-new/subprocjets/jets-basic/dijets/eic64_dijets_pT5/dijets_eic64_R10_EtMin0_10_7.root',
-            'label': r'64 GeV'
-        }
+        {'sample': 'hera300_kt_dijets',     'label': r'300 GeV'},
+        {'sample': 'eic141_antikt_dijets',  'label': r'141 GeV'},
+        {'sample': 'eic105_antikt_dijets',  'label': r'105 GeV'},
+        {'sample': 'eic64_antikt_dijets',   'label': r'64 GeV'},
     ]
+    for d in datasets:
+        d['filepath'] = find_dijet_root(d['sample']) or ""
     
     # Check which files actually exist
     existing_datasets = check_file_existence(datasets)
@@ -174,14 +179,6 @@ def main():
     
     event_types = ['QQ_Events', 'GG_Events']
     event_labels = ['QQ', 'GG']
-    
-    # Color limits
-    color_limits = [
-        (0, 1200), (0, 900),   # HERA 300
-        (0, 500), (0, 300),    # EIC 141
-        (0, 500), (0, 180),    # EIC 105
-        (0, 500), (0, 80)      # EIC 64
-    ]
     
     # Adjust for available datasets
     n_datasets = len(existing_datasets)
@@ -221,12 +218,12 @@ def main():
             histograms[f"{dataset['label']}_{event_label}"] = H
             
             X, Y = np.meshgrid(xedges, yedges)
-            
-            # Use appropriate color limits
-            if hist_idx < len(color_limits):
-                vmin, vmax = color_limits[hist_idx]
-            else:
-                vmin, vmax = 0, np.max(H) if np.max(H) > 0 else 1
+
+            # Adaptive color limits: 99th-percentile of populated bins keeps
+            # the dynamic range high without one hot bin saturating the rest.
+            populated = np.asarray(H[H > 0]).ravel() if np.ma.isMaskedArray(H) else H[H > 0]
+            vmin = 0
+            vmax = float(np.percentile(populated, 99)) if populated.size else 1.0
             
             im = ax.pcolormesh(X, Y, H.T, cmap=cmap, vmin=vmin, vmax=vmax, rasterized=True)
             
@@ -259,10 +256,12 @@ def main():
     fig.text(0.48, 0.08, r'$\eta_{\mathrm{jet}}$', fontsize=32, ha='center')
     fig.text(0.06, 0.5, r'$E_T$ (GeV)', fontsize=32, va='center', rotation=90)
     
-    # Save
-    plt.savefig('jeteteta2Dplot.pdf', bbox_inches='tight')
-    # plt.savefig('jet_et_vs_eta_latex.png', bbox_inches='tight', dpi=300)
-    print("Plots saved as jeteteta2Dplot.pdf and jet_et_vs_eta_latex.png")
+    # Save into plots/jet_kinematics/output/ alongside the rest of the suite.
+    out_dir = Path(__file__).resolve().parent / "output"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_pdf = out_dir / "jeteteta2Dplot.pdf"
+    plt.savefig(out_pdf, bbox_inches='tight')
+    print(f"Plot saved: {out_pdf}")
     
     return fig, histograms, stats
 
