@@ -82,8 +82,14 @@ def create_root_like_colormap():
     cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=n_bins)
     return cmap
 
-def read_jets_from_root(filepath, event_type):
-    """Read jet data from ROOT file with error handling"""
+def read_jets_from_root(filepath, event_type, top2_only=False):
+    """Read jet data from ROOT file with error handling.
+
+    If top2_only is True, restrict to events with >=2 jets and keep only
+    the leading and subleading jets (sorted by ET descending). This is
+    used for the 'dijets_nocuts' selection where no ET cut is applied
+    but only the two hardest jets per event enter the distribution.
+    """
     try:
         with uproot.open(filepath) as file:
             # Check if the tree exists
@@ -98,20 +104,32 @@ def read_jets_from_root(filepath, event_type):
                 else:
                     print(f"No trees containing '{event_type}' found")
                     return np.array([]), np.array([])
-            
+
             tree = file[tree_name]
-            
+
             # Check if branches exist
             if "jet_et" not in tree or "jet_eta" not in tree:
                 print(f"Warning: Required branches not found in {tree_name}")
                 print(f"Available branches: {tree.keys()}")
                 return np.array([]), np.array([])
-            
-            jet_et = ak.to_numpy(ak.flatten(tree["jet_et"].array(library="ak")))
-            jet_eta = ak.to_numpy(ak.flatten(tree["jet_eta"].array(library="ak")))
-            
+
+            et_arr  = tree["jet_et"].array(library="ak")
+            eta_arr = tree["jet_eta"].array(library="ak")
+
+            if top2_only:
+                # Require >= 2 jets per event, then take the two hardest.
+                mask = ak.num(et_arr) >= 2
+                et_arr  = et_arr[mask]
+                eta_arr = eta_arr[mask]
+                order   = ak.argsort(-et_arr, axis=-1)
+                et_arr  = et_arr[order][:, :2]
+                eta_arr = eta_arr[order][:, :2]
+
+            jet_et  = ak.to_numpy(ak.flatten(et_arr))
+            jet_eta = ak.to_numpy(ak.flatten(eta_arr))
+
             return jet_et, jet_eta
-            
+
     except Exception as e:
         print(f"Error reading {filepath}: {e}")
         return np.array([]), np.array([])
@@ -159,23 +177,34 @@ def main():
         print(f"Error: {e}")
         return None, None, None
     
-    # Selection chosen at the CLI (default: alljets — no jet cuts beyond
-    # EtMin=1 GeV; pass --selection dijets to use the exclusive-2-jet sample).
+    # Selection chosen at the CLI.
+    #   alljets        -- every reco'd jet, ET > 1 GeV floor, no dijet cut.
+    #   dijets         -- exclusive 2-jet sample with leading ET > 10 GeV,
+    #                     subleading ET > 7 GeV, per-jet ET > etMin
+    #                     (17 for HERA, 10 for EIC).
+    #   dijets_nocuts  -- read the alljets ROOT, keep events with >=2 jets,
+    #                     plot only the leading + subleading per event;
+    #                     no ET cut on either of the two jets.
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--selection", choices=("alljets", "dijets"),
+    ap.add_argument("--selection",
+                    choices=("alljets", "dijets", "dijets_nocuts"),
                     default="alljets",
-                    help="alljets: ET > 1 GeV only, no dijet selection. "
-                         "dijets: exclusive 2-jet, leading ET > 10 GeV, "
-                         "subleading ET > 7 GeV, per-jet ET > etMin "
-                         "(17 for HERA, 10 for EIC).")
+                    help="alljets / dijets / dijets_nocuts (see docstring)")
     args = ap.parse_args()
     sel = args.selection
 
+    # dijets_nocuts pulls from the alljets ROOT (we filter and sort in
+    # Python). The 'real' dijets ROOT has the lead/sub ET cuts baked in.
+    src_pattern = "alljets" if sel in ("alljets", "dijets_nocuts") else "dijets"
+    top2_only   = (sel == "dijets_nocuts")
+
     sample_dirs = {
-        "alljets": ("hera300_kt_alljets", "eic141_antikt_alljets",
-                    "eic105_antikt_alljets", "eic64_antikt_alljets"),
-        "dijets":  ("hera300_kt_dijets",  "eic141_antikt_dijets",
-                    "eic105_antikt_dijets",  "eic64_antikt_dijets"),
+        "alljets":        ("hera300_kt_alljets", "eic141_antikt_alljets",
+                           "eic105_antikt_alljets", "eic64_antikt_alljets"),
+        "dijets":         ("hera300_kt_dijets",  "eic141_antikt_dijets",
+                           "eic105_antikt_dijets",  "eic64_antikt_dijets"),
+        "dijets_nocuts":  ("hera300_kt_alljets", "eic141_antikt_alljets",
+                           "eic105_antikt_alljets", "eic64_antikt_alljets"),
     }[sel]
     datasets = [
         {'sample': sample_dirs[0], 'label': r'300 GeV'},
@@ -184,7 +213,7 @@ def main():
         {'sample': sample_dirs[3], 'label': r'64 GeV'},
     ]
     for d in datasets:
-        d['filepath'] = find_jet_root(d['sample'], sel) or ""
+        d['filepath'] = find_jet_root(d['sample'], src_pattern) or ""
     
     # Check which files actually exist
     existing_datasets = check_file_existence(datasets)
@@ -221,7 +250,9 @@ def main():
             
             # Read and plot data
             print(f"Processing {dataset['filepath']} - {event_type}")
-            jet_et, jet_eta = read_jets_from_root(dataset['filepath'], event_type)
+            jet_et, jet_eta = read_jets_from_root(dataset['filepath'],
+                                                  event_type,
+                                                  top2_only=top2_only)
             
             # Store statistics
             stats[f"{dataset['label']}_{event_label}"] = {
