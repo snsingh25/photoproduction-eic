@@ -82,7 +82,8 @@ def create_root_like_colormap():
     cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=n_bins)
     return cmap
 
-def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None):
+def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
+                        event_all_jets_above=None):
     """Read jet data from ROOT file with error handling.
 
     If top2_only is True, restrict to events with >=2 jets and keep only
@@ -92,6 +93,10 @@ def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None):
     subleading jets to have ET > et_floor. (No-op against the alljets
     ROOTs in this repo when et_floor <= 1 GeV, since the reco's own
     EtMin already enforced ET > 1 GeV.)
+
+    If event_all_jets_above is set, keep only events in which EVERY
+    reconstructed jet has ET > event_all_jets_above, then plot all
+    jets in those events. Mutually exclusive with top2_only.
     """
     try:
         with uproot.open(filepath) as file:
@@ -118,6 +123,15 @@ def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None):
 
             et_arr  = tree["jet_et"].array(library="ak")
             eta_arr = tree["jet_eta"].array(library="ak")
+
+            if event_all_jets_above is not None:
+                # Event-level cut: every jet in the event must pass ET > thresh.
+                # Empty events are dropped (ak.all returns True on []).
+                has_jet  = ak.num(et_arr) >= 1
+                all_pass = ak.all(et_arr > event_all_jets_above, axis=-1)
+                keep     = has_jet & all_pass
+                et_arr   = et_arr[keep]
+                eta_arr  = eta_arr[keep]
 
             if top2_only:
                 # Require >= 2 jets per event, then take the two hardest.
@@ -196,21 +210,26 @@ def main():
     #                     no ET cut on either of the two jets.
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--selection",
-                    choices=("alljets", "dijets",
-                             "dijets_nocuts", "dijets_et1"),
+                    choices=("alljets", "dijets", "dijets_nocuts",
+                             "dijets_et1", "dijets_et10", "alljets_et10"),
                     default="alljets",
-                    help="alljets / dijets / dijets_nocuts / dijets_et1 "
+                    help="alljets / dijets / dijets_nocuts / "
+                         "dijets_et1 / dijets_et10 / alljets_et10 "
                          "(see docstring)")
     args = ap.parse_args()
     sel = args.selection
 
-    # dijets_nocuts and dijets_et1 both pull from the alljets ROOT (we
-    # filter and sort in Python). The 'real' dijets ROOT has the
-    # lead/sub ET cuts baked in.
-    src_pattern = "alljets" if sel in ("alljets", "dijets_nocuts",
-                                       "dijets_et1") else "dijets"
-    top2_only   = sel in ("dijets_nocuts", "dijets_et1")
-    et_floor    = 1.0 if sel == "dijets_et1" else None
+    # dijets_*  modes pull lead+sub from the alljets ROOT (filter+sort in
+    # python). 'dijets' alone reads the cut-laden dijets ROOT.
+    # alljets_et10 reads alljets and applies an event-level cut: every
+    # jet in the event must pass ET > 10 GeV; all surviving jets plotted.
+    DIJET_TOP2_MODES = ("dijets_nocuts", "dijets_et1", "dijets_et10")
+    EVENT_ALLCUT_MODES = ("alljets_et10",)
+    use_alljets_root = sel in (("alljets",) + DIJET_TOP2_MODES + EVENT_ALLCUT_MODES)
+    src_pattern = "alljets" if use_alljets_root else "dijets"
+    top2_only   = sel in DIJET_TOP2_MODES
+    et_floor    = {"dijets_et1": 1.0, "dijets_et10": 10.0}.get(sel)
+    event_all_jets_above = {"alljets_et10": 10.0}.get(sel)
 
     SAMPLES_ALL = ("hera300_kt_alljets", "eic141_antikt_alljets",
                    "eic105_antikt_alljets", "eic64_antikt_alljets")
@@ -261,10 +280,11 @@ def main():
             
             # Read and plot data
             print(f"Processing {dataset['filepath']} - {event_type}")
-            jet_et, jet_eta = read_jets_from_root(dataset['filepath'],
-                                                  event_type,
-                                                  top2_only=top2_only,
-                                                  et_floor=et_floor)
+            jet_et, jet_eta = read_jets_from_root(
+                dataset['filepath'], event_type,
+                top2_only=top2_only,
+                et_floor=et_floor,
+                event_all_jets_above=event_all_jets_above)
             
             # Store statistics
             stats[f"{dataset['label']}_{event_label}"] = {
