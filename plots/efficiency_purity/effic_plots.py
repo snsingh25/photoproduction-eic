@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""Subprocess purity vs eta — live-data version.
+"""Subprocess purity vs eta — live-data version, paper formula.
 
-For each (sample, category, eta-bin) triple, computes
-    purity = N(matched parton matches the category label) / N(jets in bin)
-where the parton match comes from the jet_parton_pdgId branch written by
-bin/jetreco_softdrop.
+Implements the purity definitions stated in the manuscript:
 
-QQ-purity = fraction of QQ_Events jets whose nearest hard parton is a quark
-            (|pdg| <= 6).
-GG-purity = fraction of GG_Events jets whose nearest hard parton is a gluon
-            (pdg == 21).
+    Purity_quark  = (N_QQ + 0.5 * N_GQ) / (N_QQ + N_GG + 0.5 * N_GQ)
+                    on the THIN-jet sample,  Psi(r=0.3) > 0.8
+    Purity_gluon  = (N_GG + 0.5 * N_GQ) / (N_QQ + N_GG + 0.5 * N_GQ)
+                    on the THICK-jet sample, Psi(r=0.3) < 0.6
+
+The 0.5 weighting on the GQ subsample reflects that each GQ dijet event
+contains one quark jet and one gluon jet, so it contributes half-credit
+to either enriched sample. Thin/thick cuts match
+src/thinthick/thick_thin_analysis.cc.
 
 Inputs come from <repo>/data-jets/<sample>_<algo>_dijets/dijets_*.root.
 Output PDF goes to plots/efficiency_purity/output/.
@@ -38,30 +40,52 @@ def find_dijet_root(sample_dir):
     return hits[0] if hits else None
 
 
-def parton_purity_per_bin(root_path, category, eta_edges, dR_cut=0.5):
-    """Return purity[i] (%) for each eta-bin in eta_edges (length N+1).
+PSI_THIN_CUT  = 0.8       # Psi(r=0.3) > 0.8  -> thin jet (quark-like)
+PSI_THICK_CUT = 0.6       # Psi(r=0.3) < 0.6  -> thick jet (gluon-like)
 
-    'Purity' here matches the legacy paper definition: the fraction of jets
-    in the (category, eta-bin) sample that lie within Delta-R < dR_cut of
-    their hard outgoing parton (i.e. successful kinematic match). Gluon-side
-    purity is naturally lower because gluon jets have broader showers and
-    therefore migrate beyond Delta-R=0.5 more often. The wrong-flavor
-    contribution is zero by construction in these samples (jet_parton_pdgId
-    is taken from the hard outgoing partons of the labelled subprocess).
-    """
+
+def _category_counts_per_bin(root_path, eta_edges, psi_select):
+    """Return dict {category: counts_per_bin} where psi_select(psi) is True
+    for jets that should be counted (e.g. psi > 0.8 for thin)."""
+    counts = {c: np.zeros(len(eta_edges) - 1, dtype=int)
+              for c in ("QQ_Events", "GG_Events", "GQ_Events")}
     with uproot.open(root_path) as f:
-        key = f"{category}/jets_{category}"
-        if key not in f:
-            return np.full(len(eta_edges) - 1, np.nan)
-        t = f[key]
-        eta = ak.to_numpy(ak.flatten(t["jet_eta"].array(), axis=1))
-        dR  = ak.to_numpy(ak.flatten(t["jet_parton_dR"].array(), axis=1))
-    purity = np.zeros(len(eta_edges) - 1)
-    for i in range(len(eta_edges) - 1):
-        m = (eta >= eta_edges[i]) & (eta < eta_edges[i + 1])
-        n = m.sum()
-        purity[i] = 100.0 * (dR[m] < dR_cut).sum() / n if n else np.nan
-    return purity
+        for cat in counts:
+            key = f"{cat}/jets_{cat}"
+            if key not in f:
+                continue
+            t = f[key]
+            eta = ak.to_numpy(ak.flatten(t["jet_eta"].array(), axis=1))
+            psi = ak.to_numpy(ak.flatten(t["jet_psi03"].array(), axis=1))
+            mask = psi_select(psi)
+            for i in range(len(eta_edges) - 1):
+                m = mask & (eta >= eta_edges[i]) & (eta < eta_edges[i + 1])
+                counts[cat][i] = m.sum()
+    return counts
+
+
+def quark_purity_per_bin(root_path, eta_edges):
+    """Quark-purity (%) per eta-bin computed on the thin-jet sample
+    (Psi(r=0.3) > PSI_THIN_CUT) using the paper formula
+        (N_QQ + 0.5 * N_GQ) / (N_QQ + N_GG + 0.5 * N_GQ)."""
+    c = _category_counts_per_bin(
+        root_path, eta_edges, lambda psi: psi > PSI_THIN_CUT)
+    num   = c["QQ_Events"] + 0.5 * c["GQ_Events"]
+    denom = c["QQ_Events"] + c["GG_Events"] + 0.5 * c["GQ_Events"]
+    safe  = np.where(denom > 0, denom, 1.0)
+    return np.where(denom > 0, 100.0 * num / safe, np.nan)
+
+
+def gluon_purity_per_bin(root_path, eta_edges):
+    """Gluon-purity (%) per eta-bin computed on the thick-jet sample
+    (Psi(r=0.3) < PSI_THICK_CUT) using the paper formula
+        (N_GG + 0.5 * N_GQ) / (N_QQ + N_GG + 0.5 * N_GQ)."""
+    c = _category_counts_per_bin(
+        root_path, eta_edges, lambda psi: psi < PSI_THICK_CUT)
+    num   = c["GG_Events"] + 0.5 * c["GQ_Events"]
+    denom = c["QQ_Events"] + c["GG_Events"] + 0.5 * c["GQ_Events"]
+    safe  = np.where(denom > 0, denom, 1.0)
+    return np.where(denom > 0, 100.0 * num / safe, np.nan)
 
 rcParams['font.family'] = 'serif'
 rcParams['font.serif'] = ['Computer Modern Roman']
@@ -98,15 +122,16 @@ def create_efficiency_plot():
     # Eff_QQ_64  = np.array([99.06, 97.51, 95.53, 92.06])    # placeholder
     # -----------------------------------------------------------------------
 
-    # Live-data computation from the regenerated paper-config dijet samples.
+    # Live-data computation from the regenerated paper-config dijet samples,
+    # using the manuscript's purity definitions (paper formula).
     rf_300 = find_dijet_root("hera300_kt_dijets")
     rf_141 = find_dijet_root("eic141_antikt_dijets")
     if rf_300 is None or rf_141 is None:
         raise SystemExit("missing dijet ROOT for hera300 or eic141")
-    Eff_QQ_300 = parton_purity_per_bin(rf_300, "QQ_Events", eta_edges)
-    Eff_GG_300 = parton_purity_per_bin(rf_300, "GG_Events", eta_edges)
-    Eff_QQ_141 = parton_purity_per_bin(rf_141, "QQ_Events", eta_edges)
-    Eff_GG_141 = parton_purity_per_bin(rf_141, "GG_Events", eta_edges)
+    Eff_QQ_300 = quark_purity_per_bin(rf_300, eta_edges)
+    Eff_GG_300 = gluon_purity_per_bin(rf_300, eta_edges)
+    Eff_QQ_141 = quark_purity_per_bin(rf_141, eta_edges)
+    Eff_GG_141 = gluon_purity_per_bin(rf_141, eta_edges)
     print("HERA 300 quark purity per bin: ", np.round(Eff_QQ_300, 2))
     print("HERA 300 gluon purity per bin: ", np.round(Eff_GG_300, 2))
     print("EIC  141 quark purity per bin: ", np.round(Eff_QQ_141, 2))
