@@ -235,13 +235,14 @@ def main():
                     choices=("alljets", "dijets", "dijets_uniform_et10",
                              "dijets_nocuts",
                              "dijets_et1", "dijets_et10",
-                             "dijets_lead_et10",
+                             "dijets_lead_et7", "dijets_lead_et10",
                              "alljets_et1", "alljets_et10",
                              "alljets_perjet_et1", "alljets_perjet_et10"),
                     default="alljets",
                     help="alljets / dijets / dijets_uniform_et10 / "
                          "dijets_nocuts / dijets_et1 / dijets_et10 / "
-                         "dijets_lead_et10 / alljets_et1 / alljets_et10 / "
+                         "dijets_lead_et7 / dijets_lead_et10 / "
+                         "alljets_et1 / alljets_et10 / "
                          "alljets_perjet_et1 / alljets_perjet_et10 "
                          "(see docstring)")
     args = ap.parse_args()
@@ -252,7 +253,7 @@ def main():
     # alljets_et10 reads alljets and applies an event-level cut: every
     # jet in the event must pass ET > 10 GeV; all surviving jets plotted.
     DIJET_TOP2_MODES = ("dijets_nocuts", "dijets_et1", "dijets_et10",
-                        "dijets_lead_et10")
+                        "dijets_lead_et7", "dijets_lead_et10")
     EVENT_ALLCUT_MODES = ("alljets_et1", "alljets_et10")
     PERJET_MODES = ("alljets_perjet_et1", "alljets_perjet_et10")
     use_alljets_root = sel in (("alljets",) + DIJET_TOP2_MODES
@@ -260,7 +261,8 @@ def main():
     src_pattern = "alljets" if use_alljets_root else "dijets"
     top2_only   = sel in DIJET_TOP2_MODES
     et_floor    = {"dijets_et1": 1.0, "dijets_et10": 10.0}.get(sel)
-    lead_et_floor = {"dijets_lead_et10": 10.0}.get(sel)
+    lead_et_floor = {"dijets_lead_et7": 7.0,
+                     "dijets_lead_et10": 10.0}.get(sel)
     event_all_jets_above = {"alljets_et1": 1.0,
                             "alljets_et10": 10.0}.get(sel)
     per_jet_et_floor = {"alljets_perjet_et1": 1.0,
