@@ -5,6 +5,7 @@ Jet E_T vs eta analysis - Fixed version
 Clean implementation with Computer Modern fonts
 """
 
+import argparse
 import glob
 import os
 import sys
@@ -22,10 +23,11 @@ from matplotlib.colors import LinearSegmentedColormap
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
-def find_alljets_root(sample_dir):
-    """Return the first alljets_*.root in <repo>/data-jets/<sample_dir>/."""
+def find_jet_root(sample_dir, selection):
+    """Return the first <selection>_*.root (alljets|dijets) in
+    <repo>/data-jets/<sample_dir>/."""
     base = REPO_ROOT / "data-jets" / sample_dir
-    hits = sorted(glob.glob(str(base / "alljets_*.root")))
+    hits = sorted(glob.glob(str(base / f"{selection}_*.root")))
     return hits[0] if hits else None
 
 # LaTeX Computer Modern fonts
@@ -157,17 +159,32 @@ def main():
         print(f"Error: {e}")
         return None, None, None
     
-    # Discover alljets ROOT files inside this repo's data-jets/.
-    # alljets_*_EtMin1.root keeps every reconstructed jet (no dijet
-    # selection, no leading/subleading cuts, ET > 1 GeV floor only).
+    # Selection chosen at the CLI (default: alljets — no jet cuts beyond
+    # EtMin=1 GeV; pass --selection dijets to use the exclusive-2-jet sample).
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--selection", choices=("alljets", "dijets"),
+                    default="alljets",
+                    help="alljets: ET > 1 GeV only, no dijet selection. "
+                         "dijets: exclusive 2-jet, leading ET > 10 GeV, "
+                         "subleading ET > 7 GeV, per-jet ET > etMin "
+                         "(17 for HERA, 10 for EIC).")
+    args = ap.parse_args()
+    sel = args.selection
+
+    sample_dirs = {
+        "alljets": ("hera300_kt_alljets", "eic141_antikt_alljets",
+                    "eic105_antikt_alljets", "eic64_antikt_alljets"),
+        "dijets":  ("hera300_kt_dijets",  "eic141_antikt_dijets",
+                    "eic105_antikt_dijets",  "eic64_antikt_dijets"),
+    }[sel]
     datasets = [
-        {'sample': 'hera300_kt_alljets',     'label': r'300 GeV'},
-        {'sample': 'eic141_antikt_alljets',  'label': r'141 GeV'},
-        {'sample': 'eic105_antikt_alljets',  'label': r'105 GeV'},
-        {'sample': 'eic64_antikt_alljets',   'label': r'64 GeV'},
+        {'sample': sample_dirs[0], 'label': r'300 GeV'},
+        {'sample': sample_dirs[1], 'label': r'141 GeV'},
+        {'sample': sample_dirs[2], 'label': r'105 GeV'},
+        {'sample': sample_dirs[3], 'label': r'64 GeV'},
     ]
     for d in datasets:
-        d['filepath'] = find_alljets_root(d['sample']) or ""
+        d['filepath'] = find_jet_root(d['sample'], sel) or ""
     
     # Check which files actually exist
     existing_datasets = check_file_existence(datasets)
@@ -261,7 +278,8 @@ def main():
     # Save into plots/jet_kinematics/output/ alongside the rest of the suite.
     out_dir = Path(__file__).resolve().parent / "output"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_pdf = out_dir / "jeteteta2Dplot.pdf"
+    suffix = "" if sel == "alljets" else f"_{sel}"
+    out_pdf = out_dir / f"jeteteta2Dplot{suffix}.pdf"
     plt.savefig(out_pdf, bbox_inches='tight')
     print(f"Plot saved: {out_pdf}")
     
