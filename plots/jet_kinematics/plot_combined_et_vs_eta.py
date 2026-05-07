@@ -83,7 +83,7 @@ def create_root_like_colormap():
     return cmap
 
 def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
-                        event_all_jets_above=None):
+                        event_all_jets_above=None, per_jet_et_floor=None):
     """Read jet data from ROOT file with error handling.
 
     If top2_only is True, restrict to events with >=2 jets and keep only
@@ -97,6 +97,10 @@ def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
     If event_all_jets_above is set, keep only events in which EVERY
     reconstructed jet has ET > event_all_jets_above, then plot all
     jets in those events. Mutually exclusive with top2_only.
+
+    If per_jet_et_floor is set, keep individual jets above that ET
+    threshold regardless of what the rest of the event looks like.
+    Applied AFTER any event-level filters.
     """
     try:
         with uproot.open(filepath) as file:
@@ -147,6 +151,12 @@ def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
                     keep = (et_arr[:, 0] > et_floor) & (et_arr[:, 1] > et_floor)
                     et_arr  = et_arr[keep]
                     eta_arr = eta_arr[keep]
+
+            if per_jet_et_floor is not None:
+                # Per-jet cut: drop individual jets below the threshold.
+                jet_mask = et_arr > per_jet_et_floor
+                et_arr   = et_arr[jet_mask]
+                eta_arr  = eta_arr[jet_mask]
 
             jet_et  = ak.to_numpy(ak.flatten(et_arr))
             jet_eta = ak.to_numpy(ak.flatten(eta_arr))
@@ -210,13 +220,16 @@ def main():
     #                     no ET cut on either of the two jets.
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--selection",
-                    choices=("alljets", "dijets", "dijets_nocuts",
+                    choices=("alljets", "dijets", "dijets_uniform_et10",
+                             "dijets_nocuts",
                              "dijets_et1", "dijets_et10",
-                             "alljets_et1", "alljets_et10"),
+                             "alljets_et1", "alljets_et10",
+                             "alljets_perjet_et10"),
                     default="alljets",
-                    help="alljets / dijets / dijets_nocuts / "
-                         "dijets_et1 / dijets_et10 / alljets_et1 / "
-                         "alljets_et10 (see docstring)")
+                    help="alljets / dijets / dijets_uniform_et10 / "
+                         "dijets_nocuts / dijets_et1 / dijets_et10 / "
+                         "alljets_et1 / alljets_et10 / alljets_perjet_et10 "
+                         "(see docstring)")
     args = ap.parse_args()
     sel = args.selection
 
@@ -226,18 +239,31 @@ def main():
     # jet in the event must pass ET > 10 GeV; all surviving jets plotted.
     DIJET_TOP2_MODES = ("dijets_nocuts", "dijets_et1", "dijets_et10")
     EVENT_ALLCUT_MODES = ("alljets_et1", "alljets_et10")
-    use_alljets_root = sel in (("alljets",) + DIJET_TOP2_MODES + EVENT_ALLCUT_MODES)
+    PERJET_MODES = ("alljets_perjet_et10",)
+    use_alljets_root = sel in (("alljets",) + DIJET_TOP2_MODES
+                               + EVENT_ALLCUT_MODES + PERJET_MODES)
     src_pattern = "alljets" if use_alljets_root else "dijets"
     top2_only   = sel in DIJET_TOP2_MODES
     et_floor    = {"dijets_et1": 1.0, "dijets_et10": 10.0}.get(sel)
     event_all_jets_above = {"alljets_et1": 1.0,
                             "alljets_et10": 10.0}.get(sel)
+    per_jet_et_floor = {"alljets_perjet_et10": 10.0}.get(sel)
 
     SAMPLES_ALL = ("hera300_kt_alljets", "eic141_antikt_alljets",
                    "eic105_antikt_alljets", "eic64_antikt_alljets")
     SAMPLES_DIJ = ("hera300_kt_dijets",  "eic141_antikt_dijets",
                    "eic105_antikt_dijets",  "eic64_antikt_dijets")
-    sample_dirs = SAMPLES_DIJ if sel == "dijets" else SAMPLES_ALL
+    # Uniform-EtMin=10 dijets: HERA reco at EtMin=10 (not the canonical 17),
+    # EIC samples already at EtMin=10. Matches the lower edge of the paper plot.
+    SAMPLES_DIJ_ET10 = ("hera300_kt_dijets_etmin10", "eic141_antikt_dijets",
+                        "eic105_antikt_dijets",      "eic64_antikt_dijets")
+
+    if sel == "dijets":
+        sample_dirs = SAMPLES_DIJ
+    elif sel == "dijets_uniform_et10":
+        sample_dirs = SAMPLES_DIJ_ET10
+    else:
+        sample_dirs = SAMPLES_ALL
     datasets = [
         {'sample': sample_dirs[0], 'label': r'300 GeV'},
         {'sample': sample_dirs[1], 'label': r'141 GeV'},
@@ -286,7 +312,8 @@ def main():
                 dataset['filepath'], event_type,
                 top2_only=top2_only,
                 et_floor=et_floor,
-                event_all_jets_above=event_all_jets_above)
+                event_all_jets_above=event_all_jets_above,
+                per_jet_et_floor=per_jet_et_floor)
             
             # Store statistics
             stats[f"{dataset['label']}_{event_label}"] = {
