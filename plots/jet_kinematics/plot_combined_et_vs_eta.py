@@ -285,11 +285,12 @@ def main():
     SAMPLES_DIJ_ET10 = ("hera300_kt_dijets_etmin10", "eic141_antikt_dijets",
                         "eic105_antikt_dijets",      "eic64_antikt_dijets")
 
-    # Per-sample (lead, sub) cuts used by the dijets_papercut mode. HERA
-    # follows the published HERA dijet convention (lead > 17, sub > 10),
-    # EIC samples follow the lower-energy convention (lead > 10, sub > 7).
+    # Per-sample (lead, sub) cuts used by the dijets_papercut mode. All four
+    # samples (HERA included) at the lower-energy convention lead > 10,
+    # sub > 7 — this matches the paper's E_T vs eta figure better than the
+    # published HERA cross-section thresholds (17, 10) do.
     PAPER_LEADSUB = {
-        r'300 GeV': (17.0, 10.0),
+        r'300 GeV': (10.0, 7.0),
         r'141 GeV': (10.0, 7.0),
         r'105 GeV': (10.0, 7.0),
         r'64 GeV':  (10.0, 7.0),
