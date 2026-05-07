@@ -83,6 +83,7 @@ def create_root_like_colormap():
     return cmap
 
 def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
+                        lead_et_floor=None,
                         event_all_jets_above=None, per_jet_et_floor=None):
     """Read jet data from ROOT file with error handling.
 
@@ -93,6 +94,10 @@ def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
     subleading jets to have ET > et_floor. (No-op against the alljets
     ROOTs in this repo when et_floor <= 1 GeV, since the reco's own
     EtMin already enforced ET > 1 GeV.)
+
+    If lead_et_floor is set, require ONLY the leading jet to have ET >
+    lead_et_floor; the subleading jet keeps whatever ET it has. Used
+    by the dijets_lead_et10 selection.
 
     If event_all_jets_above is set, keep only events in which EVERY
     reconstructed jet has ET > event_all_jets_above, then plot all
@@ -149,6 +154,13 @@ def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
                 if et_floor is not None:
                     # Require BOTH leading and subleading to pass ET > et_floor.
                     keep = (et_arr[:, 0] > et_floor) & (et_arr[:, 1] > et_floor)
+                    et_arr  = et_arr[keep]
+                    eta_arr = eta_arr[keep]
+
+                if lead_et_floor is not None:
+                    # Require ONLY the leading jet to pass ET > lead_et_floor;
+                    # subleading is kept with whatever ET it has.
+                    keep = et_arr[:, 0] > lead_et_floor
                     et_arr  = et_arr[keep]
                     eta_arr = eta_arr[keep]
 
@@ -223,12 +235,13 @@ def main():
                     choices=("alljets", "dijets", "dijets_uniform_et10",
                              "dijets_nocuts",
                              "dijets_et1", "dijets_et10",
+                             "dijets_lead_et10",
                              "alljets_et1", "alljets_et10",
                              "alljets_perjet_et1", "alljets_perjet_et10"),
                     default="alljets",
                     help="alljets / dijets / dijets_uniform_et10 / "
                          "dijets_nocuts / dijets_et1 / dijets_et10 / "
-                         "alljets_et1 / alljets_et10 / "
+                         "dijets_lead_et10 / alljets_et1 / alljets_et10 / "
                          "alljets_perjet_et1 / alljets_perjet_et10 "
                          "(see docstring)")
     args = ap.parse_args()
@@ -238,7 +251,8 @@ def main():
     # python). 'dijets' alone reads the cut-laden dijets ROOT.
     # alljets_et10 reads alljets and applies an event-level cut: every
     # jet in the event must pass ET > 10 GeV; all surviving jets plotted.
-    DIJET_TOP2_MODES = ("dijets_nocuts", "dijets_et1", "dijets_et10")
+    DIJET_TOP2_MODES = ("dijets_nocuts", "dijets_et1", "dijets_et10",
+                        "dijets_lead_et10")
     EVENT_ALLCUT_MODES = ("alljets_et1", "alljets_et10")
     PERJET_MODES = ("alljets_perjet_et1", "alljets_perjet_et10")
     use_alljets_root = sel in (("alljets",) + DIJET_TOP2_MODES
@@ -246,6 +260,7 @@ def main():
     src_pattern = "alljets" if use_alljets_root else "dijets"
     top2_only   = sel in DIJET_TOP2_MODES
     et_floor    = {"dijets_et1": 1.0, "dijets_et10": 10.0}.get(sel)
+    lead_et_floor = {"dijets_lead_et10": 10.0}.get(sel)
     event_all_jets_above = {"alljets_et1": 1.0,
                             "alljets_et10": 10.0}.get(sel)
     per_jet_et_floor = {"alljets_perjet_et1": 1.0,
@@ -314,6 +329,7 @@ def main():
                 dataset['filepath'], event_type,
                 top2_only=top2_only,
                 et_floor=et_floor,
+                lead_et_floor=lead_et_floor,
                 event_all_jets_above=event_all_jets_above,
                 per_jet_et_floor=per_jet_et_floor)
             
