@@ -211,11 +211,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--selection",
                     choices=("alljets", "dijets", "dijets_nocuts",
-                             "dijets_et1", "dijets_et10", "alljets_et10"),
+                             "dijets_et1", "dijets_et10",
+                             "alljets_et1", "alljets_et10"),
                     default="alljets",
                     help="alljets / dijets / dijets_nocuts / "
-                         "dijets_et1 / dijets_et10 / alljets_et10 "
-                         "(see docstring)")
+                         "dijets_et1 / dijets_et10 / alljets_et1 / "
+                         "alljets_et10 (see docstring)")
     args = ap.parse_args()
     sel = args.selection
 
@@ -224,12 +225,13 @@ def main():
     # alljets_et10 reads alljets and applies an event-level cut: every
     # jet in the event must pass ET > 10 GeV; all surviving jets plotted.
     DIJET_TOP2_MODES = ("dijets_nocuts", "dijets_et1", "dijets_et10")
-    EVENT_ALLCUT_MODES = ("alljets_et10",)
+    EVENT_ALLCUT_MODES = ("alljets_et1", "alljets_et10")
     use_alljets_root = sel in (("alljets",) + DIJET_TOP2_MODES + EVENT_ALLCUT_MODES)
     src_pattern = "alljets" if use_alljets_root else "dijets"
     top2_only   = sel in DIJET_TOP2_MODES
     et_floor    = {"dijets_et1": 1.0, "dijets_et10": 10.0}.get(sel)
-    event_all_jets_above = {"alljets_et10": 10.0}.get(sel)
+    event_all_jets_above = {"alljets_et1": 1.0,
+                            "alljets_et10": 10.0}.get(sel)
 
     SAMPLES_ALL = ("hera300_kt_alljets", "eic141_antikt_alljets",
                    "eic105_antikt_alljets", "eic64_antikt_alljets")
