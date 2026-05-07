@@ -1,8 +1,60 @@
 #!/usr/bin/env python3
+"""Thin-jet subprocess composition vs eta — live-data version (HERA 300).
+
+Thin jets are defined as Psi(r=0.3) > 0.8 (quark-like, narrow energy
+profile), matching src/thinthick/thick_thin_analysis.cc. For each eta bin,
+this script counts the fraction of thin jets that come from QQ_Events,
+GG_Events, and GQ_Events trees of the regenerated dijet ROOT.
+
+Inputs come from <repo>/data-jets/hera300_kt_dijets/dijets_*.root.
+Output PDF goes to plots/efficiency_purity/output/.
+"""
+
+import glob
+from pathlib import Path
+
 import numpy as np
+import uproot
+import awkward as ak
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from scipy.interpolate import make_interp_spline
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PSI_THIN_CUT = 0.8        # Psi(r=0.3) > PSI_THIN_CUT  -> thin (quark-like)
+SAMPLE_DIR = "hera300_kt_dijets"
+
+
+def find_dijet_root(sample_dir):
+    base = REPO_ROOT / "data-jets" / sample_dir
+    hits = sorted(glob.glob(str(base / "dijets_*.root")))
+    return hits[0] if hits else None
+
+
+def thin_composition(root_path, eta_edges, psi_cut=PSI_THIN_CUT):
+    """Return (qq_pct, gg_pct, gq_pct) arrays of length N for thin jets."""
+    counts = {c: np.zeros(len(eta_edges) - 1, dtype=int)
+              for c in ("QQ_Events", "GG_Events", "GQ_Events")}
+    with uproot.open(root_path) as f:
+        for cat in counts:
+            key = f"{cat}/jets_{cat}"
+            if key not in f:
+                continue
+            t = f[key]
+            eta = ak.to_numpy(ak.flatten(t["jet_eta"].array(), axis=1))
+            psi = ak.to_numpy(ak.flatten(t["jet_psi03"].array(), axis=1))
+            thin = psi > psi_cut
+            for i in range(len(eta_edges) - 1):
+                m = thin & (eta >= eta_edges[i]) & (eta < eta_edges[i + 1])
+                counts[cat][i] = m.sum()
+    total = counts["QQ_Events"] + counts["GG_Events"] + counts["GQ_Events"]
+    safe = np.where(total > 0, total, 1)
+    return (
+        100.0 * counts["QQ_Events"] / safe,
+        100.0 * counts["GG_Events"] / safe,
+        100.0 * counts["GQ_Events"] / safe,
+    )
 
 rcParams['font.family'] = 'serif'
 rcParams['font.serif'] = ['Computer Modern Roman']
@@ -23,15 +75,27 @@ rcParams['xtick.minor.width'] = 1.0
 rcParams['ytick.minor.width'] = 1.0
 
 def create_purity_plot():
-    
-    # X-axis points: center of eta ranges
-    eta_centers = np.array([-0.5, 0.5, 1.5, 2.5])  # Centers of -1to0, 0to1, 1to2, 2to3
-    
-    # Thin jet composition (percentages) HERA
-    thin_QQ = np.array([64.5, 57.2, 51.2, 44.2])
-    thin_GG = np.array([1.3, 2.5, 4.9, 7.5])
-    thin_GQ = np.array([34.3, 40.3, 44.0, 48.3])
-    
+
+    eta_edges   = np.array([-1.0, 0.0, 1.0, 2.0, 3.0])
+    eta_centers = 0.5 * (eta_edges[:-1] + eta_edges[1:])
+
+    # ----- legacy paper values (HERA 300, kept for reference) --------------
+    # thin_QQ = np.array([64.5, 57.2, 51.2, 44.2])
+    # thin_GG = np.array([ 1.3,  2.5,  4.9,  7.5])
+    # thin_GQ = np.array([34.3, 40.3, 44.0, 48.3])
+    # -----------------------------------------------------------------------
+
+    # Live-data computation from the regenerated HERA 300 dijet sample.
+    rf = find_dijet_root(SAMPLE_DIR)
+    if rf is None:
+        raise SystemExit(f"missing dijet ROOT under data-jets/{SAMPLE_DIR}/")
+    thin_QQ, thin_GG, thin_GQ = thin_composition(rf, eta_edges)
+    print(f"thin (Psi(0.3) > {PSI_THIN_CUT}) composition per eta bin:")
+    print(f"  QQ : {np.round(thin_QQ, 2)}")
+    print(f"  GG : {np.round(thin_GG, 2)}")
+    print(f"  GQ : {np.round(thin_GQ, 2)}")
+
+
 
     # ==========================================================================
     # CREATE FIGURE AND AXES
@@ -148,7 +212,10 @@ def create_purity_plot():
     plt.tight_layout(pad=1.5)
     
     # Save figures
-    plt.savefig('purity_thin_hera.pdf', bbox_inches='tight')
+    out_dir = Path(__file__).resolve().parent / "output"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    plt.savefig(out_dir / "purity_thin_hera.pdf", bbox_inches="tight")
+    print(f"Plot saved: {out_dir / 'purity_thin_hera.pdf'}")
     
     return fig, ax
 
