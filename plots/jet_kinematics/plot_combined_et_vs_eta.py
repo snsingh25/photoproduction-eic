@@ -83,7 +83,7 @@ def create_root_like_colormap():
     return cmap
 
 def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
-                        lead_et_floor=None,
+                        lead_et_floor=None, sub_et_floor=None,
                         event_all_jets_above=None, per_jet_et_floor=None):
     """Read jet data from ROOT file with error handling.
 
@@ -164,6 +164,12 @@ def read_jets_from_root(filepath, event_type, top2_only=False, et_floor=None,
                     et_arr  = et_arr[keep]
                     eta_arr = eta_arr[keep]
 
+                if sub_et_floor is not None:
+                    # Require ONLY the subleading jet to pass ET > sub_et_floor.
+                    keep = et_arr[:, 1] > sub_et_floor
+                    et_arr  = et_arr[keep]
+                    eta_arr = eta_arr[keep]
+
             if per_jet_et_floor is not None:
                 # Per-jet cut: drop individual jets below the threshold.
                 jet_mask = et_arr > per_jet_et_floor
@@ -236,13 +242,14 @@ def main():
                              "dijets_nocuts",
                              "dijets_et1", "dijets_et10",
                              "dijets_lead_et7", "dijets_lead_et10",
+                             "dijets_papercut",
                              "alljets_et1", "alljets_et10",
                              "alljets_perjet_et1", "alljets_perjet_et10"),
                     default="alljets",
                     help="alljets / dijets / dijets_uniform_et10 / "
                          "dijets_nocuts / dijets_et1 / dijets_et10 / "
                          "dijets_lead_et7 / dijets_lead_et10 / "
-                         "alljets_et1 / alljets_et10 / "
+                         "dijets_papercut / alljets_et1 / alljets_et10 / "
                          "alljets_perjet_et1 / alljets_perjet_et10 "
                          "(see docstring)")
     args = ap.parse_args()
@@ -253,7 +260,8 @@ def main():
     # alljets_et10 reads alljets and applies an event-level cut: every
     # jet in the event must pass ET > 10 GeV; all surviving jets plotted.
     DIJET_TOP2_MODES = ("dijets_nocuts", "dijets_et1", "dijets_et10",
-                        "dijets_lead_et7", "dijets_lead_et10")
+                        "dijets_lead_et7", "dijets_lead_et10",
+                        "dijets_papercut")
     EVENT_ALLCUT_MODES = ("alljets_et1", "alljets_et10")
     PERJET_MODES = ("alljets_perjet_et1", "alljets_perjet_et10")
     use_alljets_root = sel in (("alljets",) + DIJET_TOP2_MODES
@@ -277,6 +285,16 @@ def main():
     SAMPLES_DIJ_ET10 = ("hera300_kt_dijets_etmin10", "eic141_antikt_dijets",
                         "eic105_antikt_dijets",      "eic64_antikt_dijets")
 
+    # Per-sample (lead, sub) cuts used by the dijets_papercut mode. HERA
+    # follows the published HERA dijet convention (lead > 17, sub > 10),
+    # EIC samples follow the lower-energy convention (lead > 10, sub > 7).
+    PAPER_LEADSUB = {
+        r'300 GeV': (17.0, 10.0),
+        r'141 GeV': (10.0, 7.0),
+        r'105 GeV': (10.0, 7.0),
+        r'64 GeV':  (10.0, 7.0),
+    }
+
     if sel == "dijets":
         sample_dirs = SAMPLES_DIJ
     elif sel == "dijets_uniform_et10":
@@ -291,6 +309,8 @@ def main():
     ]
     for d in datasets:
         d['filepath'] = find_jet_root(d['sample'], src_pattern) or ""
+        if sel == "dijets_papercut":
+            d['lead_sub_cut'] = PAPER_LEADSUB[d['label']]
     
     # Check which files actually exist
     existing_datasets = check_file_existence(datasets)
@@ -327,11 +347,17 @@ def main():
             
             # Read and plot data
             print(f"Processing {dataset['filepath']} - {event_type}")
+            # Per-dataset lead/sub overrides (only set in dijets_papercut mode).
+            ds_lead = lead_et_floor
+            ds_sub  = None
+            if 'lead_sub_cut' in dataset:
+                ds_lead, ds_sub = dataset['lead_sub_cut']
             jet_et, jet_eta = read_jets_from_root(
                 dataset['filepath'], event_type,
                 top2_only=top2_only,
                 et_floor=et_floor,
-                lead_et_floor=lead_et_floor,
+                lead_et_floor=ds_lead,
+                sub_et_floor=ds_sub,
                 event_all_jets_above=event_all_jets_above,
                 per_jet_et_floor=per_jet_et_floor)
             
