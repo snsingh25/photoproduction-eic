@@ -12,9 +12,9 @@ Per-bin output mirrors the original — four standalone PDFs, one per
 eta bin — so they can be dropped straight into the paper.
 
 Usage:
-    python plots/softdrop/paper_fig5_psi_r.py
-    python plots/softdrop/paper_fig5_psi_r.py --no-tex   (mathtext fallback)
-    python plots/softdrop/paper_fig5_psi_r.py --out-dir <path>
+    python plots/jet_shapes/paper_fig5_psi_r.py
+    python plots/jet_shapes/paper_fig5_psi_r.py --no-tex   (mathtext fallback)
+    python plots/jet_shapes/paper_fig5_psi_r.py --out-dir <path>
 """
 
 import argparse
@@ -186,7 +186,7 @@ def main():
     ap.add_argument("--data-jets", default="data-jets")
     ap.add_argument("--out-dir",
                     default=str(Path(__file__).resolve().parent
-                                / "output/cross_energy_paperconfig/fig5_panels"))
+                                / "output/fig5_panels"))
     ap.add_argument("--no-tex", action="store_true",
                     help="Use mathtext instead of LaTeX (for systems without "
                          "Computer Modern installed).")

@@ -17,7 +17,7 @@ look it up per jet via the eventID field on each jet-level row.
 No re-reco needed.
 
 Output: 8 PDFs into
-    plots/softdrop/output/cross_energy_paperconfig/fig_psi_rho_direct_resolved/
+    plots/jet_shapes/output/fig_psi_rho_direct_resolved/
     psi_directresolved_<etabin>.pdf   (4 panels)
     rho_directresolved_<etabin>.pdf   (4 panels)
 
@@ -26,8 +26,8 @@ values (line style encodes energy: 64 GeV ":", 105 GeV "--",
 141 GeV "-.", 300 GeV "-").
 
 Usage:
-    python plots/softdrop/paper_fig_psi_rho_direct_resolved.py
-    python plots/softdrop/paper_fig_psi_rho_direct_resolved.py --no-tex
+    python plots/jet_shapes/paper_fig_psi_rho_direct_resolved.py
+    python plots/jet_shapes/paper_fig_psi_rho_direct_resolved.py --no-tex
 """
 
 import argparse
@@ -269,8 +269,7 @@ def main():
     ap.add_argument("--data-jets", default="data-jets")
     ap.add_argument("--out-dir",
                     default=str(Path(__file__).resolve().parent
-                                / "output/cross_energy_paperconfig"
-                                / "fig_psi_rho_direct_resolved"))
+                                / "output/fig_psi_rho_direct_resolved"))
     ap.add_argument("--no-tex", action="store_true")
     args = ap.parse_args()
 
