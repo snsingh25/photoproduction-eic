@@ -387,7 +387,7 @@ def main():
             cbar = plt.colorbar(im, ax=ax, pad=0.02, fraction=0.15)
             cbar.ax.tick_params(labelsize=22)
             if event_idx == 1:
-                cbar.set_label(r'jets / bin', fontsize=22, labelpad=8)
+                cbar.set_label(r'$N_{\mathrm{jets}}$', fontsize=22, labelpad=8)
             # Get current ticks and remove the last one
             ticks = cbar.get_ticks()
             cbar.set_ticks(ticks[:-1])  # Remove last tick
