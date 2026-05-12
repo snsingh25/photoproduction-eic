@@ -52,7 +52,12 @@ SAMPLES = [
     ("eic64_antikt_dijets",  "eic64",   64),
     ("eic105_antikt_dijets", "eic105",  105),
     ("eic141_antikt_dijets", "eic141",  141),
-    ("hera300_kt_dijets",    "hera300", 300),
+    # HERA uses anti-kT EtMin=10 (matching the EIC samples) so the four
+    # sqrt(s) values are compared with the same algorithm and per-jet
+    # ET threshold. The canonical kT EtMin=17 HERA sample lives in
+    # data-jets/hera300_kt_dijets/ and is what Tables I/II/III in the
+    # paper are reconstructed from -- it is intentionally NOT used here.
+    ("hera300_antikt_dijets", "hera300", 300),
 ]
 
 ETA_BINS = [
