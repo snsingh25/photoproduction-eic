@@ -24,7 +24,7 @@ from scipy.interpolate import make_interp_spline
 
 R_GRID  = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 DELTA_R = 0.1
-RHO_R   = R_GRID[1:] - 0.5 * DELTA_R       # 9 centres: 0.15, 0.25, ..., 0.95
+RHO_R   = R_GRID - 0.5 * DELTA_R           # 10 centres: 0.05, 0.15, ..., 0.95
 
 ETA_LO, ETA_HI = 1.5, 2.0      # forward eta bin where the HERA-EIC gap was largest
 
@@ -68,7 +68,7 @@ def mean_rho_in_eta_bin(root_path, lo, hi):
     if m.sum() < 50:
         return None, m.sum()
     psi_mean = psi[m].mean(axis=0)
-    rho = np.diff(psi_mean) / DELTA_R       # drop the Psi(0)=0 bin
+    rho = np.diff(np.concatenate(([0.0], psi_mean))) / DELTA_R
     return rho, m.sum()
 
 

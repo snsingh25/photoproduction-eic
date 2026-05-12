@@ -38,10 +38,11 @@ from scipy.interpolate import make_interp_spline
 # Same r grid baked into jetreco_softdrop.cc — Psi(r) stored at these r values.
 R_GRID    = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 DELTA_R   = 0.1
-# Annulus centres: rho(r) is reported at the midpoint of each (r-DR, r] bin.
-# We drop the first bin (which would rely on Psi(0)=0 with no measurement
-# of Psi at sub-0.1 radii) and start at r = 0.15.
-RHO_R     = R_GRID[1:] - 0.5 * DELTA_R   # 9 centres: 0.15, 0.25, ..., 0.95
+# Annulus centres: rho(r) is reported at the midpoint of each (r-DR, r] bin,
+# so the 10 centres span r = 0.05, 0.15, ..., 0.95. The first point uses
+# Psi(0)=0 as the lower-edge boundary — matching the paper convention so
+# the GG peak structure near r ~ 0.2 is captured.
+RHO_R     = R_GRID - 0.5 * DELTA_R       # 10 centres: 0.05, 0.15, ..., 0.95
 
 SAMPLES = [
     ("eic64_antikt_dijets",  64),
@@ -89,15 +90,14 @@ def read_psi_eta(root_path, category):
 def mean_rho(psi, eta, lo, hi, min_jets=20):
     """Per-eta-bin mean rho(r) computed from the Psi(r) curve.
 
-    rho_i = ( Psi(r_i) - Psi(r_{i-1}) ) / Delta r , i = 2..10
-    We drop the i=1 bin (which would have used Psi(0)=0 as a boundary
-    assumption) so the lowest r reported is r = 0.15.
+    rho_i = ( Psi(r_i) - Psi(r_{i-1}) ) / Delta r , i = 1..10
+    with Psi(r_0) = 0 for the first bin, matching the paper convention.
     """
     m = (eta >= lo) & (eta < hi)
     if m.sum() < min_jets:
         return None
-    psi_mean = psi[m].mean(axis=0)         # shape (10,)
-    return np.diff(psi_mean) / DELTA_R     # shape (9,)
+    psi_mean = psi[m].mean(axis=0)                          # shape (10,)
+    return np.diff(np.concatenate(([0.0], psi_mean))) / DELTA_R   # shape (10,)
 
 
 def setup_style(use_tex=True):

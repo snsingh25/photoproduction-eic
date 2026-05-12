@@ -46,10 +46,9 @@ from scipy.interpolate import make_interp_spline
 
 R_GRID  = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 DELTA_R = 0.1
-# rho(r) at annulus centres. We drop the first bin (which would rely on
-# Psi(0)=0 with no measurement of Psi at sub-0.1 radii), so the lowest r
-# reported is r = 0.15.
-RHO_R   = R_GRID[1:] - 0.5 * DELTA_R       # 9 centres: 0.15, 0.25, ..., 0.95
+# 10 annulus centres: r = 0.05, 0.15, ..., 0.95. The first bin uses
+# Psi(0)=0 as the lower-edge boundary, matching the paper convention.
+RHO_R   = R_GRID - 0.5 * DELTA_R           # 10 centres: 0.05, 0.15, ..., 0.95
 
 SAMPLES = [
     ("eic64_antikt_dijets",  "eic64",   64),
@@ -153,10 +152,10 @@ def mean_psi(psi, eta, tags, target_tag, lo, hi, min_jets=20):
 def psi_to_rho(psi_mean):
     """Convert one Psi(r) curve into a rho(r) curve.
 
-    rho_i = (Psi(r_i) - Psi(r_{i-1})) / Delta r , for i = 2..10.
-    The first bin is dropped so the lowest r reported is r = 0.15.
+    rho_i = (Psi(r_i) - Psi(r_{i-1})) / Delta r , for i = 1..10,
+    with Psi(r_0)=0 in the first bin (paper convention).
     """
-    return np.diff(psi_mean) / DELTA_R     # shape (9,)
+    return np.diff(np.concatenate(([0.0], psi_mean))) / DELTA_R   # shape (10,)
 
 
 def setup_style(use_tex=True):
