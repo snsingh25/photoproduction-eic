@@ -45,10 +45,11 @@ DELTA_R   = 0.1
 RHO_R     = R_GRID - 0.5 * DELTA_R       # 10 centres: 0.05, 0.15, ..., 0.95
 
 SAMPLES = [
-    ("eic64_antikt_dijets",  64),
-    ("eic105_antikt_dijets", 105),
-    ("eic141_antikt_dijets", 141),
-    ("hera300_kt_dijets",    300),
+    ("eic64_antikt_dijets",   64),
+    ("eic105_antikt_dijets",  105),
+    ("eic141_antikt_dijets",  141),
+    # HERA uses anti-kT EtMin=10 (matching the EIC samples).
+    ("hera300_antikt_dijets", 300),
 ]
 
 ETA_BINS = [

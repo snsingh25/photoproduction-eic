@@ -35,10 +35,14 @@ from scipy.interpolate import make_interp_spline
 R_GRID = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 
 SAMPLES = [
-    ("eic64_antikt_dijets",  64),
-    ("eic105_antikt_dijets", 105),
-    ("eic141_antikt_dijets", 141),
-    ("hera300_kt_dijets",    300),
+    ("eic64_antikt_dijets",   64),
+    ("eic105_antikt_dijets",  105),
+    ("eic141_antikt_dijets",  141),
+    # HERA uses anti-kT EtMin=10 (matching the EIC samples) so the four
+    # sqrt(s) are compared apples-to-apples. The canonical kT EtMin=17
+    # HERA sample stays in data-jets/hera300_kt_dijets/ and is what
+    # Tables I/II/III in the paper are reconstructed from.
+    ("hera300_antikt_dijets", 300),
 ]
 
 ETA_BINS = [
