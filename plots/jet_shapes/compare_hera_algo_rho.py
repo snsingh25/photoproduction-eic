@@ -102,12 +102,10 @@ def main():
     ax.set_ylim(bottom=0.0)
     ax.set_xlabel(r"$r$", fontsize=22)
     ax.set_ylabel(r"$\rho(r)$", fontsize=22, labelpad=10)
+    ax.set_title(r"$\rho(r)$ for $1.5 < \eta < 2$", fontsize=18, pad=10)
     ax.minorticks_on()
     ax.tick_params(axis="both", which="major", labelsize=18)
-    ax.text(0.05, 0.95,
-            rf"$1.5 < \eta < 2$ ; all $\sqrt{{s}}$ at anti-$k_T$ EtMin=10",
-            transform=ax.transAxes, fontsize=14, va="top")
-    ax.legend(loc="upper right", fontsize=12)
+    ax.legend(loc="upper right", fontsize=12, bbox_to_anchor=(0.98, 0.95))
     plt.tight_layout()
 
     out = Path(__file__).resolve().parent / "output" / "compare_hera_algo_rho_forward.pdf"
