@@ -98,7 +98,7 @@ def main():
                 label=f"{label}  (N={n:,})")
         print(f"  [load] {sample_dir}: N={n:,}, rho peak={rho.max():.3f}")
 
-    ax.set_xlim(RHO_R.min(), 1.0)
+    ax.set_xlim(0.0, 1.0)
     ax.set_ylim(bottom=0.0)
     ax.set_xlabel(r"$r$", fontsize=22)
     ax.set_ylabel(r"$\rho(r)$", fontsize=22, labelpad=10)

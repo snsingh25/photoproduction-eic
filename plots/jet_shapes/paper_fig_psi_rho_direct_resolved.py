@@ -252,7 +252,7 @@ def create_rho_plot(direct_curves, resolved_curves, eta_label, file_path):
         ax.plot(r_smooth, smooth(psi_to_rho(y)), color=RESOLVED_COLOR,
                 linestyle=LINESTYLE[sqrts], linewidth=2)
 
-    ax.set_xlim(RHO_R.min(), 1.0)   # rho starts at r = 0.15
+    ax.set_xlim(0.0, 1.0)           # rho starts at r = 0.15; gap is visible
     ax.set_ylim(bottom=0.0)
     ax.set_xlabel(r"$r$", fontsize=28)
     ax.set_ylabel(r"$\rho(r)$", fontsize=28, labelpad=10)

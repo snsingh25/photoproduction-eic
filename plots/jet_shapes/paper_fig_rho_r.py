@@ -153,9 +153,9 @@ def create_plot(qq_curves, gg_curves, eta_label, file_path):
                 linestyle=LINESTYLE[sqrts], linewidth=2)
 
     # Axis: linear x, linear y for differential shape (paper convention).
-    # rho is reported starting at r = 0.15 (centre of the (0.1, 0.2] bin),
-    # so the displayed range matches the data — no spline extrapolation.
-    ax.set_xlim(RHO_R.min(), 1.0)
+    # rho is reported starting at r = 0.15, but the x-axis extends to
+    # r = 0 with a visible gap so the missing low-r region is explicit.
+    ax.set_xlim(0.0, 1.0)
     ax.set_ylim(bottom=0.0)
 
     ax.set_xlabel(r"$r$", fontsize=28)
