@@ -46,7 +46,10 @@ from scipy.interpolate import make_interp_spline
 
 R_GRID  = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 DELTA_R = 0.1
-RHO_R   = R_GRID - 0.5 * DELTA_R           # annulus centres for rho(r)
+# rho(r) at annulus centres. We drop the first bin (which would rely on
+# Psi(0)=0 with no measurement of Psi at sub-0.1 radii), so the lowest r
+# reported is r = 0.15.
+RHO_R   = R_GRID[1:] - 0.5 * DELTA_R       # 9 centres: 0.15, 0.25, ..., 0.95
 
 SAMPLES = [
     ("eic64_antikt_dijets",  "eic64",   64),
@@ -150,9 +153,10 @@ def mean_psi(psi, eta, tags, target_tag, lo, hi, min_jets=20):
 def psi_to_rho(psi_mean):
     """Convert one Psi(r) curve into a rho(r) curve.
 
-    rho_i = (Psi(r_i) - Psi(r_{i-1})) / Delta r , with Psi(r_0) = 0.
+    rho_i = (Psi(r_i) - Psi(r_{i-1})) / Delta r , for i = 2..10.
+    The first bin is dropped so the lowest r reported is r = 0.15.
     """
-    return np.diff(np.concatenate(([0.0], psi_mean))) / DELTA_R
+    return np.diff(psi_mean) / DELTA_R     # shape (9,)
 
 
 def setup_style(use_tex=True):
@@ -248,7 +252,7 @@ def create_rho_plot(direct_curves, resolved_curves, eta_label, file_path):
         ax.plot(r_smooth, smooth(psi_to_rho(y)), color=RESOLVED_COLOR,
                 linestyle=LINESTYLE[sqrts], linewidth=2)
 
-    ax.set_xlim(0.05, 1.0)
+    ax.set_xlim(RHO_R.min(), 1.0)   # rho starts at r = 0.15
     ax.set_ylim(bottom=0.0)
     ax.set_xlabel(r"$r$", fontsize=28)
     ax.set_ylabel(r"$\rho(r)$", fontsize=28, labelpad=10)
