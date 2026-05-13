@@ -49,10 +49,14 @@ DELTA_R = 0.1
 RHO_R   = R_GRID[:-1]
 
 SAMPLES = [
-    ("eic64_antikt_dijets",   "eic64",   64),
-    ("eic105_antikt_dijets",  "eic105",  105),
-    ("eic141_antikt_dijets",  "eic141",  141),
-    ("hera300_antikt_dijets", "hera300", 300),
+    # All four samples generated with pTHatMin = 7 for cross-sample
+    # consistency. The canonical EIC 64 and 105 (pTHat=5) samples
+    # remain at data-jets/eic{64,105}_antikt_dijets/ for Table I/II
+    # reproduction.
+    ("eic64_antikt_dijets_pTHat7",   "eic64_pTHat7",   64),
+    ("eic105_antikt_dijets_pTHat7",  "eic105_pTHat7",  105),
+    ("eic141_antikt_dijets",         "eic141",         141),
+    ("hera300_antikt_dijets",        "hera300",        300),
 ]
 
 ETA_BINS = [
@@ -172,10 +176,10 @@ def psi_to_rho(psi_curve):
 def setup_style():
     plt.style.use("default")
     plt.rcParams.update({
-        "font.size": 18, "font.family": "serif",
+        "font.size": 24, "font.family": "serif",
         "font.serif": ["Computer Modern"], "text.usetex": True,
-        "axes.linewidth": 1.2, "axes.spines.top": False,
-        "axes.spines.right": False, "lines.linewidth": 1.8,
+        "axes.linewidth": 1.4, "axes.spines.top": False,
+        "axes.spines.right": False, "lines.linewidth": 2.0,
         "legend.frameon": False, "figure.facecolor": "white",
     })
 
@@ -226,23 +230,23 @@ def plot_panel(curves_by_class_sqrts, eta_label, out_pdf, *, kind="psi"):
         ax.set_yticklabels(["0.05", "0.1", "1.0"])
         ax.yaxis.set_major_formatter(ScalarFormatter())
         ax.yaxis.get_major_formatter().set_scientific(False)
-        ax.set_ylabel(r"$\Psi(r)$", fontsize=22)
+        ax.set_ylabel(r"$\Psi(r)$", fontsize=30)
     else:
         ax.set_xlim(0.0, 1.0)
         ax.set_ylim(bottom=0.0)
-        ax.set_ylabel(r"$\rho(r)$", fontsize=22)
+        ax.set_ylabel(r"$\rho(r)$", fontsize=30)
 
-    ax.set_xlabel(r"$r$", fontsize=22)
-    ax.tick_params(axis="both", which="major", labelsize=16)
+    ax.set_xlabel(r"$r$", fontsize=30)
+    ax.tick_params(axis="both", which="major", labelsize=22)
     ax.minorticks_on()
 
     eta_x = 0.55 if kind == "rho" else 0.05
     eta_y = 0.55 if kind == "rho" else 0.10
     ax.text(eta_x, eta_y, eta_label, transform=ax.transAxes,
-            fontsize=20, va="center")
+            fontsize=26, va="center")
     ax.legend(handles=_legend_handles(),
               loc="upper right" if kind == "rho" else "lower right",
-              fontsize=12, ncol=2)
+              fontsize=18, ncol=2)
     plt.tight_layout()
     plt.savefig(out_pdf, dpi=600, bbox_inches="tight", facecolor="white")
     plt.close()

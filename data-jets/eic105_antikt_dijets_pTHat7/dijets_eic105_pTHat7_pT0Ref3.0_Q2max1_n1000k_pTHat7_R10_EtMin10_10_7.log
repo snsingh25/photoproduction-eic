@@ -1,0 +1,109 @@
+=============================================================================
+JET RECONSTRUCTION ANALYSIS FOR HERA PHOTOPRODUCTION EVENTS
+=============================================================================
+Analysis Parameters:
+  Analysis Mode:    DIJET ONLY
+  Jet Algorithm:    anti-kT
+  Jet Radius:       1
+  Min Jet ET:       10 GeV
+  Jet Eta Range:    [-4, 4]
+  Min Particle pT:  0.1 GeV
+  Softdrop (zcut, beta, R0): (0.1, 0, 1)
+  n_subjets (kT ycut):       0.0005
+
+Dijet Selection Cuts:
+  Leading Jet ET:   > 10 GeV
+  Subleading Jet ET:> 7 GeV
+  Leading Jet |η|:  < 4.5
+  Subleading |η|:   < 4.5
+=============================================================================
+
+Successfully opened input file: /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data-jets/eic105_antikt_dijets_pTHat7/../../data/eic105_pTHat7/eic105_pTHat7_pT0Ref3.0_Q2max1_n1000k_pTHat7.root
+Log file: dijets_eic105_pTHat7_pT0Ref3.0_Q2max1_n1000k_pTHat7_R10_EtMin10_10_7.log
+
+Processing QQ_Events...
+  Found 407554 events
+    Processing event 0/407554 (0%)    Processing event 100000/407554 (24%)    Processing event 200000/407554 (49%)    Processing event 300000/407554 (73%)    Processing event 400000/407554 (98%)
+  Events processed: 407554
+  Events with ≥2 jets: 58944 (14.4629%)
+  Events passing dijet cuts: 58592 (14.3765%)
+  Total jets saved: 117184
+  Average jets/selected event: 2
+
+Processing GG_Events...
+  Found 66310 events
+    Processing event 0/66310 (0%)
+  Events processed: 66310
+  Events with ≥2 jets: 6468 (9.75418%)
+  Events passing dijet cuts: 6431 (9.69839%)
+  Total jets saved: 12862
+  Average jets/selected event: 2
+
+Processing GQ_Events...
+  Found 525489 events
+    Processing event 0/525489 (0%)    Processing event 100000/525489 (19%)    Processing event 200000/525489 (38%)    Processing event 300000/525489 (57%)    Processing event 400000/525489 (76%)    Processing event 500000/525489 (95%)
+  Events processed: 525489
+  Events with ≥2 jets: 58433 (11.1197%)
+  Events passing dijet cuts: 58130 (11.0621%)
+  Total jets saved: 116260
+  Average jets/selected event: 2
+
+Processing Combined_Events...
+  Found 999353 events
+    Processing event 0/999353 (0%)    Processing event 100000/999353 (10%)    Processing event 200000/999353 (20%)    Processing event 300000/999353 (30%)    Processing event 400000/999353 (40%)    Processing event 500000/999353 (50%)    Processing event 600000/999353 (60%)    Processing event 700000/999353 (70%)    Processing event 800000/999353 (80%)    Processing event 900000/999353 (90%)
+  Events processed: 999353
+  Events with ≥2 jets: 123845 (12.3925%)
+  Events passing dijet cuts: 123153 (12.3233%)
+  Total jets saved: 246306
+  Average jets/selected event: 2
+
+Processing Resolved_Events...
+  Found 545478 events
+    Processing event 0/545478 (0%)    Processing event 100000/545478 (18%)    Processing event 200000/545478 (36%)    Processing event 300000/545478 (54%)    Processing event 400000/545478 (73%)    Processing event 500000/545478 (91%)
+  Events processed: 545478
+  Events with ≥2 jets: 67467 (12.3684%)
+  Events passing dijet cuts: 67087 (12.2988%)
+  Total jets saved: 134174
+  Average jets/selected event: 2
+
+Processing Direct_Events...
+  Found 453875 events
+    Processing event 0/453875 (0%)    Processing event 100000/453875 (22%)    Processing event 200000/453875 (44%)    Processing event 300000/453875 (66%)    Processing event 400000/453875 (88%)
+  Events processed: 453875
+  Events with ≥2 jets: 56378 (12.4215%)
+  Events passing dijet cuts: 56066 (12.3527%)
+  Total jets saved: 112132
+  Average jets/selected event: 2
+
+=============================================================================
+ANALYSIS COMPLETED SUCCESSFULLY!
+=============================================================================
+Output file: dijets_eic105_pTHat7_pT0Ref3.0_Q2max1_n1000k_pTHat7_R10_EtMin10_10_7.root
+Log file: dijets_eic105_pTHat7_pT0Ref3.0_Q2max1_n1000k_pTHat7_R10_EtMin10_10_7.log
+
+Overall Statistics:
+  Total events processed: 2998059
+  Total events selected: 369459 (12.3233%)
+
+For each category, the following are saved:
+  - Jet trees with basic properties (ET, px, py, pz, eta, phi, mass, nsd, nsubjets)
+  - Dijet-specific variables (masses, angles, cuts flags)
+  - Basic distribution histograms
+
+Jets are reconstructed using anti-kT algorithm with:
+  - R = 1
+  - ET > 10 GeV
+  - -4 < eta < 4
+
+Softdrop multiplicity n_sd (modified mass drop):
+  - z_cut = 0.1
+  - beta  = 0
+  - R0    = 1
+
+n_subjets (kT exclusive):
+  - y_cut = 0.0005
+
+Dijet selection applied with:
+  - Leading jet ET > 10 GeV
+  - Subleading jet ET > 7 GeV
+=============================================================================
