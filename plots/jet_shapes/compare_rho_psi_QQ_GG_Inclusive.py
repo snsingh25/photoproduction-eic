@@ -48,16 +48,31 @@ DELTA_R = 0.1
 # need Psi at r=1.05 which we don't measure. 9 points at r=0.1..0.9.
 RHO_R   = R_GRID[:-1]
 
-SAMPLES = [
-    # All four samples generated with pTHatMin = 7 for cross-sample
-    # consistency. The canonical EIC 64 and 105 (pTHat=5) samples
-    # remain at data-jets/eic{64,105}_antikt_dijets/ for Table I/II
-    # reproduction.
-    ("eic64_antikt_dijets_pTHat7",   "eic64_pTHat7",   64),
-    ("eic105_antikt_dijets_pTHat7",  "eic105_pTHat7",  105),
-    ("eic141_antikt_dijets",         "eic141",         141),
-    ("hera300_antikt_dijets",        "hera300",        300),
-]
+# Cross-sample pTHatMin: flip between "5" and "7" to compare the two
+# consistency tests. Each set picks the matching sample directories and
+# the rendered PDFs are tagged "_pTHat{N}.pdf" so both sets coexist.
+PTHAT_TAG = "5"
+
+if PTHAT_TAG == "5":
+    # EIC 64 and 105 are canonical pTHat=5; HERA 300 and EIC 141 had to
+    # be re-generated at pTHat=5 (canonical for those is pTHat=7).
+    SAMPLES = [
+        ("eic64_antikt_dijets",          "eic64",          64),
+        ("eic105_antikt_dijets",         "eic105",         105),
+        ("eic141_antikt_dijets_pTHat5",  "eic141_pTHat5",  141),
+        ("hera300_antikt_dijets_pTHat5", "hera300_pTHat5", 300),
+    ]
+elif PTHAT_TAG == "7":
+    # EIC 141 and HERA 300 are canonical pTHat=7; EIC 64 and 105 had to
+    # be re-generated at pTHat=7.
+    SAMPLES = [
+        ("eic64_antikt_dijets_pTHat7",   "eic64_pTHat7",   64),
+        ("eic105_antikt_dijets_pTHat7",  "eic105_pTHat7",  105),
+        ("eic141_antikt_dijets",         "eic141",         141),
+        ("hera300_antikt_dijets",        "hera300",        300),
+    ]
+else:
+    raise ValueError(f"PTHAT_TAG must be '5' or '7', got {PTHAT_TAG!r}")
 
 ETA_BINS = [
     (-1.0, 0.0, r"$-1 < \eta < 0$",  "minus1to0"),
@@ -281,9 +296,11 @@ def main():
                 m_psi = mean_psi_in_eta(psi, eta, lo, hi)
                 if m_psi is not None:
                     curves[cls][sqrts] = m_psi
-        plot_panel(curves, label, str(out_dir / f"psi_qqggincl_{slug}.pdf"),
+        plot_panel(curves, label,
+                   str(out_dir / f"psi_qqggincl_{slug}_pTHat{PTHAT_TAG}.pdf"),
                    kind="psi")
-        plot_panel(curves, label, str(out_dir / f"rho_qqggincl_{slug}.pdf"),
+        plot_panel(curves, label,
+                   str(out_dir / f"rho_qqggincl_{slug}_pTHat{PTHAT_TAG}.pdf"),
                    kind="rho")
 
     print("\nAll panels written.")

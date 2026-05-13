@@ -1,0 +1,84 @@
+Event Generation Started: Wed May 13 12:50:14 2026
+
+=== PYTHIA CONFIGURATION VERIFICATION ===
+Tune:pp = 14
+Tune:ee = 7
+StringZ:aLund = 0.68
+StringZ:bLund = 0.98
+StringPT:sigma = 0.335
+MultipartonInteractions:pT0Ref = 3
+PhaseSpace:pTHatMin = 5
+Photon:Q2max = 1
+==========================================
+
+Starting event generation...
+Target: 1000000 events
+
+  Progress: 0% | Valid: 0 | Efficiency: 0.0%
+  Progress: 10% | Valid: 99959 | Efficiency: 100.0%
+  Progress: 20% | Valid: 199923 | Efficiency: 100.0%
+  Progress: 30% | Valid: 299889 | Efficiency: 100.0%
+  Progress: 40% | Valid: 399853 | Efficiency: 100.0%
+  Progress: 50% | Valid: 499815 | Efficiency: 100.0%
+  Progress: 60% | Valid: 599778 | Efficiency: 100.0%
+  Progress: 70% | Valid: 699733 | Efficiency: 100.0%
+  Progress: 80% | Valid: 799688 | Efficiency: 100.0%
+  Progress: 90% | Valid: 899643 | Efficiency: 100.0%
+
+Event generation complete!
+
+
+=============================================================================
+EVENT GENERATION SUMMARY
+=============================================================================
+Output File: ./eic141_pTHat5_pT0Ref3.0_Q2max1_n1000k.root
+Log File:    ./eic141_pTHat5_pT0Ref3.0_Q2max1_n1000k.log
+
+--- Event Counts ---
+Total Attempts:     1000000
+Valid Events:       999596
+Failed Events:      404
+Efficiency:         100.0%
+
+--- Subprocess Classification ---
+  QQ (quark-init):    350578 (35.1%)
+  GG (gluon-init):    140328 (14.0%)
+  GQ (mixed):         508690 (50.9%)
+  Unclassified:            0 (0.0%)
+
+--- Photoproduction Type ---
+  Resolved:           683406 (68.4%)
+  Direct:             316190 (31.6%)
+
+--- Process Code Breakdown ---
+    Code                  Process     Count         %    Class
+---------------------------------------------------------------
+     111              g g → g g    136897    13.70%        GG
+     112           g g → q qbar      3475     0.35%        QQ
+     113              q g → q g    387655    38.78%        GQ
+     114            q q' → q q'    147246    14.73%        QQ
+     115           q qbar → g g      3431     0.34%        GG
+     116      q qbar → q' qbar'      2495     0.25%        QQ
+     121           g g → c cbar       991     0.10%        QQ
+     122        q qbar → c cbar       722     0.07%        QQ
+     123           g g → b bbar       222     0.02%        QQ
+     124        q qbar → b bbar       272     0.03%        QQ
+     271          g γ → q qbar    118263    11.83%        QQ
+     272          g γ → c cbar     70397     7.04%        QQ
+     273          g γ → b bbar      6487     0.65%        QQ
+     274             q γ → q g    121015    12.11%        GQ
+     281          γ g → q qbar         3     0.00%        QQ
+     282          γ g → c cbar         5     0.00%        QQ
+     284             γ q → q g        20     0.00%        GQ
+
+--- Trees Saved ---
+  QQ_Events:         350578 events
+  GG_Events:         140328 events
+  GQ_Events:         508690 events
+  Combined_Events:   999596 events
+  Resolved_Events:   683406 events
+  Direct_Events:     316190 events
+=============================================================================
+
+Event generation completed successfully!
+Output: ./eic141_pTHat5_pT0Ref3.0_Q2max1_n1000k.root
