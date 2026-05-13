@@ -142,7 +142,10 @@ def load_sample(jet_root, ev2pc):
     return result
 
 
-def mean_psi_in_eta(psi, eta, lo, hi, min_jets=20):
+def mean_psi_in_eta(psi, eta, lo, hi, min_jets=10):
+    """Lowered min_jets from 20 to 10 so the low-stats EIC samples
+    (EIC 64 has only ~10 GG jets at -1<eta<0, EIC 105 has ~16)
+    still produce a curve, albeit a noisier one."""
     m = (eta >= lo) & (eta < hi)
     if m.sum() < min_jets:
         return None
@@ -168,9 +171,15 @@ def setup_style():
 
 
 def _legend_handles():
+    """Layout with ncol=2 fills column-major. To get
+        col 1 = {QQ, GG, Dir+Res, [empty]}
+        col 2 = {64, 105, 141, 300 GeV}
+    we pad the class column with a transparent spacer so each
+    column holds 4 entries."""
     handles = []
     for label, col in CLASS_COLOUR.items():
         handles.append(plt.Line2D([0], [0], color=col, linewidth=3, label=label))
+    handles.append(plt.Line2D([0], [0], color="none", label=" "))   # spacer
     for sqrts in (64, 105, 141, 300):
         handles.append(plt.Line2D([0], [0], color="black",
                                   linestyle=LINESTYLE[sqrts],
