@@ -24,7 +24,7 @@ from scipy.interpolate import make_interp_spline
 
 R_GRID  = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 DELTA_R = 0.1
-RHO_R   = R_GRID - 0.5 * DELTA_R           # 10 centres: 0.05, 0.15, ..., 0.95
+RHO_R   = R_GRID                       # paper convention: report rho at the UPPER edge of each annulus (r = 0.1, 0.2, ..., 1.0)
 
 ETA_LO, ETA_HI = 1.5, 2.0      # forward eta bin where the HERA-EIC gap was largest
 

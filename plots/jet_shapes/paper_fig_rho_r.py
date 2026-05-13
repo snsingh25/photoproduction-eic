@@ -42,7 +42,7 @@ DELTA_R   = 0.1
 # so the 10 centres span r = 0.05, 0.15, ..., 0.95. The first point uses
 # Psi(0)=0 as the lower-edge boundary — matching the paper convention so
 # the GG peak structure near r ~ 0.2 is captured.
-RHO_R     = R_GRID - 0.5 * DELTA_R       # 10 centres: 0.05, 0.15, ..., 0.95
+RHO_R     = R_GRID                       # paper convention: report rho at the UPPER edge of each annulus (r = 0.1, 0.2, ..., 1.0)
 
 SAMPLES = [
     ("eic64_antikt_dijets",   64),
@@ -186,8 +186,9 @@ def create_plot(qq_curves, gg_curves, eta_label, file_path):
     ax.text(0.75, 0.60, "GG", transform=ax.transAxes,
             fontsize=24, color=GG_COLOR, weight="bold")
 
-    # Eta label.
-    ax.text(0.15, 0.85, eta_label, transform=ax.transAxes, fontsize=24)
+    # Eta label — placed in the lower-right empty region (after the
+    # peak has decayed) so it doesn't overlap the QQ peak at r ~ 0.1.
+    ax.text(0.55, 0.55, eta_label, transform=ax.transAxes, fontsize=24)
 
     plt.tight_layout()
     plt.savefig(file_path, dpi=600, bbox_inches="tight", facecolor="white")

@@ -48,7 +48,7 @@ R_GRID  = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 DELTA_R = 0.1
 # 10 annulus centres: r = 0.05, 0.15, ..., 0.95. The first bin uses
 # Psi(0)=0 as the lower-edge boundary, matching the paper convention.
-RHO_R   = R_GRID - 0.5 * DELTA_R           # 10 centres: 0.05, 0.15, ..., 0.95
+RHO_R   = R_GRID                       # paper convention: report rho at the UPPER edge of each annulus (r = 0.1, 0.2, ..., 1.0)
 
 SAMPLES = [
     ("eic64_antikt_dijets",  "eic64",   64),
