@@ -41,13 +41,12 @@ from scipy.interpolate import make_interp_spline
 
 R_GRID  = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 DELTA_R = 0.1
-# Hybrid binning: centred-bin for the first 9 points + a half-width
-# closing bin so the curve reaches r=1.0:
-#   r = 0.1 .. 0.9   -> centred annulus  (r-0.05, r+0.05]  width 0.1
-#   r = 1.0          -> closing annulus  (0.95,  1.00]     width 0.05
-# This way each interior point sits at the centre of its bin, but the
-# final point completes the curve all the way out to the jet radius.
-RHO_R   = R_GRID                            # 10 points at r=0.1, 0.2, ..., 1.0
+# Centred-bin convention: each rho value sits at the centre of a
+# Delta-r-wide annulus. The annulus at r=0.1 spans (0.05, 0.15], at
+# r=0.2 spans (0.15, 0.25], ..., at r=0.9 spans (0.85, 0.95]. We drop
+# the r=1.0 endpoint because the symmetric annulus (0.95, 1.05] would
+# need Psi at r=1.05 which we don't measure. 9 points at r=0.1..0.9.
+RHO_R   = R_GRID[:-1]
 
 SAMPLES = [
     ("eic64_antikt_dijets",   "eic64",   64),
@@ -159,23 +158,12 @@ def mean_psi_in_eta(psi, eta, lo, hi, min_jets=10):
 
 
 def psi_to_rho(psi_curve):
-    """Hybrid centred-bin + closing half-width bin.
-
-    Interior (r = 0.1, 0.2, ..., 0.9): centred finite difference,
+    """Centred-bin convention via centred finite difference:
         rho(r_k) = (Psi(r_k + Delta r) - Psi(r_k - Delta r)) / (2 Delta r)
-        equivalent to averaging Psi over the symmetric annulus
-        (r_k - 0.05, r_k + 0.05].
-
-    Closing (r = 1.0): asymmetric narrow annulus (0.95, 1.0], width 0.05.
-    Using linear interpolation Psi(0.95) = (Psi(0.9)+Psi(1.0))/2 gives
-        rho(1.0) = (Psi(1.0) - Psi(0.95)) / 0.05
-                 = (Psi(1.0) - Psi(0.9))  / 0.1
-    so the closing point matches the forward-difference value over the
-    half-width bin while completing the curve at r = 1.0."""
+    Equivalent to linearly interpolating Psi to (r_k - 0.05, r_k + 0.05]
+    and dividing by the bin width. Returns 9 values at r = 0.1..0.9."""
     psi_full = np.concatenate(([0.0], psi_curve))            # (11,) at 0, 0.1, ..., 1.0
-    centered = (psi_full[2:11] - psi_full[0:9]) / (2 * DELTA_R)  # (9,) at r=0.1..0.9
-    closing  = (psi_full[10] - psi_full[9]) / DELTA_R         # scalar at r=1.0
-    return np.concatenate((centered, [closing]))             # (10,) at r=0.1..1.0
+    return (psi_full[2:11] - psi_full[0:9]) / (2 * DELTA_R)  # (9,) at r=0.1..0.9
 
 
 # ---------------------------------------------------------------------------
