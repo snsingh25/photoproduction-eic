@@ -41,7 +41,12 @@ from scipy.interpolate import make_interp_spline
 
 R_GRID  = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 DELTA_R = 0.1
-RHO_R   = R_GRID                       # paper convention: report rho at the UPPER edge of each annulus (r = 0.1, 0.2, ..., 1.0)
+# Centered-bin convention: each rho value sits at the centre of a
+# Delta-r-wide annulus. The annulus at r=0.1 spans (0.05, 0.15], at
+# r=0.2 spans (0.15, 0.25], ..., at r=0.9 spans (0.85, 0.95]. We lose
+# the endpoints (r=0 and r=1) because they would need Psi at r=-0.05
+# and r=1.05 respectively. 9 points at r = 0.1, 0.2, ..., 0.9.
+RHO_R   = R_GRID[:-1]
 
 SAMPLES = [
     ("eic64_antikt_dijets",   "eic64",   64),
@@ -153,7 +158,12 @@ def mean_psi_in_eta(psi, eta, lo, hi, min_jets=10):
 
 
 def psi_to_rho(psi_curve):
-    return np.diff(np.concatenate(([0.0], psi_curve))) / DELTA_R
+    """Centered-bin convention via centered finite difference:
+        rho(r_k) = (Psi(r_k + Delta r) - Psi(r_k - Delta r)) / (2 Delta r)
+    Equivalent to linearly interpolating Psi to (r_k - 0.05, r_k + 0.05]
+    and dividing by the bin width. Returns 9 values at r = 0.1..0.9."""
+    psi_full = np.concatenate(([0.0], psi_curve))      # (11,) at 0, 0.1, ..., 1.0
+    return (psi_full[2:11] - psi_full[0:9]) / (2 * DELTA_R)   # (9,)
 
 
 # ---------------------------------------------------------------------------
