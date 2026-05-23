@@ -1,0 +1,51 @@
+============================================================================================
+Sanity check for per-eta binning  —  dijets_hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k_R10_EtMin17_10_7
+============================================================================================
+
+--- observable: nsubjets ---
+INCLUSIVE (|eta|<4):
+  QQ: N= 15130  <X>=2.9203  sigma=1.5322
+  GG: N=  3122  <X>=3.4158  sigma=1.7637
+  Delta_mu = +0.4955
+  sep      = +0.2121
+
+bin               N_QQ      <QQ>    sig_QQ    N_GG      <GG>    sig_GG     Delta       sep
+[-1.0,+0.0)    1659    4.2152    1.3429     155    5.5935    1.3128   +1.3784   +0.7340
+[+0.0,+1.0)    4870    3.9618    1.3149     676    5.3225    1.3040   +1.3607   +0.7348
+[+1.0,+2.0)    4805    2.6065    1.0740    1061    3.6381    1.1651   +1.0316   +0.6510
+[+2.0,+3.0)    3037    1.5021    0.6466     992    2.0585    0.7901   +0.5563   +0.5449
+
+variance decomposition (sigma^2 = within + between):
+  QQ:  within^2 = 1.2681   between^2 = 1.0095   sum = 2.2777   observed^2 = 2.3474   ratio = 0.970
+  GG:  within^2 = 1.2053   between^2 = 1.7269   sum = 2.9322   observed^2 = 3.1097   ratio = 0.943
+  -> if ratio ~= 1.0, per-bin + between-bin variance reconstructs inclusive.
+  -> fraction of QQ variance that is between-bin: 44.3%
+  -> fraction of GG variance that is between-bin: 58.9%
+
+N sanity: sum per-bin N_QQ = 14371  vs inclusive N_QQ = 15130  (diff = out-of-bin jets)
+          sum per-bin N_GG = 2884  vs inclusive N_GG = 3122
+
+--- observable: nsd ---
+INCLUSIVE (|eta|<4):
+  QQ: N= 15130  <X>=3.6182  sigma=1.4056
+  GG: N=  3122  <X>=4.6521  sigma=1.3842
+  Delta_mu = +1.0339
+  sep      = +0.5241
+
+bin               N_QQ      <QQ>    sig_QQ    N_GG      <GG>    sig_GG     Delta       sep
+[-1.0,+0.0)    1659    3.5835    1.4102     155    4.3806    1.3007   +0.7972   +0.4155
+[+0.0,+1.0)    4870    3.6507    1.4019     676    4.7012    1.3993   +1.0505   +0.5303
+[+1.0,+2.0)    4805    3.6279    1.4112    1061    4.6362    1.3912   +1.0083   +0.5088
+[+2.0,+3.0)    3037    3.5973    1.3962     992    4.6653    1.3886   +1.0680   +0.5424
+
+variance decomposition (sigma^2 = within + between):
+  QQ:  within^2 = 1.9734   between^2 = 0.0006   sum = 1.9739   observed^2 = 1.9755   ratio = 0.999
+  GG:  within^2 = 1.9252   between^2 = 0.0047   sum = 1.9298   observed^2 = 1.9155   ratio = 1.007
+  -> if ratio ~= 1.0, per-bin + between-bin variance reconstructs inclusive.
+  -> fraction of QQ variance that is between-bin: 0.0%
+  -> fraction of GG variance that is between-bin: 0.2%
+
+N sanity: sum per-bin N_QQ = 14371  vs inclusive N_QQ = 15130  (diff = out-of-bin jets)
+          sum per-bin N_GG = 2884  vs inclusive N_GG = 3122
+
+Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/plots/softdrop/output/hera300_kt_dijets/sanity_eta_means.pdf

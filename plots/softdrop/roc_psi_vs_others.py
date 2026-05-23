@@ -134,10 +134,31 @@ def main():
 
     # --- plot -----------------------------------------------------------
     fig, ax = plt.subplots(figsize=(6.6, 5.4))
-    for name, _gg, _qq, es, eb, auc, col, _kind in results:
+    for name, gg_arr, qq_arr, es, eb, auc, col, _kind in results:
         ax.plot(eb, es, "o-" if _kind == "integer" else "-",
                 color=col, linewidth=2, markersize=6 if _kind == "integer" else 0,
                 label=f"{name}  AUC = {auc:.3f}")
+        # For Psi (continuous, gluon-smaller), overlay markers at fixed cut
+        # values so the operating-point structure is visible. Cut Psi<c
+        # selects gluon-like; epsilon_GG = P(Psi<c|GG), epsilon_QQ = P(Psi<c|QQ).
+        if "Psi" in name:
+            psi_cuts = np.array([0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+            eg = np.array([(gg_arr <= c).mean() for c in psi_cuts])
+            eq = np.array([(qq_arr <= c).mean() for c in psi_cuts])
+            ax.scatter(eq, eg, s=44, facecolor="white", edgecolor=col,
+                       linewidth=1.8, zorder=5)
+            # Highlight the paper's thin (>0.8 = quark, i.e. Psi<0.8 cut selects
+            # gluons at high QQ efficiency) and thick (Psi<0.6) cuts.
+            for c_paper, label in [(0.6, r"$\Psi{<}0.6$"),
+                                   (0.8, r"$\Psi{<}0.8$")]:
+                eg_p = (gg_arr <= c_paper).mean()
+                eq_p = (qq_arr <= c_paper).mean()
+                ax.scatter(eq_p, eg_p, s=80, marker="s",
+                           facecolor=col, edgecolor="black",
+                           linewidth=1.2, zorder=6)
+                ax.annotate(label, (eq_p, eg_p),
+                            textcoords="offset points",
+                            xytext=(8, -2), fontsize=10, color="black")
     ax.plot([0, 1], [0, 1], "--", color="grey", alpha=0.5, label="random")
     ax.set_xlabel(r"$\varepsilon$(QQ)")
     ax.set_ylabel(r"$\varepsilon$(GG)")

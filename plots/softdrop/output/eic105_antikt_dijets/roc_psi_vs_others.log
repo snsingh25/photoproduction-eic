@@ -9,4 +9,4 @@ n_SD                   3.349     1.325     4.224     1.251    +0.480     0.682
 n_subjets              3.003     1.340     3.460     1.388    +0.237     0.590
 Psi(r=0.3)             0.702     0.222     0.481     0.229    -0.692     0.766
 
-Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data-jets/eic105_antikt_dijets/roc_psi_vs_others.pdf
+Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/plots/softdrop/output/eic105_antikt_dijets/roc_psi_vs_others.pdf

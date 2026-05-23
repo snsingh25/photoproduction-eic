@@ -9,4 +9,4 @@ n_SD                   3.618     1.406     4.652     1.384    +0.524     0.698
 n_subjets              2.920     1.532     3.416     1.764    +0.212     0.576
 Psi(r=0.3)             0.754     0.211     0.540     0.230    -0.688     0.776
 
-Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data-jets/hera300_kt_dijets/roc_psi_vs_others.pdf
+Wrote /Users/siddharthsingh/Analysis/repos/photoproduction-eic/plots/softdrop/output/hera300_kt_dijets/roc_psi_vs_others.pdf
