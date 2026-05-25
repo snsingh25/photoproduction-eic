@@ -45,13 +45,13 @@ const double subleading_jet_etMin = 7.0;
 const int N_ETA_BINS = 4;
 const double eta_bin_edges[N_ETA_BINS + 1] = {-1.0, 0.0, 1.0, 1.5, 2};
 
-// Input file
-const string input_file = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt7GeV/hera300_pT7/hera300_pT7.root";
-// const string input_file = "/Users/siddharthsingh/Analysis/ph-new/evt/allevents_pt5GeV/eic141_pt5/eic141_pT5.root";
-
-// Experiment label (for output)
-const string exp_label = "hera300";
-const double sqrt_s = 300.0;  // GeV
+// Input file + experiment label / sqrt(s) are set at the CLI
+// (see main()). The values below are defaults preserved only to keep
+// the old build green when no args are given; the live calls always
+// override them via argv.
+string input_file = "/Users/siddharthsingh/Analysis/repos/photoproduction-eic/data/hera300/hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k.root";
+string exp_label = "hera300";
+double sqrt_s = 300.0;  // GeV
 
 // =============================================================================
 // HELPER FUNCTIONS
@@ -90,8 +90,13 @@ string generateOutputFilename() {
 // MAIN ANALYSIS
 // =============================================================================
 
-int main() {
+int main(int argc, char** argv) {
     gROOT->SetBatch(kTRUE);
+
+    // CLI: <input.root> <exp_label> <sqrts_GeV>
+    if (argc > 1) input_file = argv[1];
+    if (argc > 2) exp_label  = argv[2];
+    if (argc > 3) sqrt_s     = atof(argv[3]);
 
     cout << "\n========================================" << endl;
     cout << "  Mean Subjet Multiplicity vs Eta" << endl;

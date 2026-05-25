@@ -276,14 +276,16 @@ def main():
     per_jet_et_floor = {"alljets_perjet_et1": 1.0,
                         "alljets_perjet_et10": 10.0}.get(sel)
 
-    SAMPLES_ALL = ("hera300_kt_alljets", "eic141_antikt_alljets",
-                   "eic105_antikt_alljets", "eic64_antikt_alljets")
-    SAMPLES_DIJ = ("hera300_kt_dijets",  "eic141_antikt_dijets",
-                   "eic105_antikt_dijets",  "eic64_antikt_dijets")
-    # Uniform-EtMin=10 dijets: HERA reco at EtMin=10 (not the canonical 17),
+    # HERA switched to anti-kT for cross-sample algorithm consistency in
+    # the revised paper; EIC samples were already anti-kT.
+    SAMPLES_ALL = ("hera300_antikt_alljets", "eic141_antikt_alljets",
+                   "eic105_antikt_alljets",  "eic64_antikt_alljets")
+    SAMPLES_DIJ = ("hera300_antikt_dijets",  "eic141_antikt_dijets",
+                   "eic105_antikt_dijets",   "eic64_antikt_dijets")
+    # Uniform-EtMin=10 dijets: HERA antikt at EtMin=10 (not the canonical 17),
     # EIC samples already at EtMin=10. Matches the lower edge of the paper plot.
-    SAMPLES_DIJ_ET10 = ("hera300_kt_dijets_etmin10", "eic141_antikt_dijets",
-                        "eic105_antikt_dijets",      "eic64_antikt_dijets")
+    SAMPLES_DIJ_ET10 = ("hera300_antikt_dijets", "eic141_antikt_dijets",
+                        "eic105_antikt_dijets",  "eic64_antikt_dijets")
 
     # Per-sample (lead, sub) cuts used by the dijets_papercut mode. All four
     # samples (HERA included) at the lower-energy convention lead > 10,

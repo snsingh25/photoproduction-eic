@@ -1,0 +1,16 @@
+# Mean Subjet Multiplicity vs Eta
+# Experiment: hera300
+# sqrt_s = 300
+# R = 1
+# ycut = 0.0005
+# leading_jet_etMin = 10
+# subleading_jet_etMin = 7
+# total_events = 999888
+# dijet_events = 178874
+# qq_events = 119786
+# gg_events = 59088
+# Columns: eta_bin_low, eta_bin_high, eta_bin_center, mean_nsubjet_QQ, mean_nsubjet_GG, n_jets_QQ, n_jets_GG
+-1 0 -0.5 4.29346 5.29981 42446 8362
+0 1 0.5 4.25657 5.22995 63627 21279
+1 1.5 1.25 3.37255 4.25572 30968 14997
+1.5 2 1.75 2.60334 3.35855 27333 17027

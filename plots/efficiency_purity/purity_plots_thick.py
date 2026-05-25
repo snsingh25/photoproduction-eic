@@ -23,7 +23,7 @@ from scipy.interpolate import make_interp_spline
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PSI_THICK_CUT = 0.6       # Psi(r=0.3) < PSI_THICK_CUT  -> thick (gluon-like)
-SAMPLE_DIR = "hera300_kt_dijets"
+SAMPLE_DIR = "hera300_antikt_dijets"
 
 
 def find_dijet_root(sample_dir):

@@ -1,0 +1,24 @@
+# Subjet Multiplicity Data
+# Experiment: eic141_pTHat7_pT0Ref3.0_Q2max1_n1000k
+# CMS_Energy: 141
+# ycut = 0.0005
+# etaMin = -1
+# etaMax = 0
+# Leading_Jet_ET_Min = 10
+# Subleading_Jet_ET_Min = 7
+# Selection = dijets
+# Columns: bin_center, QQ_normalized, GG_normalized
+# Mean_QQ: 4.35182
+# Mean_GG: 5.21901
+# Entries_QQ: 7265
+# Entries_GG: 242
+0.5 0 0
+1.5 0.00289057 0
+2.5 0.0437715 0
+3.5 0.183207 0.053719
+4.5 0.332829 0.227273
+5.5 0.280936 0.318182
+6.5 0.123056 0.260331
+7.5 0.0293187 0.128099
+8.5 0.00371645 0.0123967
+9.5 0.000275292 0

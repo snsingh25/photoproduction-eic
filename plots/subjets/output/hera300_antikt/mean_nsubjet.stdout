@@ -1,0 +1,61 @@
+ERROR in cling::CIFactory::createCI(): cannot extract standard library include paths!
+Invoking:
+  LC_ALL=C clang-19  -O3 -DNDEBUG -xc++ -E -v /dev/null 2>&1 | sed -n -e '/^.include/,${' -e '/^ \/.*++/p' -e '}'
+Results was:
+With exit code 0
+
+========================================
+  Mean Subjet Multiplicity vs Eta
+========================================
+Experiment: hera300 (sqrt(s) = 300 GeV)
+Jet Algorithm: anti-kT, R = 1
+Subjet Algorithm: kT, ycut = 0.0005
+Leading Jet ET > 10 GeV
+Subleading Jet ET > 7 GeV
+Eta bins: [-1, 0) [0, 1) [1, 1.5) [1.5, 2) 
+========================================
+
+Successfully opened: data/hera300/hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k.root
+
+Total events in tree: 999888
+#--------------------------------------------------------------------------
+#                         FastJet release 3.4.2
+#                 M. Cacciari, G.P. Salam and G. Soyez                  
+#     A software package for jet finding and analysis at colliders      
+#                           http://fastjet.fr                           
+#	                                                                      
+# Please cite EPJC72(2012)1896 [arXiv:1111.6097] if you use this package
+# for scientific work and optionally PLB641(2006)57 [hep-ph/0512210].   
+#                                                                       
+# FastJet is provided without warranty under the GNU GPL v2 or higher.  
+# It uses T. Chan's closest pair algorithm, S. Fortune's Voronoi code
+# and 3rd party plugin jet algorithms. See COPYING file for details.
+#--------------------------------------------------------------------------
+  Processed 100000 events...
+  Processed 200000 events...
+  Processed 300000 events...
+  Processed 400000 events...
+  Processed 500000 events...
+  Processed 600000 events...
+  Processed 700000 events...
+  Processed 800000 events...
+  Processed 900000 events...
+
+========================================
+  Results
+========================================
+Total events processed: 999888
+Dijet events: 178874
+  QQ events: 119786
+  GG events: 59088
+
+Eta Bin			<n_subjet>_QQ	<n_subjet>_GG	N_jets_QQ	N_jets_GG
+------------------------------------------------------------------------
+[-1.0000, 0.0000)		4.2935		5.2998		42446		8362
+[0.0000, 1.0000)		4.2566		5.2299		63627		21279
+[1.0000, 1.5000)		3.3725		4.2557		30968		14997
+[1.5000, 2.0000)		2.6033		3.3585		27333		17027
+
+========================================
+Output saved to: hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k_10_7.txt
+========================================

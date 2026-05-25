@@ -1,0 +1,16 @@
+# Mean Subjet Multiplicity vs Eta
+# Experiment: eic141
+# sqrt_s = 141
+# R = 1
+# ycut = 0.0005
+# leading_jet_etMin = 10
+# subleading_jet_etMin = 7
+# total_events = 999625
+# dijet_events = 156359
+# qq_events = 129359
+# gg_events = 27000
+# Columns: eta_bin_low, eta_bin_high, eta_bin_center, mean_nsubjet_QQ, mean_nsubjet_GG, n_jets_QQ, n_jets_GG
+-1 0 -0.5 4.3118 5.24059 44570 4065
+0 1 0.5 4.19196 5.11044 91458 14515
+1 1.5 1.25 3.34096 4.16861 42674 10201
+1.5 2 1.75 2.58681 3.28808 35153 10306

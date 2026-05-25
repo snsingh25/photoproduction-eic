@@ -124,7 +124,10 @@ def create_efficiency_plot():
 
     # Live-data computation from the regenerated paper-config dijet samples,
     # using the manuscript's purity definitions (paper formula).
-    rf_300 = find_dijet_root("hera300_kt_dijets")
+    # HERA 300 switched to anti-kT (matching the per-sample algorithm
+    # consistency adopted for the revised paper); EtMin=10 to match the
+    # EIC samples.
+    rf_300 = find_dijet_root("hera300_antikt_dijets")
     rf_141 = find_dijet_root("eic141_antikt_dijets")
     if rf_300 is None or rf_141 is None:
         raise SystemExit("missing dijet ROOT for hera300 or eic141")
