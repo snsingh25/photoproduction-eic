@@ -1,0 +1,91 @@
+% Removed from apssamp.tex on request. Kept here for possible reuse.
+% Requires \cite{lee2023machine,Komiske_2018,Metodiev_2018,Kasieczka2017-bu},
+% all still present in EIC_Observables.bib.
+
+\subsection{Comparison with machine-learning taggers}
+
+Deep-learning classifiers built on jet constituents are the benchmark for
+quark/gluon discrimination at the
+LHC~\cite{Komiske_2018,Metodiev_2018,Kasieczka2017-bu}, so it is fair to ask what
+a single physically-motivated observable gives up against them. Two things frame
+the comparison. A learned classifier sees all the constituent-level information
+and can in principle reach whatever discrimination is available, so it is really
+an upper bound rather than a competitor. But reaching that bound in practice
+takes calibration, and nobody can yet quote a systematic uncertainty for a
+tagger trained on simulation and applied at a facility with no data.
+
+We can make this quantitative because Ref.~\cite{lee2023machine} studies
+machine-learning quark/gluon tagging in exactly this final state. That work
+generates low-$Q^2$ photoproduction dijets at $\sqrt{s} = 141$~GeV, clusters them
+with anti-$k_T$ at $R = 1.0$ within $|\eta_{\mathrm{lab}}| < 4$, labels QQ,
+$Q\bar{Q}$ and GG topologies from the generator process codes while dropping
+mixed $qg$ final states, and trains three classifiers on the leading-jet
+constituents: a Particle Flow Network (PFN) that is given particle-identification
+information, an IRC-safe Energy Flow Network (EFN), and a deep network fed
+IRC-safe Energy Flow Polynomials (EFPs) of dimension $d=7$. Jet mass serves as
+their single-observable baseline. The jet definition, the pseudorapidity
+acceptance, the photon virtuality, the centre-of-mass energy and the handling of
+mixed topologies all match what we do here. The differences are the generator
+(\textsc{Pythia}~6 rather than \textsc{Pythia}~8) and the dijet thresholds
+($p_{T1} > 8$, $p_{T2} > 5$, $p_{T3} < 4$~GeV there; $E_{T1} > 10$,
+$E_{T2} > 7$~GeV and exactly two jets here).
+
+Reference~\cite{lee2023machine} shows ROC curves but never quotes areas, so we
+obtained the values in Table~\ref{tab:ml} by digitising its Fig.~9. The
+$\pm 0.015$ is the full spread we get from shifting the axis calibration by
+$\pm 3$ pixels and from taking either the mean or the median of the plotted
+curve, which has finite width. One more thing to note: their ROC treats the
+quark as signal, the opposite of our convention. Swapping the two classes and
+flipping the sign of the discriminant leaves the area unchanged, so the numbers
+compare directly.
+
+\begin{table}[htbp]
+\caption{Quark/gluon discrimination at $\sqrt{s} = 141$~GeV in low-$Q^2$
+photoproduction dijets. The machine-learning entries are digitised from Fig.~9 of
+Ref.~\cite{lee2023machine}; the uncertainty is the digitisation spread described
+in the text. The $\Psi(r=0.3)$ entry is the present work, from
+Table~\ref{tab:auc}.}
+\label{tab:ml}
+\begin{ruledtabular}
+\begin{tabular}{lc}
+Discriminant & AUC \\
+\colrule
+Particle Flow Network (with PID)~\cite{lee2023machine} & $0.788 \pm 0.015$ \\
+Energy Flow Network (IRC-safe)~\cite{lee2023machine}   & $0.760 \pm 0.015$ \\
+\textbf{Integrated jet shape} $\Psi(r=0.3)$ \textbf{(this work)} & \textbf{0.757} \\
+EFP network, $d = 7$~\cite{lee2023machine}             & $0.749 \pm 0.015$ \\
+Jet mass~\cite{lee2023machine}                         & $0.697 \pm 0.015$ \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
+Three things follow, and they are more specific than the usual blanket claim that
+jet shapes are ``competitive'' with machine learning.
+
+First, $\Psi(0.3)$ is indistinguishable from the two IRC-safe learned
+classifiers. Its AUC of $0.757$ sits between the EFN at $0.760 \pm 0.015$ and the
+EFP network at $0.749 \pm 0.015$. A single calorimetric observable with nothing
+to train recovers, to the precision of this comparison, everything the deep sets
+get out of the full IRC-safe constituent information.
+
+Second, $\Psi(0.3)$ does \emph{not} match the best learned tagger. The PFN with
+particle identification reaches $0.788 \pm 0.015$, about $0.03$ ahead, which is
+more than the digitisation uncertainty. The reason is not mysterious. The PFN is
+the only classifier here that is told what the particles are, and the
+charged-hadron and kaon content carries quark/gluon information that a
+transverse-energy profile cannot see by construction. So the comparison measures
+what you give up by using a calorimetric shape instead of full particle-flow
+input, and at these energies the answer is a few percent in AUC.
+
+Third, the margin over a single-observable baseline is large.
+Reference~\cite{lee2023machine} uses jet mass in that role and gets
+$0.697 \pm 0.015$, which $\Psi(0.3)$ beats by about $0.06$. Physically motivated
+observables are not interchangeable, and picking the right one matters as much as
+the choice between a physical observable and a learned one.
+
+Put together, these numbers support a narrower claim than is usually made for
+traditional observables. Machine learning does keep a measurable edge at the EIC,
+but only when it is handed information beyond the energy flow, and the edge is
+small enough that a first measurement --- dominated by detector systematics that
+neither study includes --- is unlikely to resolve it.
+
