@@ -2,8 +2,8 @@
 
 ## Abstract
 
-Jets are studied in photoproduction ep collisions at the proposed EIC energies,
-$\sqrt{s} = 30$–$140$ GeV, alongside an HERA $\sqrt{s} = 300$ GeV reference.
+Jets are studied in photoproduction ep collisions at the EIC design energies,
+$\sqrt{s} = 64$–$141$ GeV, alongside a HERA $\sqrt{s} = 300$ GeV reference.
 The contribution of the photoproduction sub-processes — direct and resolved —
 is studied separately. Events are generated with the **PYTHIA8** event
 generator, jets are reconstructed with the longitudinally-invariant
@@ -11,6 +11,37 @@ $k_T$ / anti-$k_T$ algorithm from **FastJet3**, and the substructure of
 gluon- vs quark-initiated jets is analyzed via integrated jet shapes
 $\Psi(r)$, iterated soft-drop multiplicity $n_{\mathrm{SD}}$, and exclusive
 $k_T$ subjet multiplicity.
+
+## Papers
+
+Two papers come out of this repository.
+
+**I — Study of quark and gluon jet identification in photoproduction at EIC.**
+[arXiv:2603.09545](https://arxiv.org/abs/2603.09545), under revision for PRD.
+Establishes the dijet photoproduction samples and uses the integrated jet
+shape $\Psi(r)$ together with subjet multiplicity to produce quark- and
+gluon-enriched jet samples. The manuscript source lives outside this repo;
+the samples, figure code and cross-checks behind it are here, with the
+referee-response material under `docs/referee_responses/`.
+
+**II — Comparative study of jet-substructure quark/gluon discriminants in
+photoproduction at the EIC.** Source in `EIC_Observables/`, in preparation.
+Asks which substructure observable actually separates quark from gluon jets
+best at EIC energies, by computing $\Psi(r=0.3)$, $n_{\mathrm{subjets}}$ and
+$n_{\mathrm{SD}}$ on *identical* jets — same clustering, same cuts, same
+event loop — at all four centre-of-mass energies.
+
+Headline results of II:
+
+- The integrated jet shape gives the largest separation at every energy:
+  ROC AUC $0.75$–$0.77$, against $0.66$–$0.69$ for $n_{\mathrm{SD}}$ and
+  $0.53$–$0.65$ for $n_{\mathrm{subjets}}$.
+- The ordering of the two *counting* observables is not fixed. Pooled over
+  $\eta$, $n_{\mathrm{SD}}$ leads by up to $0.16$ in AUC; binned in $\eta$,
+  $n_{\mathrm{subjets}}$ leads in all fourteen bins measured. A bin-width
+  scan traces this to the absolute momentum threshold in
+  $n_{\mathrm{subjets}}$, which leaves it partly sensitive to jet
+  kinematics rather than colour flow.
 
 ## Workflow
 
@@ -42,23 +73,36 @@ photoproduction-eic/
 │   ├── jetshapes/             integrated/ + differential/ shape analyses
 │   ├── subjets/               n-subjet multiplicity
 │   ├── thinthick/             thick vs thin jet classification
-│   ├── dijets/                older dijet-specific analyses 
+│   ├── dijets/                older dijet-specific analyses
 │   └── analysis/              jet counts, efficiency/purity, all-shapes
+├── EIC_Observables/           PAPER II manuscript (REVTeX 4.2)
+│   ├── apssamp.tex            main file (template name, real content)
+│   ├── EIC_Observables.bib    bibliography
+│   ├── figures/               figure PDFs, copied from plots/*/output/
+│   └── iith_abstract/         conference abstract
 ├── plots/
+│   ├── style/
+│   │   └── paper_style.py     shared publication style — fonts, palettes,
+│   │                          REVTeX widths, square panels
 │   ├── softdrop/              ACTIVE plotting suite (Python; uproot/matplotlib)
-│   │   ├── paper_fig5_psi_r.py            paper Fig 5 — Psi(r) per eta bin
-│   │   ├── paper_fig8_fig9_regression.py  paper Fig 8/9 reproducers
-│   │   ├── roc_cross_energy.py / _with_psi.py
-│   │   ├── roc_eta_scan.py, roc_psi_vs_others.py
+│   │   ├── paper_roc_figures.py           PAPER II Figs 1-4 + AUC tables
+│   │   ├── roc_cross_energy_with_psi.py   ROC definition — single source of
+│   │   │                                  truth, imported by the above
+│   │   ├── roc_cross_energy.py, roc_eta_scan.py, roc_psi_vs_others.py
+│   │   ├── sanity_eta_means.py            eta variance decomposition
+│   │   ├── paper_fig5_psi_r.py            paper I Fig 5 — Psi(r) per eta bin
+│   │   ├── paper_fig8_fig9_regression.py  paper I Fig 8/9 reproducers
 │   │   ├── dijet_balance_check.py, jet_parton_match.py
-│   │   ├── sanity_eta_means.py, softdrop_sensitivity.py
-│   │   ├── algo_compare_kt_vs_antikt.py, compare_energies.py
-│   │   ├── compare_nsd_vs_nsubjets.py, check_nsd.py
+│   │   ├── softdrop_sensitivity.py, algo_compare_kt_vs_antikt.py
+│   │   ├── compare_energies.py, compare_nsd_vs_nsubjets.py, check_nsd.py
 │   │   └── output/            generated PDFs + summary logs (tracked)
 │   │       ├── <sample>/                      per-sample artifacts
-│   │       ├── cross_energy_paperconfig/      cross-sample summaries
+│   │       ├── paper_roc_antikt_etmin10/      PAPER II figures + tables
+│   │       ├── cross_energy_antikt_etmin10/   all-anti-kT cross-energy scan
+│   │       ├── cross_energy_paperconfig/      earlier mixed-algorithm scan
 │   │       └── cross_energy_legacy/           pre-paper-config summaries
-│   ├── jet_kinematics/        legacy plotters (kept for reference)
+│   ├── jet_kinematics/
+│   │   └── paper_pt_vs_eta.py  jet pT-vs-eta density, one panel per energy
 │   ├── jet_shapes/            legacy integrated/differential shape plotters
 │   ├── shape_cuts/, range_studies/, subjets/, efficiency_purity/, subprocess_fractions/
 │   └─                         legacy plotters (kept for reference)
@@ -118,6 +162,19 @@ python plots/softdrop/roc_cross_energy_with_psi.py
 
 Each script accepts `--out-dir` to override the default output location.
 
+### Regenerating the Paper II figures
+
+Both scripts discover their own inputs and need no arguments:
+
+```bash
+python plots/softdrop/paper_roc_figures.py       # Figs 1-4 + AUC tables
+python plots/jet_kinematics/paper_pt_vs_eta.py   # jet pT vs eta density
+```
+
+They write to `plots/*/output/paper_*/`. Getting a refreshed figure into the
+manuscript is a **manual copy** into `EIC_Observables/figures/` — nothing
+links the two automatically.
+
 Python deps: `uproot`, `awkward`, `numpy`, `matplotlib`, `scipy` (and a working
 TeX install for the paper-figure reproducers — pass `--no-tex` to fall back to
 matplotlib's mathtext).
@@ -130,7 +187,9 @@ Only the bulky ROOT files are gitignored:
 - `data-jets/**/*.root`   — jet trees from `jetreco_softdrop`
 
 Everything else (PDFs, summary logs, per-run `.log` text, run records) is
-tracked so plots and provenance stay with the repo.
+tracked so plots and provenance stay with the repo. That includes the Paper II
+manuscript and its figure PDFs under `EIC_Observables/`; only the LaTeX build
+artefacts there are ignored, via a nested `.gitignore`.
 
 ## Conventions
 
@@ -141,3 +200,11 @@ tracked so plots and provenance stay with the repo.
   the input ROOT file's parent directory. Pass `--out-dir` to redirect.
 - Per-sample ROOT files in `data-jets/<sample>/` always sit next to a matching
   `dijets_*.log` or `alljets_*.log` recording the `jetreco_softdrop` run.
+- Sample directory names encode the cuts (`hera300_antikt_dijets`,
+  `hera300_kt_dijets_etmin10`, `hera300_pTHat3`, ...). Variants get their own
+  directory rather than overwriting an existing one, so every configuration
+  that was ever run stays on disk and reproducible.
+- Paper II figures are built on **identical jets** across all four energies:
+  anti-$k_T$, $R = 1.0$, exactly two jets, $E_T > 10$ / $7$ GeV. Mixing jet
+  algorithms or $E_T$ cuts between samples invalidates the comparison, which
+  is the whole point of that paper.
