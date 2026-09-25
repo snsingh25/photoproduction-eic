@@ -1,0 +1,109 @@
+=============================================================================
+JET RECONSTRUCTION ANALYSIS FOR HERA PHOTOPRODUCTION EVENTS
+=============================================================================
+Analysis Parameters:
+  Analysis Mode:    DIJET ONLY
+  Jet Algorithm:    kT
+  Jet Radius:       1
+  Min Jet ET:       10 GeV
+  Jet Eta Range:    [-4, 4]
+  Min Particle pT:  0.1 GeV
+  Softdrop (zcut, beta, R0): (0.1, 0, 1)
+  n_subjets (kT ycut):       0.0005
+
+Dijet Selection Cuts:
+  Leading Jet ET:   > 10 GeV
+  Subleading Jet ET:> 7 GeV
+  Leading Jet |η|:  < 4.5
+  Subleading |η|:   < 4.5
+=============================================================================
+
+Successfully opened input file: /Users/siddharthsingh/Analysis/repos/photoproduction-eic/data/hera300_pTHat3/hera300_pTHat3_pT0Ref3.0_Q2max1_n500k_pTHat3test.root
+Log file: dijets_hera300_pTHat3_pT0Ref3.0_Q2max1_n500k_pTHat3test_R10_EtMin10_10_7.log
+
+Processing QQ_Events...
+  Found 99546 events
+    Processing event 0/99546 (0%)
+  Events processed: 99546
+  Events with ≥2 jets: 1249 (1.2547%)
+  Events passing dijet cuts: 1187 (1.19241%)
+  Total jets saved: 2374
+  Average jets/selected event: 2
+
+Processing GG_Events...
+  Found 168438 events
+    Processing event 0/168438 (0%)    Processing event 100000/168438 (59%)
+  Events processed: 168438
+  Events with ≥2 jets: 620 (0.368088%)
+  Events passing dijet cuts: 586 (0.347902%)
+  Total jets saved: 1172
+  Average jets/selected event: 2
+
+Processing GQ_Events...
+  Found 231949 events
+    Processing event 0/231949 (0%)    Processing event 100000/231949 (43%)    Processing event 200000/231949 (86%)
+  Events processed: 231949
+  Events with ≥2 jets: 1798 (0.77517%)
+  Events passing dijet cuts: 1711 (0.737662%)
+  Total jets saved: 3422
+  Average jets/selected event: 2
+
+Processing Combined_Events...
+  Found 499933 events
+    Processing event 0/499933 (0%)    Processing event 100000/499933 (20%)    Processing event 200000/499933 (40%)    Processing event 300000/499933 (60%)    Processing event 400000/499933 (80%)
+  Events processed: 499933
+  Events with ≥2 jets: 3667 (0.733498%)
+  Events passing dijet cuts: 3484 (0.696893%)
+  Total jets saved: 6968
+  Average jets/selected event: 2
+
+Processing Resolved_Events...
+  Found 431142 events
+    Processing event 0/431142 (0%)    Processing event 100000/431142 (23%)    Processing event 200000/431142 (46%)    Processing event 300000/431142 (69%)    Processing event 400000/431142 (92%)
+  Events processed: 431142
+  Events with ≥2 jets: 2704 (0.627172%)
+  Events passing dijet cuts: 2565 (0.594932%)
+  Total jets saved: 5130
+  Average jets/selected event: 2
+
+Processing Direct_Events...
+  Found 68791 events
+    Processing event 0/68791 (0%)
+  Events processed: 68791
+  Events with ≥2 jets: 963 (1.39989%)
+  Events passing dijet cuts: 919 (1.33593%)
+  Total jets saved: 1838
+  Average jets/selected event: 2
+
+=============================================================================
+ANALYSIS COMPLETED SUCCESSFULLY!
+=============================================================================
+Output file: dijets_hera300_pTHat3_pT0Ref3.0_Q2max1_n500k_pTHat3test_R10_EtMin10_10_7.root
+Log file: dijets_hera300_pTHat3_pT0Ref3.0_Q2max1_n500k_pTHat3test_R10_EtMin10_10_7.log
+
+Overall Statistics:
+  Total events processed: 1499799
+  Total events selected: 10452 (0.696893%)
+
+For each category, the following are saved:
+  - Jet trees with basic properties (ET, px, py, pz, eta, phi, mass, nsd, nsubjets)
+  - Dijet-specific variables (masses, angles, cuts flags)
+  - Basic distribution histograms
+
+Jets are reconstructed using anti-kT algorithm with:
+  - R = 1
+  - ET > 10 GeV
+  - -4 < eta < 4
+
+Softdrop multiplicity n_sd (modified mass drop):
+  - z_cut = 0.1
+  - beta  = 0
+  - R0    = 1
+
+n_subjets (kT exclusive):
+  - y_cut = 0.0005
+
+Dijet selection applied with:
+  - Leading jet ET > 10 GeV
+  - Subleading jet ET > 7 GeV
+=============================================================================
