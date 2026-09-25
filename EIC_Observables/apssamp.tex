@@ -569,6 +569,105 @@ an operating point. We hope what we have done here is useful to the EIC
 programme in two ways: as a benchmark for comparing taggers, and as the
 generator-level baseline that detector systematics can later be quoted against.
 
+\appendix
+
+\section{Supplementary material}\label{sec:appendix}
+
+\subsection{ROC curves in individual pseudorapidity bins}
+
+Section~\ref{sec:etabins} quotes per-bin areas but shows the curves only in
+aggregate. Figures~\ref{fig:app_roc_300} and \ref{fig:app_roc_64} give the
+underlying ROC curves bin by bin, at the highest and lowest energies in the
+study. The reversal discussed in the main text is visible directly: in every
+panel the $n_{\mathrm{subjets}}$ curve lies above the $n_{\mathrm{SD}}$ curve,
+the opposite of what the pooled measurement in Fig.~\ref{fig:roc_panels} shows.
+
+At $\sqrt{s} = 64$~GeV only three bins are shown. The sample has just ten GG
+jets with $\eta \in [-1,0)$, too few for a meaningful ROC, so that bin is
+dropped; the corresponding QQ count is 690. All four bins are usable at
+$\sqrt{s} = 300$~GeV.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.94\textwidth]{figures/fig_app_roc_eta_300.pdf}
+\caption{ROC curves in each pseudorapidity bin at $\sqrt{s} = 300$~GeV. Signal
+is jets from GG events, background is jets from QQ events. Jets are binned
+individually by their own $\eta$. Legend entries give the area under each
+curve.}
+\label{fig:app_roc_300}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.94\textwidth]{figures/fig_app_roc_eta_64.pdf}
+\caption{As Fig.~\ref{fig:app_roc_300}, at $\sqrt{s} = 64$~GeV. The
+$\eta \in [-1,0)$ bin is omitted: it holds only ten GG jets.}
+\label{fig:app_roc_64}
+\end{figure*}
+
+\subsection{Jet counts per pseudorapidity bin}
+
+Table~\ref{tab:jetcounts} lists how many jets enter each bin. Jets are counted
+individually, not as events: a dijet event contributes its two jets to
+whichever bins their own pseudorapidities fall in, and the two need not be the
+same bin. The bins are half-open, $[\eta_{\min}, \eta_{\max})$, so they tile
+the range $-1 \le \eta < 2$ exactly. The per-bin counts therefore sum to the
+total over that range with no jet lost and none counted twice, as the closure
+row shows.
+
+The inclusive row is larger because it covers the full acceptance
+$-4 < \eta < 4$ used for the pooled results of Sec.~\ref{sec:results}. The
+difference is jets forward of $\eta = 2$, which fall outside the binned range:
+at $\sqrt{s} = 300$~GeV these account for $29\%$ of the QQ jets and $44\%$ of
+the GG jets. This is worth keeping in mind when comparing the per-bin markers
+of Fig.~\ref{fig:auc_vs_eta} with its inclusive reference lines, since the two
+are evaluated over different $\eta$ ranges.
+
+\begin{table}[htbp]
+\caption{Jet counts per pseudorapidity bin. ``Sum of bins'' is the total over
+the four bins; ``total'' is a direct count over $-1 \le \eta < 2$. The two
+agree exactly at every energy. ``Inclusive'' is the full acceptance
+$-4 < \eta < 4$.}
+\label{tab:jetcounts}
+\begin{ruledtabular}
+\begin{tabular}{llrr}
+$\sqrt{s}$ [GeV] & bin & $N_{\mathrm{QQ}}$ & $N_{\mathrm{GG}}$ \\
+\colrule
+    & $[-1, 0)$    &  \phantom{0}\phantom{0}690 & \phantom{00}10 \\
+    & $[0, 1)$     &  7\,927 &   340 \\
+ 64 & $[1, 1.5)$   &  4\,014 &   252 \\
+    & $[1.5, 2)$   &  2\,065 &   135 \\
+    & sum of bins  & 14\,696 &   737 \\
+    & total        & 14\,696 &   737 \\
+    & inclusive    & 15\,132 &   758 \\
+\colrule
+    & $[-1, 0)$    &    617 &    16 \\
+    & $[0, 1)$     &  8\,295 &   601 \\
+105 & $[1, 1.5)$   &  5\,642 &   612 \\
+    & $[1.5, 2)$   &  5\,131 &   679 \\
+    & sum of bins  & 19\,685 & 1\,908 \\
+    & total        & 19\,685 & 1\,908 \\
+    & inclusive    & 25\,258 & 2\,796 \\
+\colrule
+    & $[-1, 0)$    & 20\,036 & 1\,538 \\
+    & $[0, 1)$     & 50\,776 & 6\,634 \\
+141 & $[1, 1.5)$   & 24\,329 & 4\,735 \\
+    & $[1.5, 2)$   & 19\,555 & 4\,612 \\
+    & sum of bins  & 114\,696 & 17\,519 \\
+    & total        & 114\,696 & 17\,519 \\
+    & inclusive    & 135\,800 & 22\,930 \\
+\colrule
+    & $[-1, 0)$    & 22\,897 & 4\,003 \\
+    & $[0, 1)$     & 37\,961 & 11\,283 \\
+300 & $[1, 1.5)$   & 18\,660 & 7\,965 \\
+    & $[1.5, 2)$   & 16\,487 & 8\,739 \\
+    & sum of bins  & 96\,005 & 31\,990 \\
+    & total        & 96\,005 & 31\,990 \\
+    & inclusive    & 134\,774 & 57\,592 \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
+
 \bibliography{EIC_Observables}
 
 \end{document}

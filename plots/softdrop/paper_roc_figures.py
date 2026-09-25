@@ -247,6 +247,134 @@ def fig_auc_vs_eta(eta_results, out_path):
     print(f"Wrote {out_path}")
 
 
+def compute_eta_curves(data_jets, sqrts_wanted, min_jets=50):
+    """Full per-eta-bin ROC curves (not just AUC) for the appendix figures."""
+    out = {}
+    for sqrts, sample in SAMPLES:
+        if sqrts not in sqrts_wanted:
+            continue
+        rf = rc.find_root(data_jets, sample)
+        if rf is None:
+            continue
+        d = rc.load(rf)
+        if d is None:
+            continue
+        per_bin = {}
+        for lo, hi in ETA_BINS:
+            sub = rc.slice_eta(d, lo, hi)
+            if "QQ_Events" not in sub or "GG_Events" not in sub:
+                continue
+            q, g = sub["QQ_Events"], sub["GG_Events"]
+            nq, ng = q["jet_eta"].size, g["jet_eta"].size
+            if nq < min_jets or ng < min_jets:
+                print(f"  [skip] {sqrts} GeV, eta [{lo},{hi}): "
+                      f"N_QQ={nq}, N_GG={ng} — below {min_jets}")
+                continue
+            curves = {}
+            for obs in ps.OBS_ORDER:
+                eff_s, eff_b, auc = rc.roc(g[obs], q[obs], *KIND[obs])
+                curves[obs] = {"eff_sig": eff_s, "eff_bkg": eff_b, "auc": auc}
+            per_bin[(lo, hi)] = {"curves": curves, "n_qq": nq, "n_gg": ng}
+        out[sqrts] = per_bin
+    return out
+
+
+def fig_roc_eta_panels(per_bin, sqrts, out_path, ncols=2):
+    """One square ROC panel per eta bin, for a single centre-of-mass energy."""
+    bins = [b for b in ETA_BINS if b in per_bin]
+    n = len(bins)
+    if n == 0:
+        print(f"  [skip] no usable bins at {sqrts} GeV")
+        return
+    nrows = int(np.ceil(n / ncols))
+    w = ps.FULL_W if ncols > 1 else ps.COL_W
+    fig, axes = plt.subplots(nrows, ncols,
+                             figsize=(w, w * (nrows / ncols) * 1.02),
+                             squeeze=False)
+    flat = [axes[r][c] for r in range(nrows) for c in range(ncols)]
+
+    for ax in flat[n:]:
+        ax.set_visible(False)
+
+    for i, b in enumerate(bins):
+        ax = flat[i]
+        ps.square(ax)
+        ps.chance_line(ax)
+        blk = per_bin[b]
+        lab_w = "1.6cm" if ncols <= 2 else "1.55cm"
+        for obs in ps.OBS_ORDER:
+            r = blk["curves"][obs]
+            line, = ax.plot(r["eff_bkg"], r["eff_sig"],
+                            color=ps.OBS_COLOR[obs], linewidth=1.4,
+                            solid_capstyle="round",
+                            label=ps.auc_legend_label(obs, r["auc"], lab_w))
+            dashes = ps.OBS_DASH[obs]
+            if dashes[0] is not None:
+                line.set_dashes(dashes)
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+        # drop the crowded end ticks when panels sit side by side
+        xt = np.arange(0, 1.01, 0.2) if ncols <= 2 else np.arange(0, 0.81, 0.2)
+        ax.set_xticks(xt)
+        ax.set_yticks(np.arange(0, 1.01, 0.2))
+        ax.set_title(rf"$\eta \in [{b[0]:g},\,{b[1]:g})$", pad=6)
+        row, col = i // ncols, i % ncols
+        last_row = (row == nrows - 1) or (i + ncols >= n)
+        if last_row:
+            ax.set_xlabel(r"$\varepsilon_{\mathrm{QQ}}$")
+        else:
+            ax.set_xticklabels([])
+        if col == 0:
+            ax.set_ylabel(r"$\varepsilon_{\mathrm{GG}}$")
+        else:
+            ax.set_yticklabels([])
+        leg = ax.legend(loc="lower right",
+                        title=rf"\makebox[{lab_w}][l]{{}}AUC",
+                        title_fontsize=7, borderpad=0.4)
+        leg.get_title().set_color(ps.MUTED)
+
+    fig.subplots_adjust(wspace=0.06 if ncols <= 2 else 0.14, hspace=0.14)
+    fig.savefig(out_path)
+    plt.close(fig)
+    print(f"Wrote {out_path}")
+
+
+def write_jet_count_table(data_jets, out_path):
+    """Per-bin jet counts, and the closure check that they tile the range."""
+    lines = ["Jet counts per eta bin. The four bins tile [-1,2) exactly, so",
+             "the per-bin sum equals the total in that range. The inclusive",
+             "column is the full acceptance -4 < eta < 4, which is larger:",
+             "the difference is jets forward of eta = 2.",
+             "=" * 78,
+             f"{'sqrt(s)':>8}  {'bin':<12}{'N_QQ':>9}{'N_GG':>9}"]
+    for sqrts, sample in SAMPLES:
+        rf = rc.find_root(data_jets, sample)
+        if rf is None:
+            continue
+        d = rc.load(rf)
+        if d is None:
+            continue
+        qq, gg = d["QQ_Events"]["jet_eta"], d["GG_Events"]["jet_eta"]
+        sq, sg = 0, 0
+        for lo, hi in ETA_BINS:
+            nq = int(((qq >= lo) & (qq < hi)).sum())
+            ng = int(((gg >= lo) & (gg < hi)).sum())
+            sq += nq
+            sg += ng
+            lines.append(f"{sqrts if (lo, hi) == ETA_BINS[0] else '':>8}  "
+                         f"{f'[{lo:g}, {hi:g})':<12}{nq:>9}{ng:>9}")
+        tq = int(((qq >= -1) & (qq < 2)).sum())
+        tg = int(((gg >= -1) & (gg < 2)).sum())
+        lines.append(f"{'':>8}  {'sum of bins':<12}{sq:>9}{sg:>9}")
+        lines.append(f"{'':>8}  {'total [-1,2)':<12}{tq:>9}{tg:>9}"
+                     f"   closure: {sq - tq:+d} / {sg - tg:+d}")
+        lines.append(f"{'':>8}  {'inclusive':<12}{qq.size:>9}{gg.size:>9}"
+                     f"   (|eta| < 4)")
+        lines.append("-" * 78)
+    Path(out_path).write_text("\n".join(lines) + "\n")
+    print("\n".join(lines))
+
+
 # Binning-width scan. Uniform bins over one fixed range, so the 1-bin case is
 # the genuine pooled limit of the same jets and the comparison is like-for-like.
 ETA_SCAN_RANGE = (-1.0, 2.0)
@@ -442,6 +570,16 @@ def main():
     scan = compute_eta_scan(data_jets)
     fig_auc_vs_binwidth(scan, out_dir / "fig_auc_vs_binwidth.pdf")
     write_scan_table(scan, out_dir / "auc_binwidth_table.log")
+
+    # --- appendix material -------------------------------------------
+    curves = compute_eta_curves(data_jets, sqrts_wanted={64, 300})
+    if 300 in curves:
+        fig_roc_eta_panels(curves[300], 300,
+                           out_dir / "fig_app_roc_eta_300.pdf", ncols=2)
+    if 64 in curves:
+        fig_roc_eta_panels(curves[64], 64,
+                           out_dir / "fig_app_roc_eta_64.pdf", ncols=3)
+    write_jet_count_table(data_jets, out_dir / "jet_counts_table.log")
 
 
 if __name__ == "__main__":
