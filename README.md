@@ -42,7 +42,7 @@ photoproduction-eic/
 │   ├── jetshapes/             integrated/ + differential/ shape analyses
 │   ├── subjets/               n-subjet multiplicity
 │   ├── thinthick/             thick vs thin jet classification
-│   ├── dijets/                older dijet-specific analyses
+│   ├── dijets/                older dijet-specific analyses 
 │   └── analysis/              jet counts, efficiency/purity, all-shapes
 ├── plots/
 │   ├── softdrop/              ACTIVE plotting suite (Python; uproot/matplotlib)

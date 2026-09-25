@@ -1,4 +1,109 @@
 ======================================================================================
+Sample: EIC 64 GeV (10, 100)   (sqrt(s) = 63.2 GeV)
+  file: data/eic64/eic64_pTHat5_pT0Ref3.0_Q2max1_n1000k.root
+======================================================================================
+
+[Table I] Combined events:
+  Paper:       998,511
+  Data:        998,511
+  Diff:             +0  (+0.000%)
+  Status:   PASS  (threshold: |diff| < 1% of paper)
+
+[Table II] Photon-interaction decomposition (fractions of total):
+  Resolved  :  500,525  ( 50.13%)  (paper 50.20%, Δ -0.07 pp)
+  Direct    :  497,986  ( 49.87%)  (paper 49.80%, Δ +0.07 pp)
+
+  Category  Code  Process                                N    % of total  vs paper
+  ----------------------------------------------------------------------------------------
+  Resolved  113   q g -> q g                       270,800        27.12%  (paper 27.09%, Δ +0.03 pp)
+  Resolved  114   q q' -> q q'                     163,782        16.40%  (paper 16.47%, Δ -0.07 pp)
+  Resolved  111   g g -> g g                        54,229         5.43%  (paper  5.42%, Δ +0.01 pp)
+  Resolved  115   q qbar -> g g                      4,699         0.47%
+  Resolved  116   q qbar -> q' qbar'                 3,762         0.38%
+  Resolved  112   g g -> q qbar                      1,453         0.15%
+  Resolved  122   q qbar -> c cbar                   1,042         0.10%
+  Resolved  121   g g -> c cbar                        376         0.04%
+  Resolved  124   q qbar -> b bbar                     324         0.03%
+  Resolved  123   g g -> b bbar                         58         0.01%
+  Direct    274   q gamma -> q g                   267,187        26.76%  (paper 26.73%, Δ +0.03 pp)
+  Direct    271   g gamma -> q qbar (uds)          142,705        14.29%  (paper 14.29%, Δ +0.00 pp)
+  Direct    272   g gamma -> c cbar                 82,411         8.25%
+  Direct    273   g gamma -> b bbar                  5,646         0.57%
+  Direct    284   gamma q -> q g                        28         0.00%
+  Direct    281   gamma g -> q qbar (uds)                7         0.00%
+  Direct    282   gamma g -> c cbar                      2         0.00%
+
+======================================================================================
+Sample: EIC 105 GeV (10, 275)   (sqrt(s) = 104.9 GeV)
+  file: data/eic105/eic105_pTHat5_pT0Ref3.0_Q2max1_n1000k.root
+======================================================================================
+
+[Table I] Combined events:
+  Paper:       999,444
+  Data:        999,444
+  Diff:             +0  (+0.000%)
+  Status:   PASS  (threshold: |diff| < 1% of paper)
+
+[Table II] Photon-interaction decomposition (fractions of total):
+  Resolved  :  624,842  ( 62.52%)  (paper 62.60%, Δ -0.08 pp)
+  Direct    :  374,602  ( 37.48%)  (paper 37.40%, Δ +0.08 pp)
+
+  Category  Code  Process                                N    % of total  vs paper
+  ----------------------------------------------------------------------------------------
+  Resolved  113   q g -> q g                       351,887        35.21%  (paper 35.26%, Δ -0.05 pp)
+  Resolved  114   q q' -> q q'                     158,337        15.84%  (paper 15.81%, Δ +0.03 pp)
+  Resolved  111   g g -> g g                       103,230        10.33%  (paper 10.33%, Δ -0.00 pp)
+  Resolved  115   q qbar -> g g                      3,836         0.38%
+  Resolved  116   q qbar -> q' qbar'                 2,861         0.29%
+  Resolved  112   g g -> q qbar                      2,646         0.26%
+  Resolved  122   q qbar -> c cbar                     841         0.08%
+  Resolved  121   g g -> c cbar                        735         0.07%
+  Resolved  124   q qbar -> b bbar                     313         0.03%
+  Resolved  123   g g -> b bbar                        156         0.02%
+  Direct    274   q gamma -> q g                   162,246        16.23%  (paper 16.24%, Δ -0.01 pp)
+  Direct    271   g gamma -> q qbar (uds)          129,300        12.94%  (paper 12.91%, Δ +0.03 pp)
+  Direct    272   g gamma -> c cbar                 76,581         7.66%
+  Direct    273   g gamma -> b bbar                  6,451         0.65%
+  Direct    284   gamma q -> q g                        19         0.00%
+  Direct    281   gamma g -> q qbar (uds)                4         0.00%
+  Direct    282   gamma g -> c cbar                      1         0.00%
+
+======================================================================================
+Sample: EIC 141 GeV (18, 275)   (sqrt(s) = 141.0 GeV)
+  file: data/eic141/eic141_pTHat7_pT0Ref3.0_Q2max1_n1000k.root
+======================================================================================
+
+[Table I] Combined events:
+  Paper:       999,633
+  Data:        999,625
+  Diff:             -8  (-0.001%)
+  Status:   PASS  (threshold: |diff| < 1% of paper)
+
+[Table II] Photon-interaction decomposition (fractions of total):
+  Resolved  :  613,696  ( 61.39%)  (paper 61.40%, Δ -0.01 pp)
+  Direct    :  385,929  ( 38.61%)  (paper 38.60%, Δ +0.01 pp)
+
+  Category  Code  Process                                N    % of total  vs paper
+  ----------------------------------------------------------------------------------------
+  Resolved  113   q g -> q g                       347,653        34.78%  (paper 34.66%, Δ +0.12 pp)
+  Resolved  114   q q' -> q q'                     165,973        16.60%  (paper 16.62%, Δ -0.02 pp)
+  Resolved  111   g g -> g g                        88,688         8.87%  (paper  8.92%, Δ -0.05 pp)
+  Resolved  115   q qbar -> g g                      3,805         0.38%
+  Resolved  116   q qbar -> q' qbar'                 2,856         0.29%
+  Resolved  112   g g -> q qbar                      2,287         0.23%
+  Resolved  122   q qbar -> c cbar                     924         0.09%
+  Resolved  121   g g -> c cbar                        677         0.07%
+  Resolved  124   q qbar -> b bbar                     524         0.05%
+  Resolved  123   g g -> b bbar                        309         0.03%
+  Direct    274   q gamma -> q g                   168,834        16.89%  (paper 16.80%, Δ +0.09 pp)
+  Direct    271   g gamma -> q qbar (uds)          126,808        12.69%  (paper 12.74%, Δ -0.05 pp)
+  Direct    272   g gamma -> c cbar                 79,142         7.92%
+  Direct    273   g gamma -> b bbar                 11,101         1.11%
+  Direct    284   gamma q -> q g                        35         0.00%
+  Direct    282   gamma g -> c cbar                      5         0.00%
+  Direct    281   gamma g -> q qbar (uds)                4         0.00%
+
+======================================================================================
 Sample: HERA 300 GeV (27.5, 820)   (sqrt(s) = 300.0 GeV)
   file: data/hera300/hera300_pTHat7_pT0Ref3.0_Q2max1_n1000k.root
 ======================================================================================
