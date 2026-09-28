@@ -74,15 +74,66 @@ We compare three jet-substructure quark/gluon discriminators in $ep$ photoproduc
 
 \section{Introduction}\label{sec:intro}
 
-The classification of jets by the flavor of the initiating parton, quark or gluon, is one of the most studied problems in jet substructure. The two classes differ in radiation pattern at the leading-log level by the ratio of color Casimirs, $C_A / C_F = 2.25$ in QCD, and many physical observables built from the jet's internal energy and angular distributions inherit some fraction of this discrimination power. The literature on quark/gluon taggers spans several decades: from early measurements at LEP and HERA based on jet-shape variables and subjet multiplicities, through theoretically motivated grooming observables such as iterated soft-drop multiplicity, generalised angularities and energy-flow polynomials, and most recently to deep-learning approaches that operate directly on the jet's constituents. The questions of which observable is ``best'' and what ``best'' should even mean depend strongly on the experimental setting, collision system, kinematic range, available statistics, and the relative weight given to interpretability versus raw tagging power.
+Telling a quark jet from a gluon jet is one of the oldest problems in jet
+substructure. At leading logarithmic accuracy the two radiate in proportion to
+the colour Casimir of the parton that made them, and the ratio
+$C_A / C_F = 2.25$ sets how much they can differ. Any observable built from the
+energy and angular distribution inside a jet inherits some share of that
+difference, which is why so many of them have been proposed. The list runs from
+the jet shapes and subjet multiplicities measured at LEP and HERA, through
+grooming observables such as the iterated soft-drop multiplicity, generalised
+angularities and energy-flow polynomials, to deep networks that read the jet
+constituents directly. Which one is best has no single answer: it depends on
+the collider, the energy range, how much data there is, and how much weight one
+puts on being able to interpret the result.
 
-The Electron-Ion Collider~(EIC), currently under construction at Brookhaven National Laboratory, will provide an unprecedented testing ground for jet substructure in a cleaner environment than $pp$ colliders. In particular, $ep$ photoproduction at the EIC populates a kinematic regime characterised by lower jet transverse energies than at HERA, a substantial admixture of direct and resolved photon processes that varies smoothly with $\sqrt{s}$, and a relatively low underlying-event activity compared with $pp$ collisions. These features make photoproduction at the EIC an attractive setting both for studying jet substructure in its own right and for benchmarking discriminators that will later be applied to higher-multiplicity environments. At the same time, the EIC is a future facility: no measured data exist yet, and any methodological choice that introduces analysis-specific tuning has to be defended without recourse to data-driven calibration.
+The Electron-Ion Collider~(EIC), under construction at Brookhaven National
+Laboratory, will be a cleaner place to study jet substructure than a $pp$
+collider. Photoproduction there sits in a particular corner of phase space:
+jets are softer than at HERA, direct and resolved photon processes mix in
+proportions that shift smoothly with $\sqrt{s}$, and there is far less
+underlying-event activity than in $pp$ collisions. That makes it a good setting
+both for studying jet substructure on its own terms and for testing
+discriminators before they are used somewhere busier. It also comes with a
+constraint. The EIC has no data yet, so any choice that needs tuning has to be
+justified without a calibration to fall back on.
 
-In this paper we revisit the quark/gluon tagging question in the specific context of EIC photoproduction. We compare three substructure observables, the integrated jet shape $\Psi(r)$, the $k_T$ exclusive subjet multiplicity $n_{\mathrm{subjets}}$, and the iterated soft-drop multiplicity $n_{\mathrm{SD}}$, on the same jets, reconstructed in the same way, across four center-of-mass energies spanning HERA and the three EIC design energies. Our motivation is twofold. First, the integrated jet shape is the observable used in our recent photoproduction study, where it is the basis for the thin/thick classifier that produces the quark- and gluon-enriched jet samples reported there. The choice was historically motivated by direct comparability with the published HERA-ZEUS data, but its quantitative performance against alternative discriminators in the EIC kinematic regime had not been established. Second, the iterated soft-drop multiplicity is a well-known counting tagger that has been argued to outperform $n_{\mathrm{subjets}}$ on theoretical grounds, its leading-log behaviour approaches the $C_A / C_F$ Casimir ratio per hard splitting. Verifying whether this advantage holds empirically in the soft, low-$E_T$ EIC regime, and how it compares to a continuous integrated observable like $\Psi(r)$, is the central question of this work.
+This paper asks the tagging question again, for EIC photoproduction
+specifically. We compare three substructure observables --- the integrated jet
+shape $\Psi(r)$, the $k_T$ exclusive subjet multiplicity
+$n_{\mathrm{subjets}}$, and the iterated soft-drop multiplicity
+$n_{\mathrm{SD}}$ --- on the same jets, reconstructed the same way, at four
+centre-of-mass energies covering HERA and the three EIC design points.
 
-We find that the ordering $\Psi(r=0.3) > n_{\mathrm{SD}} > n_{\mathrm{subjets}}$ holds in every sample we examined. The integrated jet shape gives the largest ROC AUC at all four center-of-mass energies, and the advantage of $n_{\mathrm{SD}}$ over $n_{\mathrm{subjets}}$ widens as $\sqrt{s}$ grows from 64~GeV to 300~GeV --- though that ordering reverses once the measurement is binned in pseudorapidity. We give a qualitative physical interpretation of these findings in terms of the integrated-versus-counting nature of the observables, and we discuss the implications for the design of first-generation EIC jet-substructure measurements.
+There are two reasons to do this. The first is that $\Psi(r)$ is the observable
+our companion photoproduction study relies on: it is what the thin/thick
+classifier cuts on to build the quark- and gluon-enriched samples reported
+there. That choice was made so the results could be compared directly with the
+published HERA-ZEUS measurements, which is a good reason, but it was never
+checked against the alternatives at EIC energies. The second is that
+$n_{\mathrm{SD}}$ is widely expected to beat $n_{\mathrm{subjets}}$, because at
+leading logarithmic accuracy its count approaches the $C_A / C_F$ ratio per
+hard splitting. Whether that expectation survives in the soft, low-$E_T$ EIC
+regime, and how either counting observable fares against a continuous one like
+$\Psi(r)$, is what we set out to measure.
 
-The remainder of this paper is organised as follows. Section~\ref{sec:generation} summarises the event generation and jet reconstruction, with cross-references to the companion paper for full details. Section~\ref{sec:observables} defines the three substructure observables. Section~\ref{sec:roc} specifies the ROC construction and the figures-of-merit (AUC, mean separation, operating-point analysis). Section~\ref{sec:results} presents the per-sample results, the cross-energy trend and the effect of pseudorapidity binning. Section~\ref{sec:discussion} discusses the physical interpretation and the implications for EIC measurements. Section~\ref{sec:conclusion} concludes.
+The integrated jet shape wins at every energy we looked at. The ordering
+$\Psi(r=0.3) > n_{\mathrm{SD}} > n_{\mathrm{subjets}}$ holds in every sample,
+and the gap between the two counting observables widens as $\sqrt{s}$ rises
+from 64 to 300~GeV. That last ordering, however, turns over once the
+measurement is binned in pseudorapidity rather than pooled. We explain both
+findings in terms of what the observables actually do with the jet, one
+integrating over it and the others counting pieces of it, and then say what
+this means for a first EIC measurement.
+
+The paper is laid out as follows. Section~\ref{sec:generation} covers the event
+generation and jet reconstruction, pointing to the companion paper for the
+details. Section~\ref{sec:observables} defines the three observables.
+Section~\ref{sec:roc} sets out how the ROC curves are built and what we
+measure from them. Section~\ref{sec:results} gives the results: per sample,
+across energies, and as a function of the pseudorapidity binning.
+Section~\ref{sec:discussion} interprets them and draws out the implications for
+the EIC. Section~\ref{sec:conclusion} concludes.
 
 \section{Event generation and jet reconstruction}\label{sec:generation}
 
@@ -380,6 +431,10 @@ grows with the jet $p_T$. A wider $p_T$ spread therefore just adds more pooled
 width that says nothing about the class.
 
 \subsection{Pseudorapidity binning}\label{sec:etabins}
+
+Jets are binned individually here, by their own $\eta$. The two jets of a dijet
+event go to whichever bins they each point into, and need not land in the same
+one; with a mean separation of about $1.2$ in $\eta$, usually they do not.
 
 If the argument above is right, binning in $\eta$ before building the ROC should
 give $n_{\mathrm{subjets}}$ most of its discrimination back, and should do almost
