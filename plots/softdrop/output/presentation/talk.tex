@@ -38,17 +38,19 @@
 % ===================================================================
 \begin{frame}{The question}
 
-Gluon jets are wider than quark jets. Everybody knows this.
+Gluon jets are wider than quark jets. That much is long established.
 
 \vspace{0.5em}
 But ``wider'' is not an observable. You have to \emph{choose a number} that
 measures it --- and there are dozens of candidates.
 
 \vspace{1em}
-\textbf{Nobody had checked which one actually works at EIC energies.}
+Our companion paper picked one of them --- the integrated jet shape --- because
+it matches the archival ZEUS measurements. \textbf{That choice was never tested
+against the alternatives at EIC energies.}
 
 \vspace{1em}
-So we took three, computed them on the \emph{same jets}, and raced them.
+So we took three, computed them on the \emph{same jets}, and compared them.
 
 \vspace{1.5em}
 \footnotesize
@@ -100,7 +102,7 @@ Walk the jet's splitting tree, count splittings where the softer prong
 carries $z > 0.1$.
 
 \vspace{0.6em}
-\textcolor{gray}{Theory's favourite. Approaches $C_A/C_F$ asymptotically.}
+\textcolor{gray}{Expected to do well: its count approaches $C_A/C_F$ asymptotically.}
 \end{columns}
 
 \vspace{1.2em}
@@ -340,7 +342,7 @@ The paper chose \textbf{0.60}.
 
 \vspace{1.2em}
 \centering
-\textbf{Essentially optimal.} Not a lucky guess --- the right call.
+\textbf{Essentially optimal} --- within $0.03$ of the best available cut.
 
 \vspace{1em}
 \flushleft\footnotesize
@@ -434,8 +436,8 @@ pooled panel looks like the others --- because there is nothing to smear.
 % ===================================================================
 \begin{frame}{The physics: a moving ruler}
 
-The usual story is that $n_{\mathrm{subjets}}$ counts above a \emph{fixed
-momentum scale}. In the standard implementation it does not.
+It is natural to read $n_{\mathrm{subjets}}$ as counting above a \emph{fixed
+momentum scale}. In the implementation we use, it does not.
 
 \vspace{0.6em}
 The $y_{\mathrm{cut}}$ is normalised to the summed constituent
@@ -550,10 +552,11 @@ integrated jet shape $\Psi(r)$.}
 \begin{itemize}
   \item Best separation of the three, at every energy
   \item Flat across the whole EIC range, and matches the HERA reference
-  \item \textbf{No internal tagging parameters} to defend --- important at a
-        facility with no data to calibrate against
-  \item Directly comparable to archival ZEUS measurements, a validation path
-        no newer observable has
+  \item \textbf{No tagging parameter beyond the choice of $r$} --- and $r$ is
+        less a knob than a choice of where to read a profile measured in full
+  \item Directly comparable to archival ZEUS measurements. (So is
+        $n_{\mathrm{subjets}}$, by construction; $n_{\mathrm{SD}}$ has no $ep$
+        measurement to check against)
 \end{itemize}
 
 \vspace{1.2em}
