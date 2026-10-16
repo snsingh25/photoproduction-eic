@@ -1,0 +1,7 @@
+# beamer build artefacts
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
