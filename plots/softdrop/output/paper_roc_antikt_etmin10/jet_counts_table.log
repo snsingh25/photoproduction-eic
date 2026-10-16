@@ -10,7 +10,7 @@ the difference is jets forward of eta = 2.
           [1.5, 2)         2065      135
           sum of bins     14696      737
           total [-1,2)    14696      737   closure: +0 / +0
-          inclusive       15132      758   (|eta| < 4)
+          full accept.    15132      758   (-4 < eta < 4, NOT used as inclusive)
 ------------------------------------------------------------------------------
      105  [-1, 0)           617       16
           [0, 1)           8295      601
@@ -18,7 +18,7 @@ the difference is jets forward of eta = 2.
           [1.5, 2)         5131      679
           sum of bins     19685     1908
           total [-1,2)    19685     1908   closure: +0 / +0
-          inclusive       25258     2796   (|eta| < 4)
+          full accept.    25258     2796   (-4 < eta < 4, NOT used as inclusive)
 ------------------------------------------------------------------------------
      141  [-1, 0)         20036     1538
           [0, 1)          50776     6634
@@ -26,7 +26,7 @@ the difference is jets forward of eta = 2.
           [1.5, 2)        19555     4612
           sum of bins    114696    17519
           total [-1,2)   114696    17519   closure: +0 / +0
-          inclusive      135800    22930   (|eta| < 4)
+          full accept.   135800    22930   (-4 < eta < 4, NOT used as inclusive)
 ------------------------------------------------------------------------------
      300  [-1, 0)         22897     4003
           [0, 1)          37961    11283
@@ -34,5 +34,5 @@ the difference is jets forward of eta = 2.
           [1.5, 2)        16487     8739
           sum of bins     96005    31990
           total [-1,2)    96005    31990   closure: +0 / +0
-          inclusive      134774    57592   (|eta| < 4)
+          full accept.   134774    57592   (-4 < eta < 4, NOT used as inclusive)
 ------------------------------------------------------------------------------

@@ -54,6 +54,18 @@ KIND = {"jet_psi03": ("continuous", True),
         "jet_nsd": ("integer", False),
         "jet_nsubjets": ("integer", False)}
 
+# What "inclusive" means everywhere in the paper. The reconstruction keeps
+# -4 < eta < 4, but every binned result lives in [-1, 2), so the inclusive
+# numbers are restricted to the same window. Otherwise the inclusive and
+# per-bin figures would be drawn from different jet samples, and the
+# per-bin counts would not sum to the inclusive one.
+INCLUSIVE_RANGE = (-1.0, 2.0)
+
+
+def restrict(d, rng=INCLUSIVE_RANGE):
+    """Cut both classes to the inclusive eta window."""
+    return d if rng is None else rc.slice_eta(d, rng[0], rng[1])
+
 
 def compute(data_jets):
     """Return {sqrts: {obs: {eff_sig, eff_bkg, auc, n_qq, n_gg}}}."""
@@ -68,6 +80,7 @@ def compute(data_jets):
             print(f"  [skip] {sample}: missing branches")
             continue
         print(f"  [load] {sqrts:>3} GeV  {Path(rf).name}")
+        d = restrict(d)
         qq, gg = d["QQ_Events"], d["GG_Events"]
         per_obs = {}
         for obs in ps.OBS_ORDER:
@@ -179,7 +192,8 @@ def compute_eta(data_jets, min_jets=50):
         if d is None:
             continue
         per = {"incl": {}, "bins": {}}
-        qq, gg = d["QQ_Events"], d["GG_Events"]
+        inc = restrict(d)
+        qq, gg = inc["QQ_Events"], inc["GG_Events"]
         for obs in ps.OBS_ORDER:
             kind, sigsmall = KIND[obs]
             per["incl"][obs] = rc.roc(gg[obs], qq[obs], kind, sigsmall)[2]
@@ -368,8 +382,8 @@ def write_jet_count_table(data_jets, out_path):
         lines.append(f"{'':>8}  {'sum of bins':<12}{sq:>9}{sg:>9}")
         lines.append(f"{'':>8}  {'total [-1,2)':<12}{tq:>9}{tg:>9}"
                      f"   closure: {sq - tq:+d} / {sg - tg:+d}")
-        lines.append(f"{'':>8}  {'inclusive':<12}{qq.size:>9}{gg.size:>9}"
-                     f"   (|eta| < 4)")
+        lines.append(f"{'':>8}  {'full accept.':<12}{qq.size:>9}{gg.size:>9}"
+                     f"   (-4 < eta < 4, NOT used as inclusive)")
         lines.append("-" * 78)
     Path(out_path).write_text("\n".join(lines) + "\n")
     print("\n".join(lines))
