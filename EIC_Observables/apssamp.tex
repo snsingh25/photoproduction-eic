@@ -64,7 +64,7 @@
 \begin{abstract}
 \centering \textbf{Abstract}
 \begin{justify}
-We compare three jet-substructure quark/gluon discriminators in $ep$ photoproduction --- the integrated jet shape $\Psi(r=0.3)$, the $k_T$ exclusive subjet multiplicity $n_{\mathrm{subjets}}$, and the iterated soft-drop multiplicity $n_{\mathrm{SD}}$ --- on identical anti-$k_T$ jets from PYTHIA~8 events at $\sqrt{s} = 64$--$300$~GeV, spanning the EIC design energies and a HERA reference. The integrated jet shape separates gluon from quark jets best at every energy, with ROC areas of $0.75$--$0.77$ against $0.66$--$0.69$ for $n_{\mathrm{SD}}$ and $0.53$--$0.65$ for $n_{\mathrm{subjets}}$, the last degrading with $\sqrt{s}$ as pooling over pseudorapidity dilutes it. Carrying no internal tagging parameters and directly comparable to archival HERA data, the integrated jet shape is well matched to first-generation EIC measurements.
+We compare three jet-substructure quark/gluon discriminators in $ep$ photoproduction --- the integrated jet shape $\Psi(r=0.3)$, the $k_T$ exclusive subjet multiplicity $n_{\mathrm{subjets}}$, and the iterated soft-drop multiplicity $n_{\mathrm{SD}}$ --- on identical anti-$k_T$ jets from PYTHIA~8 events at $\sqrt{s} = 64$--$300$~GeV, spanning the EIC design energies and a HERA reference. The integrated jet shape separates gluon from quark jets best at every energy, with ROC areas of $0.75$--$0.77$ against $0.66$--$0.68$ for $n_{\mathrm{SD}}$ and $0.64$--$0.66$ for $n_{\mathrm{subjets}}$. The ranking of the two counting observables is not fixed: pooled over pseudorapidity $n_{\mathrm{SD}}$ leads, but binned in pseudorapidity $n_{\mathrm{subjets}}$ leads in every bin measured. We trace this to the resolution scale of $n_{\mathrm{subjets}}$, which is set by the jet energy rather than its transverse momentum and therefore tightens as $\cosh\eta$. Carrying no internal tagging parameters and directly comparable to archival HERA data, the integrated jet shape is well matched to first-generation EIC measurements.
 \end{justify}
 \end{abstract}
 
@@ -124,14 +124,15 @@ hard splitting. Whether that expectation survives in the soft, low-$E_T$ EIC
 regime, and how either counting observable fares against a continuous one like
 $\Psi(r)$, is what we set out to measure.
 
-The integrated jet shape wins at every energy we looked at. The ordering
-$\Psi(r=0.3) > n_{\mathrm{SD}} > n_{\mathrm{subjets}}$ holds in every sample,
-and the gap between the two counting observables widens as $\sqrt{s}$ rises
-from 64 to 300~GeV. That last ordering, however, turns over once the
-measurement is binned in pseudorapidity rather than pooled. We explain both
-findings in terms of what the observables actually do with the jet, one
-integrating over it and the others counting pieces of it, and then say what
-this means for a first EIC measurement.
+The integrated jet shape wins at every energy we looked at, and the ordering
+$\Psi(r=0.3) > n_{\mathrm{SD}} > n_{\mathrm{subjets}}$ holds in every sample.
+The ordering of the two counting observables, however, turns over once the
+measurement is binned in pseudorapidity rather than pooled. We trace that to
+the resolution scale of $n_{\mathrm{subjets}}$, which is normalised to the jet
+energy rather than its transverse momentum and so tightens as $\cosh\eta$,
+and we explain the win of $\Psi(r)$ in terms of what the observables do with
+the jet: one integrates over it, the others count pieces of it. We then say
+what this means for a first EIC measurement.
 
 The paper is laid out as follows. Section~\ref{sec:generation} covers the event
 generation and jet reconstruction, pointing to the companion
@@ -159,8 +160,8 @@ We simulate four beam setups --- one HERA reference and the three EIC design
 energies --- with $10^6$ events each. Table~\ref{tab:samples} lists them.
 
 \begin{table}[htbp]
-\caption{Beam configurations and dijet yields. All three columns count jets,
-not events, after the full selection described in the text. The mixed
+\caption{Beam configurations and dijet yields inside the analysis window
+$-1 \le \eta < 2$. All three columns count jets, not events. The mixed
 quark--gluon sample $N_{\mathrm{GQ}}$ is listed for completeness only: it holds
 one jet of each flavour per event, so its jets carry no class label and it
 takes no part in the comparison.}
@@ -170,10 +171,10 @@ takes no part in the comparison.}
 $\sqrt{s}$ & $E_p$ & $E_e$ & $\hat{p}_T^{\min}$ & $N_{\mathrm{QQ}}$ & $N_{\mathrm{GG}}$ & $N_{\mathrm{GQ}}$ \\
 $[\mathrm{GeV}]$ & [GeV] & [GeV] & [GeV] & & & \\
 \colrule
- 63.2 & 100 & 10.0 & 5 &  15\,132 &    758 &  14\,696 \\
-104.9 & 275 & 10.0 & 5 &  25\,258 &  2\,796 &  25\,368 \\
-140.7 & 275 & 18.0 & 7 & 135\,800 & 22\,930 & 145\,980 \\
-300.3 & 820 & 27.5 & 7 & 134\,774 & 57\,592 & 182\,568 \\
+ 63.2 & 100 & 10.0 & 5 &  14\,696 &    737 &  14\,306 \\
+104.9 & 275 & 10.0 & 5 &  19\,685 &  1\,908 &  19\,079 \\
+140.7 & 275 & 18.0 & 7 & 114\,696 & 17\,519 & 120\,036 \\
+300.3 & 820 & 27.5 & 7 &  96\,005 & 31\,990 & 118\,882 \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
@@ -196,6 +197,15 @@ jets in $-4 < \eta < 4$, the leading jet above $E_T = 10$~GeV and the subleading
 one above $7$~GeV. Asking for exactly two jets removes events with extra hard
 radiation between the jet directions, which in boson--gluon fusion can come from
 colour exchange between the outgoing partons.
+
+Reconstruction keeps jets over the full $-4 < \eta < 4$, but every result in
+this paper is quoted inside $-1 \le \eta < 2$. That window is the union of the
+four pseudorapidity bins used throughout, so the inclusive and the binned
+numbers are always drawn from the same jets and the per-bin counts sum exactly
+to the inclusive ones. Section~\ref{sec:etabins} shows why the restriction
+matters: the behaviour of $n_{\mathrm{subjets}}$ changes sharply in the forward
+region, and mixing that region into an ``inclusive'' number conflates two
+different effects.
 
 One point matters more than any other here: \emph{all three observables are
 computed on the same jets, in the same event loop}. Same jet definition, same
@@ -353,8 +363,8 @@ of the four centre-of-mass energies. The ordering
 \Psi(r=0.3) \;>\; n_{\mathrm{SD}} \;>\; n_{\mathrm{subjets}}
 \end{equation}
 holds in every sample. The integrated jet shape reaches AUC values between
-$0.745$ and $0.768$, the iterated soft-drop multiplicity between $0.657$ and
-$0.688$, and the subjet multiplicity between $0.526$ and $0.652$.
+$0.746$ and $0.772$, the iterated soft-drop multiplicity between $0.656$ and
+$0.684$, and the subjet multiplicity between $0.641$ and $0.655$.
 Table~\ref{tab:auc} gives the numbers.
 
 \begin{figure*}[t]
@@ -369,17 +379,17 @@ no-discrimination limit. Legend entries give the area under each curve.}
 \end{figure*}
 
 \begin{table}[htbp]
-\caption{Area under the ROC curve for the three discriminants, inclusive in
-$\eta$.}
+\caption{Area under the ROC curve for the three discriminants, inclusive over
+the analysis window $-1 \le \eta < 2$.}
 \label{tab:auc}
 \begin{ruledtabular}
 \begin{tabular}{cccc}
 $\sqrt{s}$ [GeV] & $\Psi(r=0.3)$ & $n_{\mathrm{SD}}$ & $n_{\mathrm{subjets}}$ \\
 \colrule
- 64 & 0.745 & 0.657 & 0.652 \\
-105 & 0.766 & 0.682 & 0.590 \\
-141 & 0.757 & 0.672 & 0.586 \\
-300 & 0.768 & 0.688 & 0.526 \\
+ 64 & 0.746 & 0.656 & 0.655 \\
+105 & 0.767 & 0.678 & 0.645 \\
+141 & 0.758 & 0.668 & 0.641 \\
+300 & 0.772 & 0.684 & 0.651 \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
@@ -387,60 +397,82 @@ $\sqrt{s}$ [GeV] & $\Psi(r=0.3)$ & $n_{\mathrm{SD}}$ & $n_{\mathrm{subjets}}$ \\
 \subsection{Trend with centre-of-mass energy}
 
 Figure~\ref{fig:auc_vs_energy} shows the same information against $\sqrt{s}$.
-Two things stand out. The integrated jet shape and the iterated soft-drop
-multiplicity are both nearly flat across the whole range, moving by only $0.023$
-and $0.031$ in AUC between 64 and 300~GeV. The subjet multiplicity does the
-opposite: it falls steadily above 64~GeV, from $0.652$ down to $0.526$, and by
-the HERA reference energy it is close to useless.
+All three observables are close to flat. Between 64 and 300~GeV the integrated
+jet shape moves by $0.026$ in AUC, the iterated soft-drop multiplicity by
+$0.028$, and the subjet multiplicity by $0.014$. None of them depends strongly
+on the centre-of-mass energy once the pseudorapidity window is held fixed.
+
+This is worth stating explicitly because it is easy to conclude otherwise.
+Quoted over the full reconstruction acceptance $-4 < \eta < 4$, the subjet
+multiplicity appears to collapse with energy, from $0.652$ at 64~GeV to $0.526$
+at 300~GeV. That trend is not an energy effect. Higher $\sqrt{s}$ pushes a
+larger fraction of the sample into the forward region, and
+Sec.~\ref{sec:etabins} shows that the forward region is precisely where
+$n_{\mathrm{subjets}}$ fails. Restricting all four samples to the same
+$-1 \le \eta < 2$ removes the apparent trend entirely.
 
 \begin{figure}[tb]
 \centering
 \includegraphics[width=\columnwidth]{figures/fig_auc_vs_energy.pdf}
 \caption{Area under the ROC curve as a function of centre-of-mass energy for the
-three discriminants, inclusive in $\eta$. The integrated jet shape and the
-iterated soft-drop multiplicity are stable across the range; the subjet
-multiplicity degrades towards the no-discrimination limit as $\sqrt{s}$ grows.}
+three discriminants, inclusive over $-1 \le \eta < 2$. With the pseudorapidity
+window held fixed, all three are close to flat: none varies by more than $0.03$
+in AUC between 64 and 300~GeV.}
 \label{fig:auc_vs_energy}
 \end{figure}
 
-So the lead of $n_{\mathrm{SD}}$ over $n_{\mathrm{subjets}}$ grows with energy:
-the AUC gap is $0.005$ at 64~GeV, $0.092$ at 105~GeV, $0.086$ at 141~GeV and
-$0.162$ at 300~GeV. At the lowest EIC energy the two counting observables are
-about equally good; by the HERA energy they are not close.
+So $n_{\mathrm{SD}}$ leads $n_{\mathrm{subjets}}$ inclusively at every energy
+above the lowest, by a roughly constant $0.03$ in AUC: the gaps are $0.001$,
+$0.034$, $0.028$ and $0.033$ at 64, 105, 141 and 300~GeV. The next two sections
+show that this ordering does not survive binning, and explain why.
 
-\subsection{Origin of the scale sensitivity}
+\subsection{The resolution scale of $n_{\mathrm{subjets}}$}\label{sec:scale}
 
-$n_{\mathrm{subjets}}$ falls off because its resolution threshold is an absolute
-scale. In the HERA-300 sample the inclusive means are
-$\langle n_{\mathrm{subjets}}\rangle_{\mathrm{QQ}} = 3.10$ and
-$\langle n_{\mathrm{subjets}}\rangle_{\mathrm{GG}} = 3.30$, a mean separation of
-only $\mathcal{S} = 0.087$ from Eq.~(\ref{eq:sep}). Inside a single
-pseudorapidity bin the separation is much better: $\mathcal{S} = 0.657$ for
-$\eta \in [-1,0)$, dropping to $0.501$ for $\eta \in [2,3)$. The inclusive number
-is not the average of the per-bin ones, because the mean itself slides with
-$\eta$ --- from $4.25$ in the most backward bin to $1.63$ in the most forward.
-
-Decomposing the pooled variance into within-bin and between-bin components,
+The exclusive $k_T$ multiplicity is usually described as counting emissions
+above a fixed momentum scale. In the standard implementation it does not. The
+$y_{\mathrm{cut}}$ condition is normalised to $Q^2$, the squared sum of
+constituent \emph{energies}, so a pair is resolved when
 \begin{equation}
-\sigma^2_{\mathrm{pool}} \;=\;
-\underbrace{\bigl\langle \sigma^2_{\mathrm{bin}} \bigr\rangle_{\mathrm{bins}}}_{\text{within}}
-\;+\;
-\underbrace{\mathrm{Var}_{\mathrm{bins}}\bigl(\langle X\rangle_{\mathrm{bin}}\bigr)}_{\text{between}},
+\min(p_{T,i},\,p_{T,j})\;\Delta R_{ij}
+\;>\;
+\sqrt{y_{\mathrm{cut}}}\;E_{\mathrm{jet}} .
+\label{eq:ycond}
 \end{equation}
-puts a number on it. For $n_{\mathrm{subjets}}$ at HERA-300 the between-bin term
-is $48.0\%$ of the pooled QQ variance and $62.3\%$ of the pooled GG variance. For
-$n_{\mathrm{SD}}$ it is under $0.2\%$ in both classes. So roughly half the width
-of the inclusive $n_{\mathrm{subjets}}$ distribution is not class information at
-all --- it is the observable following the jet kinematics, dragged in by pooling
-over $\eta$. The iterated soft-drop multiplicity, cut on a dimensionless
-fraction, picks up almost none of this: its per-bin means agree to within $2\%$
-across the full $\eta$ range.
+Writing the softer prong as a fraction of the jet, $p_T = z\,p_T^{\mathrm{jet}}$,
+and using $E_{\mathrm{jet}} = p_T^{\mathrm{jet}}\cosh\eta$, the jet transverse
+momentum cancels from both sides of Eq.~(\ref{eq:ycond}) and what remains is
+\begin{equation}
+z\,\Delta R \;>\; \sqrt{y_{\mathrm{cut}}}\,\cosh\eta .
+\label{eq:zeff}
+\end{equation}
+So $n_{\mathrm{subjets}}$ has neither an absolute momentum threshold nor a
+scale-invariant one. It has an effective momentum-fraction threshold that grows
+as $\cosh\eta$. With $y_{\mathrm{cut}} = 5\times10^{-4}$ and taking
+$\Delta R \sim R$, the effective cut runs from $z_{\mathrm{eff}} \simeq 0.022$
+at $\eta = 0$ to $0.053$ at $\eta = 1.5$ and $0.137$ at $\eta = 2.5$.
+$n_{\mathrm{SD}}$, by contrast, cuts at $z > z_{\mathrm{cut}} = 0.1$ everywhere.
 
-The same argument explains why $n_{\mathrm{subjets}}$ gets worse as $\sqrt{s}$
-rises. More energy means a wider spread of jet transverse momenta in the
-accepted sample, and the number of emissions above a fixed $p_T^2$ threshold
-grows with the jet $p_T$. A wider $p_T$ spread therefore just adds more pooled
-width that says nothing about the class.
+Equation~(\ref{eq:zeff}) makes a sharp prediction. Counting observables
+accumulate emissions logarithmically, $\langle n\rangle \propto C_R\ln(1/z)$, so
+$\langle n_{\mathrm{subjets}}\rangle$ should fall linearly in $\ln\cosh\eta$ at
+fixed $p_T$. Measured on HERA-300 quark jets with $11 < p_T < 16$~GeV, it does:
+a linear fit gives
+$\langle n_{\mathrm{subjets}}\rangle = 4.35 - 1.53\,\ln\cosh\eta$ with
+$r^2 = 0.991$, while $\langle n_{\mathrm{SD}}\rangle$ stays between $3.42$ and
+$3.48$ over the same range. Binned in jet energy rather than $\eta$,
+$\langle n_{\mathrm{subjets}}\rangle$ falls from $4.23$ at $E = 10$--$20$~GeV to
+$1.50$ at $70$--$120$~GeV, while $\langle n_{\mathrm{SD}}\rangle$ holds at
+$3.43$--$3.50$. Energy, not transverse momentum, is what the observable
+responds to.
+
+This also settles which of the two counting observables carries more
+information. Where $z_{\mathrm{eff}} \ll z_{\mathrm{cut}}$, that is in the
+central region, $n_{\mathrm{subjets}}$ resolves emissions roughly five times
+softer than $n_{\mathrm{SD}}$ and so samples a larger slice of the
+Casimir-weighted radiation pattern. It is the better counter there. Its
+weakness is not the counting but the moving threshold: pooled over a range of
+$\eta$, the same observable is effectively a different measurement in each
+part of the range.
 
 \subsection{Pseudorapidity binning}\label{sec:etabins}
 
@@ -448,13 +480,14 @@ Jets are binned individually here, by their own $\eta$. The two jets of a dijet
 event go to whichever bins they each point into, and need not land in the same
 one; with a mean separation of about $1.2$ in $\eta$, usually they do not.
 
-If the argument above is right, binning in $\eta$ before building the ROC should
-give $n_{\mathrm{subjets}}$ most of its discrimination back, and should do almost
-nothing to the other two. Figure~\ref{fig:auc_vs_eta} shows that this is exactly
-what happens. The dotted horizontal lines are the inclusive values. For
-$\Psi(0.3)$ and $n_{\mathrm{SD}}$ the per-bin points sit on those lines. For
-$n_{\mathrm{subjets}}$ they sit far above: at HERA-300 it goes from $0.526$
-pooled to $0.737$--$0.743$ bin by bin.
+If Eq.~(\ref{eq:zeff}) is the explanation, then binning in $\eta$ before
+building the ROC should give $n_{\mathrm{subjets}}$ its discrimination back,
+because inside a narrow bin the effective threshold is nearly constant. It
+should do almost nothing to the other two, whose thresholds carry no $\eta$ at
+all. Figure~\ref{fig:auc_vs_eta} shows exactly that. The dotted horizontal lines
+are the inclusive values. For $\Psi(0.3)$ and $n_{\mathrm{SD}}$ the per-bin
+points sit on those lines. For $n_{\mathrm{subjets}}$ they sit well above: at
+HERA-300 it goes from $0.651$ pooled to $0.737$--$0.743$ bin by bin.
 
 \begin{figure*}[t]
 \centering
@@ -468,7 +501,7 @@ where the sample has too few jets there.}
 \end{figure*}
 
 This reverses the ordering of the two counting observables. Inclusively
-$n_{\mathrm{SD}}$ is ahead at three of the four energies, by up to $0.162$. In
+$n_{\mathrm{SD}}$ is ahead at three of the four energies, by about $0.03$. In
 every one of the fourteen $\eta$ bins we can measure, $n_{\mathrm{subjets}}$ is
 ahead instead, by between $0.027$ and $0.072$. There is no exception. Which of
 the two counting observables looks better is therefore not a property of the
@@ -580,14 +613,23 @@ validation path no newer observable has.
 The choice between the two counting observables is not settled in the abstract:
 it follows from how the measurement is presented. If the result is quoted
 inclusively in $\eta$, use $n_{\mathrm{SD}}$, which is untouched by pooling and
-leads by up to $0.162$ in AUC. If it is quoted differentially, which is the more
+leads by about $0.03$ in AUC. If it is quoted differentially, which is the more
 natural way to publish, use $n_{\mathrm{subjets}}$, which leads in every bin we
-can measure. Section~\ref{sec:etabins} shows that bins of width $1.5$ or narrower
-are already enough to put $n_{\mathrm{subjets}}$ ahead.
+can measure. Section~\ref{sec:etabins} shows that bins of width $1.5$ or
+narrower are already enough to put $n_{\mathrm{subjets}}$ ahead.
 
-What should not be done is to quote $n_{\mathrm{subjets}}$ inclusively. Its
-discrimination power is real, but pooling over $\eta$ throws most of it away, and
-at HERA energies the pooled result is close to no discrimination at all.
+There is also a third option, which this analysis points to but does not pursue.
+Since the problem is the $\cosh\eta$ in Eq.~(\ref{eq:zeff}), it can be removed
+at the source by scaling $y_{\mathrm{cut}}$ by $1/\cosh^2\eta$, or equivalently
+by reclustering in a frame where the jet is central. That would make
+$n_{\mathrm{subjets}}$ behave like a genuinely scale-invariant counter and
+should recover its per-bin performance without any binning at all. We have not
+tested it here, but it is a cheap change for any future analysis.
+
+What should not be done is to quote $n_{\mathrm{subjets}}$ inclusively over a
+wide $\eta$ range without saying so. Its discrimination power is real, but
+pooling throws much of it away, and over the full $-4 < \eta < 4$ acceptance the
+loss is severe.
 
 \section{Conclusion}\label{sec:conclusion}
 
@@ -598,27 +640,30 @@ anti-$k_T$ jets from PYTHIA~8 photoproduction events at HERA and at the three EI
 design energies. Four things came out of it.
 
 \textit{First}, the integrated jet shape separates gluons from quarks best in
-every sample, with ROC AUCs of $0.745$, $0.766$, $0.757$ and $0.768$ at
+every sample, with ROC AUCs of $0.746$, $0.767$, $0.758$ and $0.772$ at
 $\sqrt{s} = 64$, $105$, $141$ and $300$~GeV. The iterated soft-drop multiplicity
-follows at $0.66$--$0.69$, and the subjet multiplicity trails at $0.53$--$0.65$.
+follows at $0.656$--$0.684$, and the subjet multiplicity trails at
+$0.641$--$0.655$. All three are close to flat in $\sqrt{s}$.
 
 \textit{Second}, which of the two counting observables is better depends on how
-the measurement is binned, and the reason is the difference in their thresholds.
-At $\beta = 0$, $n_{\mathrm{SD}}$ counts splittings above a dimensionless
-momentum fraction, so it barely notices a change of jet scale.
-$n_{\mathrm{subjets}}$ at fixed $y_{\mathrm{cut}}$ counts emissions above an
-absolute $p_T^2$ scale, so it also picks up soft wide-angle radiation, and that
-contribution grows with the jet $p_T$. Pooled over $\eta$, that extra spread is
-pure dilution: splitting the inclusive $n_{\mathrm{subjets}}$ variance into
-within- and between-bin parts puts 48--62\% of the HERA-300 pooled variance in
-the between-bin term, against under $0.2\%$ for $n_{\mathrm{SD}}$. So
-inclusively $n_{\mathrm{SD}}$ wins, by a margin that grows with $\sqrt{s}$ and
-reaches $0.162$ at HERA. Bin in $\eta$ and the dilution goes away, and the
-ordering reverses: $n_{\mathrm{subjets}}$ leads in all fourteen bins we can
-measure, by $0.027$ to $0.072$. A scan over bin width shows
-$n_{\mathrm{subjets}}$ already ahead at $\Delta\eta = 1.5$ and staying ahead as
-the bins narrow, while $\Psi(0.3)$ and $n_{\mathrm{SD}}$ shift by less than
-$0.007$ across the entire scan.
+the measurement is binned, and the reason is a property of the $k_T$ exclusive
+algorithm rather than of the physics. Its $y_{\mathrm{cut}}$ is normalised to
+the summed constituent energy, so the jet transverse momentum cancels and the
+effective momentum-fraction threshold becomes
+$z_{\mathrm{eff}} = \sqrt{y_{\mathrm{cut}}}\,\cosh\eta$, rising from about
+$0.022$ centrally to $0.137$ at $\eta = 2.5$. $n_{\mathrm{SD}}$ cuts at
+$z > 0.1$ everywhere. The prediction that
+$\langle n_{\mathrm{subjets}}\rangle$ falls linearly in $\ln\cosh\eta$ is
+confirmed at $r^2 = 0.991$. Pooled over $\eta$, $n_{\mathrm{subjets}}$ is
+therefore a different measurement in each part of the range, and the resulting
+dilution puts 48--62\% of its HERA-300 variance in the between-bin term against
+under $0.2\%$ for $n_{\mathrm{SD}}$; inclusively $n_{\mathrm{SD}}$ wins by
+about $0.03$. Bin in $\eta$ and the dilution goes away, the ordering reverses,
+and $n_{\mathrm{subjets}}$ leads in all fourteen bins by $0.027$ to $0.072$ ---
+because where its threshold is soft it resolves emissions about five times
+softer than $n_{\mathrm{SD}}$ does. A scan over bin width shows it already
+ahead at $\Delta\eta = 1.5$, while $\Psi(0.3)$ and $n_{\mathrm{SD}}$ shift by
+less than $0.007$ across the entire scan.
 
 \textit{Third}, the integrated jet shape wins because it uses the whole radial
 energy distribution, hard splittings and soft ones alike, instead of counting
@@ -682,19 +727,22 @@ the range $-1 \le \eta < 2$ exactly. The per-bin counts therefore sum to the
 total over that range with no jet lost and none counted twice, as the closure
 row shows.
 
-The inclusive row is larger because it covers the full acceptance
-$-4 < \eta < 4$ used for the pooled results of Sec.~\ref{sec:results}. The
-difference is jets forward of $\eta = 2$, which fall outside the binned range:
-at $\sqrt{s} = 300$~GeV these account for $29\%$ of the QQ jets and $44\%$ of
-the GG jets. This is worth keeping in mind when comparing the per-bin markers
-of Fig.~\ref{fig:auc_vs_eta} with its inclusive reference lines, since the two
-are evaluated over different $\eta$ ranges.
+The full-acceptance row is shown only for reference. Reconstruction keeps
+$-4 < \eta < 4$, but none of the results in this paper use the forward region:
+every inclusive number is quoted over $-1 \le \eta < 2$, the same window the
+bins tile. At $\sqrt{s} = 300$~GeV the excluded forward jets are $29\%$ of the
+QQ sample and $44\%$ of the GG sample, and by Eq.~(\ref{eq:zeff}) that is
+exactly where $n_{\mathrm{subjets}}$ is worst. Quoting an inclusive number over
+the full acceptance would therefore mix the binning effect of
+Sec.~\ref{sec:etabins} with a simple change of acceptance, which is why we do
+not do it.
 
 \begin{table}[htbp]
 \caption{Jet counts per pseudorapidity bin. ``Sum of bins'' is the total over
 the four bins; ``total'' is a direct count over $-1 \le \eta < 2$. The two
-agree exactly at every energy. ``Inclusive'' is the full acceptance
-$-4 < \eta < 4$.}
+agree exactly at every energy. ``Full accept.''\ is the reconstruction range
+$-4 < \eta < 4$, shown for reference only; it is not used anywhere as an
+inclusive value.}
 \label{tab:jetcounts}
 \begin{ruledtabular}
 \begin{tabular}{llrr}
@@ -706,7 +754,7 @@ $\sqrt{s}$ [GeV] & bin & $N_{\mathrm{QQ}}$ & $N_{\mathrm{GG}}$ \\
     & $[1.5, 2)$   &  2\,065 &   135 \\
     & sum of bins  & 14\,696 &   737 \\
     & total        & 14\,696 &   737 \\
-    & inclusive    & 15\,132 &   758 \\
+    & full accept. & 15\,132 &   758 \\
 \colrule
     & $[-1, 0)$    &    617 &    16 \\
     & $[0, 1)$     &  8\,295 &   601 \\
@@ -714,7 +762,7 @@ $\sqrt{s}$ [GeV] & bin & $N_{\mathrm{QQ}}$ & $N_{\mathrm{GG}}$ \\
     & $[1.5, 2)$   &  5\,131 &   679 \\
     & sum of bins  & 19\,685 & 1\,908 \\
     & total        & 19\,685 & 1\,908 \\
-    & inclusive    & 25\,258 & 2\,796 \\
+    & full accept. & 25\,258 & 2\,796 \\
 \colrule
     & $[-1, 0)$    & 20\,036 & 1\,538 \\
     & $[0, 1)$     & 50\,776 & 6\,634 \\
@@ -722,7 +770,7 @@ $\sqrt{s}$ [GeV] & bin & $N_{\mathrm{QQ}}$ & $N_{\mathrm{GG}}$ \\
     & $[1.5, 2)$   & 19\,555 & 4\,612 \\
     & sum of bins  & 114\,696 & 17\,519 \\
     & total        & 114\,696 & 17\,519 \\
-    & inclusive    & 135\,800 & 22\,930 \\
+    & full accept. & 135\,800 & 22\,930 \\
 \colrule
     & $[-1, 0)$    & 22\,897 & 4\,003 \\
     & $[0, 1)$     & 37\,961 & 11\,283 \\
@@ -730,7 +778,7 @@ $\sqrt{s}$ [GeV] & bin & $N_{\mathrm{QQ}}$ & $N_{\mathrm{GG}}$ \\
     & $[1.5, 2)$   & 16\,487 & 8\,739 \\
     & sum of bins  & 96\,005 & 31\,990 \\
     & total        & 96\,005 & 31\,990 \\
-    & inclusive    & 134\,774 & 57\,592 \\
+    & full accept. & 134\,774 & 57\,592 \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
