@@ -508,6 +508,31 @@ the two counting observables looks better is therefore not a property of the
 observables on their own: it depends entirely on whether the measurement is
 quoted inclusively or differentially.
 
+The mean separation of Eq.~(\ref{eq:sep}) shows the same thing from the other
+side. Pooled over the window, $n_{\mathrm{subjets}}$ at HERA-300 gives
+$\mathcal{S} = 0.403$ against $0.485$ for $n_{\mathrm{SD}}$. Taken bin by bin it
+gives $0.657$, $0.649$, $0.671$ and $0.667$ --- larger than $n_{\mathrm{SD}}$
+everywhere, and remarkably stable, which is what one expects once the effective
+threshold of Eq.~(\ref{eq:zeff}) is held nearly fixed inside each bin. The
+pooled value is depressed not because the classes overlap but because the
+observable means move between bins: $\langle n_{\mathrm{subjets}}\rangle_{QQ}$
+runs from $4.25$ in the most backward bin to $2.49$ in the most forward.
+
+Splitting the pooled variance into within- and between-bin parts,
+\begin{equation}
+\sigma^2_{\mathrm{pool}} \;=\;
+\underbrace{\bigl\langle \sigma^2_{\mathrm{bin}} \bigr\rangle_{\mathrm{bins}}}_{\text{within}}
+\;+\;
+\underbrace{\mathrm{Var}_{\mathrm{bins}}\bigl(\langle X\rangle_{\mathrm{bin}}\bigr)}_{\text{between}},
+\label{eq:vardecomp}
+\end{equation}
+puts a number on the dilution. For $n_{\mathrm{subjets}}$ at HERA-300 the
+between-bin term is $26.6\%$ of the pooled QQ variance and $38.9\%$ of the
+pooled GG variance. For $n_{\mathrm{SD}}$ it is $0.0\%$ and $0.2\%$. So between
+a quarter and two fifths of the width of the pooled $n_{\mathrm{subjets}}$
+distribution is not class information at all: it is the $\cosh\eta$ of
+Eq.~(\ref{eq:zeff}) entering through the back door.
+
 Since that conclusion could be an artefact of one particular choice of bins, we
 repeated the exercise with uniform bins of varying width over a fixed range
 $-1 < \eta < 2$, so that the widest case is the genuine pooled limit of the same
@@ -656,9 +681,9 @@ $z > 0.1$ everywhere. The prediction that
 $\langle n_{\mathrm{subjets}}\rangle$ falls linearly in $\ln\cosh\eta$ is
 confirmed at $r^2 = 0.991$. Pooled over $\eta$, $n_{\mathrm{subjets}}$ is
 therefore a different measurement in each part of the range, and the resulting
-dilution puts 48--62\% of its HERA-300 variance in the between-bin term against
-under $0.2\%$ for $n_{\mathrm{SD}}$; inclusively $n_{\mathrm{SD}}$ wins by
-about $0.03$. Bin in $\eta$ and the dilution goes away, the ordering reverses,
+dilution puts $27$--$39\%$ of its HERA-300 variance in the between-bin term
+against under $0.2\%$ for $n_{\mathrm{SD}}$; inclusively $n_{\mathrm{SD}}$ wins
+by about $0.03$. Bin in $\eta$ and the dilution goes away, the ordering reverses,
 and $n_{\mathrm{subjets}}$ leads in all fourteen bins by $0.027$ to $0.072$ ---
 because where its threshold is soft it resolves emissions about five times
 softer than $n_{\mathrm{SD}}$ does. A scan over bin width shows it already
