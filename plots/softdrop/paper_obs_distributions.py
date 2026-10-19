@@ -77,6 +77,61 @@ def panel(ax, d, branch, edges, title, sqrts, show_legend):
     ax.grid(False)
 
 
+
+
+
+def fig_paper_comparison(d, sqrts, out_path):
+    """Compact paper figure: both counting observables, backward / forward /
+    pooled, so the moving threshold and the fixed one sit side by side."""
+    cols = [((-1.0, 0.0), r"$-1 < \eta < 0$"),
+            ((1.5, 2.0),  r"$1.5 < \eta < 2$"),
+            (WINDOW,      r"$-1 < \eta < 2$ (pooled)")]
+    rows = [("jet_nsubjets", r"$n_{\mathrm{subjets}}$"),
+            ("jet_nsd",      r"$n_{\mathrm{SD}}$")]
+    edges = np.arange(-0.5, 10.5, 1.0)
+
+    fig, axes = plt.subplots(2, 3, figsize=(ps.FULL_W, ps.FULL_W * 0.52),
+                             sharex=True)
+    for r, (branch, rlabel) in enumerate(rows):
+        for c, ((lo, hi), clabel) in enumerate(cols):
+            ax = axes[r][c]
+            sub = rc.slice_eta(d, lo, hi)
+            hts = []
+            for cat, (lbl, col, hatch) in CLS.items():
+                v = sub[cat][branch]
+                h, _ = np.histogram(v, bins=edges, density=True)
+                hts.append(h)
+                ax.hist(v, bins=edges, density=True, histtype="stepfilled",
+                        facecolor=col, alpha=0.25, hatch=hatch,
+                        edgecolor=col, linewidth=0.0,
+                        label=lbl if (r == 0 and c == 0) else None)
+                ax.hist(v, bins=edges, density=True, histtype="step",
+                        edgecolor=col, linewidth=1.2)
+                if cat == "QQ_Events":
+                    ax.axvline(v.mean(), color=col, linestyle=(0, (1.5, 1.5)),
+                               linewidth=0.9, zorder=4)
+                else:
+                    ax.axvline(v.mean(), color=col, linestyle=(0, (1.5, 1.5)),
+                               linewidth=0.9, zorder=4)
+            ax.set_ylim(0, max(h.max() for h in hts) * 1.38)
+            ax.set_xlim(-0.5, 9.5)
+            ax.grid(False)
+            if r == 0:
+                ax.set_title(clabel, fontsize=8, pad=5)
+            if r == 1:
+                ax.set_xlabel(rlabel if c == 1 else "", fontsize=9)
+            if c == 0:
+                ax.set_ylabel(rlabel + r"$\quad$" + "\n" +
+                              r"normalised", fontsize=8)
+            if r == 0 and c == 0:
+                ax.legend(loc="upper right", fontsize=7, borderpad=0.3)
+    axes[1][1].set_xlabel(r"observable value", fontsize=9)
+    fig.subplots_adjust(wspace=0.22, hspace=0.18)
+    fig.savefig(out_path)
+    plt.close(fig)
+    print(f"Wrote {out_path}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--data-jets", default="data-jets")
@@ -140,6 +195,9 @@ def main():
             lines.append(f"{t:>16}{q.size:>9}{g.size:>8}"
                          f"{q.mean():>9.3f}{g.mean():>9.3f}"
                          f"{g.mean()-q.mean():>8.3f}")
+    if args.sample == "hera300_antikt_dijets":
+        fig_paper_comparison(d, sqrts, out_dir / "fig_dist_comparison.pdf")
+
     log = out_dir / f"dist_summary_{args.sample}.log"
     log.write_text("\n".join(lines) + "\n")
     print()
