@@ -76,7 +76,7 @@ photoproduction-eic/
 │   ├── dijets/                older dijet-specific analyses
 │   └── analysis/              jet counts, efficiency/purity, all-shapes
 ├── EIC_Observables/           PAPER II manuscript (REVTeX 4.2)
-│   ├── apssamp.tex            main file (template name, real content)
+│   ├── eic_observables.tex    main file
 │   ├── EIC_Observables.bib    bibliography
 │   ├── figures/               figure PDFs, copied from plots/*/output/
 │   └── iith_abstract/         conference abstract

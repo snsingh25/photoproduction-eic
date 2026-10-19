@@ -13,4 +13,4 @@
 *.synctex.gz
 
 # apsrev4-2 regenerates this during the bibtex run
-apssampNotes.bib
+*Notes.bib
