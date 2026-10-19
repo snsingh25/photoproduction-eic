@@ -34,14 +34,21 @@ event loop — at all four centre-of-mass energies.
 Headline results of II:
 
 - The integrated jet shape gives the largest separation at every energy:
-  ROC AUC $0.75$–$0.77$, against $0.66$–$0.69$ for $n_{\mathrm{SD}}$ and
-  $0.53$–$0.65$ for $n_{\mathrm{subjets}}$.
+  ROC AUC $0.75$–$0.77$, against $0.66$–$0.68$ for $n_{\mathrm{SD}}$ and
+  $0.64$–$0.66$ for $n_{\mathrm{subjets}}$.
 - The ordering of the two *counting* observables is not fixed. Pooled over
-  $\eta$, $n_{\mathrm{SD}}$ leads by up to $0.16$ in AUC; binned in $\eta$,
-  $n_{\mathrm{subjets}}$ leads in all fourteen bins measured. A bin-width
-  scan traces this to the absolute momentum threshold in
-  $n_{\mathrm{subjets}}$, which leaves it partly sensitive to jet
-  kinematics rather than colour flow.
+  $\eta$, $n_{\mathrm{SD}}$ leads by about $0.03$ in AUC; binned in $\eta$,
+  $n_{\mathrm{subjets}}$ leads in all fourteen bins measured.
+- The cause is the resolution scale of $n_{\mathrm{subjets}}$. The
+  $y_{\mathrm{cut}}$ is normalised to the summed constituent *energy*, so the
+  jet $p_T$ cancels and the effective threshold becomes
+  $z_{\mathrm{eff}} = \sqrt{y_{\mathrm{cut}}}\,\cosh\eta$ — rising from
+  $0.022$ centrally to $0.137$ at $\eta = 2.5$, against a flat $0.1$ for
+  $n_{\mathrm{SD}}$. The prediction that
+  $\langle n_{\mathrm{subjets}}\rangle$ falls linearly in $\ln\cosh\eta$
+  holds at $r^2 = 0.991$.
+- All results are quoted inclusive over $-1 \le \eta < 2$, the window the
+  four bins tile, so inclusive and binned numbers come from the same jets.
 
 ## Workflow
 
