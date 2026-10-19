@@ -208,52 +208,115 @@ the row total.
 % ===================================================================
 \begin{frame}{How the ROC plot is built}
 
-\begin{columns}[T]
-\column{0.52\textwidth}
-Now try \emph{every} pass mark, not just one:
+Now try \emph{every} pass mark, not just $c = 5$. Each row below is
+\textbf{one dot} on the plot.
 
-\vspace{0.6em}
+\vspace{0.8em}
 \centering\footnotesize
+\begin{columns}[T]
+\column{0.32\textwidth}
+\centering
+\sdc{$n_{\mathrm{SD}} \ge c$}\\[0.3em]
 \begin{tabular}{crr}
 \toprule
 $c$ & $\varepsilon_{\mathrm{QQ}}$ & $\varepsilon_{\mathrm{GG}}$ \\
 \midrule
-3 & 0.94 & 0.99 \\
-4 & 0.73 & 0.95 \\
-5 & 0.41 & 0.78 \\
-6 & 0.15 & 0.45 \\
-7 & 0.03 & 0.15 \\
+3 & 0.76 & 0.93 \\
+4 & 0.48 & 0.75 \\
+5 & 0.21 & 0.45 \\
+6 & 0.07 & 0.19 \\
+7 & 0.01 & 0.05 \\
 \bottomrule
 \end{tabular}
 
-\vspace{0.8em}
-\flushleft\normalsize
-Each row is \textbf{one dot} on the plot.
+\column{0.32\textwidth}
+\centering
+\sjc{$n_{\mathrm{subjets}} \ge c$}\\[0.3em]
+\begin{tabular}{crr}
+\toprule
+$c$ & $\varepsilon_{\mathrm{QQ}}$ & $\varepsilon_{\mathrm{GG}}$ \\
+\midrule
+3 & 0.82 & 0.94 \\
+4 & 0.55 & 0.75 \\
+5 & 0.27 & 0.48 \\
+6 & 0.09 & 0.23 \\
+7 & 0.02 & 0.07 \\
+\bottomrule
+\end{tabular}
 
-\vspace{0.5em}
-Join the dots $\rightarrow$ the ROC curve.
-
-\vspace{0.5em}
-Area underneath $\rightarrow$ the AUC.
-
-\column{0.46\textwidth}
-\footnotesize
-\textbf{For $n_{\mathrm{SD}}$, $c$ takes twelve values:}
-\[ c = 0, 1, 2, \ldots, 11 \]
-Only whole numbers --- a jet has 4 splittings or 5, never 4.5.
-
-\vspace{0.8em}
-\textbf{For $\Psi$, 400 values} between 0 and 1.
-
-\vspace{0.8em}
-That is why $\Psi$'s curve looks smooth in our figures and the counting
-curves look faceted. \emph{The faceting is honest}: there really are only
-twelve places you could put that cut.
+\column{0.32\textwidth}
+\centering
+\psic{$\Psi(0.3) \le c$}\\[0.3em]
+\begin{tabular}{crr}
+\toprule
+$c$ & $\varepsilon_{\mathrm{QQ}}$ & $\varepsilon_{\mathrm{GG}}$ \\
+\midrule
+0.35 & 0.10 & 0.34 \\
+0.45 & 0.16 & 0.49 \\
+0.55 & 0.24 & 0.64 \\
+0.65 & 0.35 & 0.78 \\
+0.75 & 0.52 & 0.89 \\
+\bottomrule
+\end{tabular}
+\end{columns}
 
 \vspace{1em}
-\textbf{Why sweep at all?} If we quoted one cut, you could fairly say we
-picked the one that flatters our favourite. Sweeping removes the choice
+\flushleft\normalsize
+Compare any row where the quark leak is similar. At
+$\varepsilon_{\mathrm{QQ}} \approx 0.21$--$0.27$, \sdc{$n_{\mathrm{SD}}$}
+keeps 45\% of gluons and \sjc{$n_{\mathrm{subjets}}$} 48\%, but
+\psic{$\Psi$} keeps \textbf{64\%}. That gap is the AUC difference, read one
+row at a time.
+
+\vspace{0.6em}
+\footnotesize
+\textcolor{gray}{$\Psi$ runs the other way --- quark jets are narrower, so
+\emph{smaller} $\Psi$ means gluon-like.}
+
+\end{frame}
+
+% ===================================================================
+\begin{frame}{How many pass marks are there?}
+
+\begin{columns}[T]
+\column{0.5\textwidth}
+\textbf{The counting observables: twelve.}
+\[ c = 0, 1, 2, \ldots, 11 \]
+Only whole numbers --- a jet has 4 splittings or 5, never 4.5. A cut at 4.5
+keeps exactly the same jets as a cut at 5.
+
+\vspace{1em}
+\textbf{$\Psi(0.3)$: four hundred}, evenly spaced between 0 and 1.
+
+\vspace{1em}
+That is why $\Psi$'s curve looks smooth in our figures while the counting
+curves look faceted.
+
+\vspace{0.6em}
+\emph{The faceting is honest.} There really are only twelve places an
+experimentalist could put that cut.
+
+\column{0.46\textwidth}
+\textbf{Why sweep at all?}
+
+\vspace{0.6em}
+If we quoted one cut, you could fairly object that we picked the value that
+flatters our preferred observable.
+
+\vspace{0.8em}
+Sweeping every possible cut and taking the area removes that objection
 entirely.
+
+\vspace{0.8em}
+\textbf{The AUC contains no choice of cut.} That is what makes a three-way
+comparison fair.
+
+\vspace{1.2em}
+\hrule
+\vspace{0.6em}
+\footnotesize
+All numbers on the previous slide: HERA-300, $-1 < \eta < 2$, the same jets
+used everywhere in this talk.
 
 \end{columns}
 
