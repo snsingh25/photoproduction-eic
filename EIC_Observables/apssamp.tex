@@ -302,13 +302,21 @@ below.
 
 \section{ROC construction and figures of merit}\label{sec:roc}
 
-For a discriminant $X$ with the convention that gluon jets have the larger value,
-we take jets from GG events as signal and jets from QQ events as background, and
-define for every threshold $c$
+For a discriminant $X$ with the convention that gluon jets have the larger
+value, we take jets from GG events as signal and jets from QQ events as
+background. A cut at threshold $c$ keeps every jet with $X \ge c$, and we
+record what fraction of each class survives it:
 \begin{equation}
 \varepsilon_{\mathrm{GG}}(c) = \Pr(X \ge c \mid \mathrm{GG}), \qquad
 \varepsilon_{\mathrm{QQ}}(c) = \Pr(X \ge c \mid \mathrm{QQ}).
 \end{equation}
+The two carry opposite meanings despite the symmetric notation.
+$\varepsilon_{\mathrm{GG}}$ is the \emph{gluon-jet efficiency}: the fraction of
+the jets we want that the cut keeps, so larger is better.
+$\varepsilon_{\mathrm{QQ}}$ is the \emph{quark-jet mistag rate}: the fraction
+of the jets we want to reject that pass anyway, so smaller is better. No cut
+makes one favourable without also moving the other, and that trade-off is what
+the ROC curve displays.
 The ROC curve is what
 $\bigl(\varepsilon_{\mathrm{QQ}}(c), \varepsilon_{\mathrm{GG}}(c)\bigr)$ traces
 out as $c$ sweeps across the range of $X$. For the two counting observables $c$
@@ -372,7 +380,9 @@ Table~\ref{tab:auc} gives the numbers.
 \includegraphics[width=0.94\textwidth]{figures/fig_roc_panels.pdf}
 \caption{ROC curves for gluon-versus-quark discrimination at the four
 centre-of-mass energies. Signal is jets from GG events, background is jets from QQ
-events. All three observables are evaluated on identical jets (anti-$k_T$,
+events. The vertical axis is the fraction of gluon jets a cut keeps; the
+horizontal axis is the fraction of quark jets that pass the same cut. All three
+observables are evaluated on identical jets (anti-$k_T$,
 $R = 1.0$, exclusive two-jet, $E_T > 10$~GeV). The dotted diagonal is the
 no-discrimination limit. Legend entries give the area under each curve.}
 \label{fig:roc_panels}
