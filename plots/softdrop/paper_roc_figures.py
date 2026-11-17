@@ -123,7 +123,7 @@ def fig_roc_panels(results, out_path):
 
         # only outer panels carry axis labels
         if idx // 2 == 1:
-            ax.set_xlabel(r"quark-jet mistag rate $\varepsilon_{\mathrm{QQ}}$")
+            ax.set_xlabel(r"quark-jet mistag rate $\bar{\varepsilon}_{\mathrm{QQ}}$")
         else:
             ax.set_xticklabels([])
         if idx % 2 == 0:
@@ -335,7 +335,7 @@ def fig_roc_eta_panels(per_bin, sqrts, out_path, ncols=2):
         row, col = i // ncols, i % ncols
         last_row = (row == nrows - 1) or (i + ncols >= n)
         if last_row:
-            ax.set_xlabel(r"quark-jet mistag rate $\varepsilon_{\mathrm{QQ}}$")
+            ax.set_xlabel(r"quark-jet mistag rate $\bar{\varepsilon}_{\mathrm{QQ}}$")
         else:
             ax.set_xticklabels([])
         if col == 0:
